@@ -442,7 +442,15 @@
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/**",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"",
+					"\"${PODS_ROOT}/Headers/Public/Realm\"",
+					"$(PROJECT_DIR)/MADVCamera.framework/Headers/**",
+					"$(PROJECT_DIR)/MADVPano.framework/Headers",
 				);
 				INFOPLIST_FILE = ImmoviewerMADVentureDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -463,7 +471,15 @@
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/**",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"",
+					"\"${PODS_ROOT}/Headers/Public/Realm\"",
+					"$(PROJECT_DIR)/MADVCamera.framework/Headers/**",
+					"$(PROJECT_DIR)/MADVPano.framework/Headers",
 				);
 				INFOPLIST_FILE = ImmoviewerMADVentureDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

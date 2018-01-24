@@ -7,8 +7,13 @@
 //
 
 #import "FirstViewController.h"
+#import <MVCameraClient.h>
 
-@interface FirstViewController ()
+@interface FirstViewController () <MVCameraClientObserver>
+
+@property (nonatomic, strong) IBOutlet UIButton* connectButton;
+@property (nonatomic, strong) IBOutlet UIButton* shootButton;
+@property (nonatomic, strong) IBOutlet UISwitch* bracketingSwitch;
 
 @end
 
@@ -17,6 +22,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.connectButton.tag = 0;
+    
+    [[MVCameraClient sharedInstance] addObserver:self];
 }
 
 
@@ -25,5 +33,48 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark UI Events
+
+-(IBAction)connectButtonClicked:(id)sender {
+    if (0 == self.connectButton.tag)
+    {
+        self.connectButton.enabled = NO;
+        [[MVCameraClient sharedInstance] connectCamera];
+    }
+    else
+    {
+        [[MVCameraClient sharedInstance] disconnectCamera];
+    }
+}
+
+-(IBAction)shootButtonClicked:(id)sender {
+    [[MVCameraClient sharedInstance] startShooting];
+}
+
+#pragma mark MVCameraClientObserver
+
+-(void) didConnectSuccess:(MVCameraDevice *)device {
+    self.connectButton.enabled = YES;
+    self.connectButton.tag = 1;
+    [self.connectButton setTitle:@"Disconnect" forState:UIControlStateNormal];
+    
+    self.shootButton.hidden = NO;
+    self.bracketingSwitch.hidden = NO;
+    
+    [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoSurroundExp param:6];
+}
+
+-(void) didConnectFail:(NSString *)errorMessage {
+    self.connectButton.enabled = YES;
+}
+
+-(void) didDisconnect:(CameraDisconnectReason)reason {
+    self.connectButton.enabled = YES;
+    self.connectButton.tag = 0;
+    [self.connectButton setTitle:@"Connect" forState:UIControlStateNormal];
+    
+    self.shootButton.hidden = YES;
+    self.bracketingSwitch.hidden = YES;
+}
 
 @end
