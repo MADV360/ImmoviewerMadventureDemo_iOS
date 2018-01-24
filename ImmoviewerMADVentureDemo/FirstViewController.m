@@ -61,7 +61,7 @@
     self.shootButton.hidden = NO;
     self.bracketingSwitch.hidden = NO;
     
-    [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoSurroundExp param:6];
+    [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoSurroundExp param:0];
 }
 
 -(void) didConnectFail:(NSString *)errorMessage {
@@ -75,6 +75,13 @@
     
     self.shootButton.hidden = YES;
     self.bracketingSwitch.hidden = YES;
+}
+
+-(void) didCameraModeChange:(CameraMode)mode subMode:(CameraSubMode)subMode param:(NSInteger)param {
+    if (mode == CameraModePhoto && subMode == CameraSubmodePhotoSurroundExp && param != 6)
+    {
+        [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoSurroundExp param:6];
+    }
 }
 
 @end
