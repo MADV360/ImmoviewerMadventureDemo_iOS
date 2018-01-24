@@ -14,9 +14,31 @@
 		BBAD07D620187960005BAD6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBAD07D520187960005BAD6F /* Assets.xcassets */; };
 		BBAD07D920187961005BAD6F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBAD07D720187961005BAD6F /* LaunchScreen.storyboard */; };
 		BBAD07DC20187961005BAD6F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD07DB20187961005BAD6F /* main.m */; };
+		BBAD07E420187AC9005BAD6F /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD07E220187AC9005BAD6F /* CoreMotion.framework */; };
+		BBAD07E520187AC9005BAD6F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD07E320187AC9005BAD6F /* CoreMedia.framework */; };
+		BBAD07E720187AD1005BAD6F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD07E620187AD1005BAD6F /* CoreGraphics.framework */; };
+		BBAD07EB20187AE9005BAD6F /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD07E820187AE9005BAD6F /* CoreAudio.framework */; };
+		BBAD07EC20187AE9005BAD6F /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD07E920187AE9005BAD6F /* CoreTelephony.framework */; };
+		BBAD07ED20187AE9005BAD6F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD07EA20187AE9005BAD6F /* CoreVideo.framework */; };
+		BBAD07EF20187AF1005BAD6F /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD07EE20187AF0005BAD6F /* VideoToolbox.framework */; };
+		BBAD07F120187AF6005BAD6F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD07F020187AF6005BAD6F /* AVFoundation.framework */; };
+		BBAD07F520187AFE005BAD6F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD07F320187AFE005BAD6F /* AudioToolbox.framework */; };
+		BBAD07F720187B04005BAD6F /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD07F620187B03005BAD6F /* libxml2.2.tbd */; };
+		BBAD07F920187B0D005BAD6F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD07F820187B0D005BAD6F /* libz.tbd */; };
+		BBAD07FB20187B18005BAD6F /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD07FA20187B18005BAD6F /* libiconv.tbd */; };
+		BBAD07FE20187B5D005BAD6F /* MADVCamera.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD07FC20187B5C005BAD6F /* MADVCamera.framework */; };
+		BBAD07FF20187B5D005BAD6F /* MADVPano.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD07FD20187B5C005BAD6F /* MADVPano.framework */; };
+		BBAD080120187B7A005BAD6F /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD080020187B7A005BAD6F /* Photos.framework */; };
+		BBAD080320187B81005BAD6F /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD080220187B81005BAD6F /* MediaPlayer.framework */; };
+		BBAD080520187B89005BAD6F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD080420187B89005BAD6F /* CoreLocation.framework */; };
+		BBAD080720187BC6005BAD6F /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD080620187BC6005BAD6F /* Accelerate.framework */; };
+		F3AF0153BD8636897B2271C9 /* libPods-ImmoviewerMADVentureDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25132D9EC38BDD4A8C419F43 /* libPods-ImmoviewerMADVentureDemo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		25132D9EC38BDD4A8C419F43 /* libPods-ImmoviewerMADVentureDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ImmoviewerMADVentureDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		40E3166B23F443B369412182 /* Pods-ImmoviewerMADVentureDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImmoviewerMADVentureDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ImmoviewerMADVentureDemo/Pods-ImmoviewerMADVentureDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		4CE02EE7E4F5FA1AAE8ABCC3 /* Pods-ImmoviewerMADVentureDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImmoviewerMADVentureDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ImmoviewerMADVentureDemo/Pods-ImmoviewerMADVentureDemo.release.xcconfig"; sourceTree = "<group>"; };
 		BBAD07C62018795F005BAD6F /* ImmoviewerMADVentureDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImmoviewerMADVentureDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBAD07C920187960005BAD6F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		BBAD07CA20187960005BAD6F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -29,6 +51,25 @@
 		BBAD07D820187961005BAD6F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BBAD07DA20187961005BAD6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BBAD07DB20187961005BAD6F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BBAD07E220187AC9005BAD6F /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		BBAD07E320187AC9005BAD6F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		BBAD07E620187AD1005BAD6F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		BBAD07E820187AE9005BAD6F /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		BBAD07E920187AE9005BAD6F /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		BBAD07EA20187AE9005BAD6F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		BBAD07EE20187AF0005BAD6F /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		BBAD07F020187AF6005BAD6F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		BBAD07F220187AFE005BAD6F /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		BBAD07F320187AFE005BAD6F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		BBAD07F620187B03005BAD6F /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
+		BBAD07F820187B0D005BAD6F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		BBAD07FA20187B18005BAD6F /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		BBAD07FC20187B5C005BAD6F /* MADVCamera.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MADVCamera.framework; sourceTree = "<group>"; };
+		BBAD07FD20187B5C005BAD6F /* MADVPano.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MADVPano.framework; sourceTree = "<group>"; };
+		BBAD080020187B7A005BAD6F /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		BBAD080220187B81005BAD6F /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		BBAD080420187B89005BAD6F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		BBAD080620187BC6005BAD6F /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,17 +77,74 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBAD080720187BC6005BAD6F /* Accelerate.framework in Frameworks */,
+				BBAD080520187B89005BAD6F /* CoreLocation.framework in Frameworks */,
+				BBAD080320187B81005BAD6F /* MediaPlayer.framework in Frameworks */,
+				BBAD080120187B7A005BAD6F /* Photos.framework in Frameworks */,
+				BBAD07FE20187B5D005BAD6F /* MADVCamera.framework in Frameworks */,
+				BBAD07FF20187B5D005BAD6F /* MADVPano.framework in Frameworks */,
+				BBAD07FB20187B18005BAD6F /* libiconv.tbd in Frameworks */,
+				BBAD07F920187B0D005BAD6F /* libz.tbd in Frameworks */,
+				BBAD07F720187B04005BAD6F /* libxml2.2.tbd in Frameworks */,
+				BBAD07F520187AFE005BAD6F /* AudioToolbox.framework in Frameworks */,
+				BBAD07F120187AF6005BAD6F /* AVFoundation.framework in Frameworks */,
+				BBAD07EF20187AF1005BAD6F /* VideoToolbox.framework in Frameworks */,
+				BBAD07EB20187AE9005BAD6F /* CoreAudio.framework in Frameworks */,
+				BBAD07EC20187AE9005BAD6F /* CoreTelephony.framework in Frameworks */,
+				BBAD07ED20187AE9005BAD6F /* CoreVideo.framework in Frameworks */,
+				BBAD07E720187AD1005BAD6F /* CoreGraphics.framework in Frameworks */,
+				BBAD07E420187AC9005BAD6F /* CoreMotion.framework in Frameworks */,
+				BBAD07E520187AC9005BAD6F /* CoreMedia.framework in Frameworks */,
+				F3AF0153BD8636897B2271C9 /* libPods-ImmoviewerMADVentureDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1C070C5A73858637F229DBD9 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				40E3166B23F443B369412182 /* Pods-ImmoviewerMADVentureDemo.debug.xcconfig */,
+				4CE02EE7E4F5FA1AAE8ABCC3 /* Pods-ImmoviewerMADVentureDemo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		2E7BEA6C39DD22A2C9ABD0BB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BBAD080620187BC6005BAD6F /* Accelerate.framework */,
+				BBAD080420187B89005BAD6F /* CoreLocation.framework */,
+				BBAD080220187B81005BAD6F /* MediaPlayer.framework */,
+				BBAD080020187B7A005BAD6F /* Photos.framework */,
+				BBAD07FC20187B5C005BAD6F /* MADVCamera.framework */,
+				BBAD07FD20187B5C005BAD6F /* MADVPano.framework */,
+				BBAD07FA20187B18005BAD6F /* libiconv.tbd */,
+				BBAD07F820187B0D005BAD6F /* libz.tbd */,
+				BBAD07F620187B03005BAD6F /* libxml2.2.tbd */,
+				BBAD07F320187AFE005BAD6F /* AudioToolbox.framework */,
+				BBAD07F220187AFE005BAD6F /* AudioUnit.framework */,
+				BBAD07F020187AF6005BAD6F /* AVFoundation.framework */,
+				BBAD07EE20187AF0005BAD6F /* VideoToolbox.framework */,
+				BBAD07E820187AE9005BAD6F /* CoreAudio.framework */,
+				BBAD07E920187AE9005BAD6F /* CoreTelephony.framework */,
+				BBAD07EA20187AE9005BAD6F /* CoreVideo.framework */,
+				BBAD07E620187AD1005BAD6F /* CoreGraphics.framework */,
+				BBAD07E320187AC9005BAD6F /* CoreMedia.framework */,
+				BBAD07E220187AC9005BAD6F /* CoreMotion.framework */,
+				25132D9EC38BDD4A8C419F43 /* libPods-ImmoviewerMADVentureDemo.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		BBAD07BD2018795E005BAD6F = {
 			isa = PBXGroup;
 			children = (
 				BBAD07C820187960005BAD6F /* ImmoviewerMADVentureDemo */,
 				BBAD07C72018795F005BAD6F /* Products */,
+				1C070C5A73858637F229DBD9 /* Pods */,
+				2E7BEA6C39DD22A2C9ABD0BB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -83,9 +181,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BBAD07DF20187961005BAD6F /* Build configuration list for PBXNativeTarget "ImmoviewerMADVentureDemo" */;
 			buildPhases = (
+				34D500C431619FC5F43A2071 /* [CP] Check Pods Manifest.lock */,
 				BBAD07C22018795F005BAD6F /* Sources */,
 				BBAD07C32018795F005BAD6F /* Frameworks */,
 				BBAD07C42018795F005BAD6F /* Resources */,
+				BB8326E550D9D7F3347B7DFD /* [CP] Embed Pods Frameworks */,
+				A475CAFF34C95FF0E476DEF1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -141,6 +242,57 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		34D500C431619FC5F43A2071 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ImmoviewerMADVentureDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A475CAFF34C95FF0E476DEF1 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ImmoviewerMADVentureDemo/Pods-ImmoviewerMADVentureDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BB8326E550D9D7F3347B7DFD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ImmoviewerMADVentureDemo/Pods-ImmoviewerMADVentureDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		BBAD07C22018795F005BAD6F /* Sources */ = {
@@ -282,11 +434,18 @@
 		};
 		BBAD07E020187961005BAD6F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 40E3166B23F443B369412182 /* Pods-ImmoviewerMADVentureDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QBAB3CS86A;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = ImmoviewerMADVentureDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.madv360.ImmoviewerMADVentureDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -296,11 +455,18 @@
 		};
 		BBAD07E120187961005BAD6F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4CE02EE7E4F5FA1AAE8ABCC3 /* Pods-ImmoviewerMADVentureDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QBAB3CS86A;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = ImmoviewerMADVentureDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.madv360.ImmoviewerMADVentureDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
