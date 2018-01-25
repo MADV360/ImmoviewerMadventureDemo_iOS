@@ -7,8 +7,9 @@
 //
 
 #import "AppDelegate.h"
+#import <MVMediaManager.h>
 
-@interface AppDelegate ()
+@interface AppDelegate () <MVMediaDataSourceObserver, MVMediaDownloadStatusObserver>
 
 @end
 
@@ -17,6 +18,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [[MVMediaManager sharedInstance] addMediaDataSourceObserver:self];
+    [[MVMediaManager sharedInstance] addMediaDownloadStatusObserver:self];
     return YES;
 }
 
@@ -47,5 +50,58 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+#pragma mark    MVMediaDataSourceObserver
+
+-(void)didCameraMediasReloaded:(NSArray<MVMedia *> *) medias dataSetEvent:(DataSetEvent)dataSetEvent errorCode:(int)errorCode {
+    if (dataSetEvent == DataSetEventAddNew)
+    {
+        [[MVMediaManager sharedInstance] addDownloadingOfMedias:medias completion:^{
+            NSLog(@"Batch downloading done");
+        } progressBlock:^(int completedCount, int totalCount, BOOL *cancel) {
+            NSLog(@"Batch downloading progress : %d/%d", completedCount, totalCount);
+        }];
+    }
+}
+
+-(void) didLocalMediasReloaded:(NSArray<MVMedia *> *) medias dataSetEvent:(DataSetEvent)dataSetEvent {
+    
+}
+
+-(void)didFetchThumbnailImage:(UIImage *)image ofMedia:(MVMedia*)media error:(int)error {
+    
+}
+
+-(void)didFetchMediaInfo:(MVMedia *)media error:(int)error {
+    
+}
+
+- (void) didFetchRecentMediaThumbnail:(MVMedia*)media image:(UIImage*)image error:(int)error {
+    
+}
+
+#pragma mark    MVMediaDownloadStatusObserver
+
+- (void) didDownloadStatusChange:(int)downloadStatus errorCode:(int)errorCode ofMedia:(MVMedia*)media {
+    if (!errorCode && downloadStatus == MVMediaDownloadStatusFinished)
+    {
+        NSLog(@"Media downloaded, localPath = %@", media.localPath);
+    }
+}
+
+- (void) didDownloadProgressChange:(NSInteger)downloadedBytes totalBytes:(NSInteger)totalBytes ofMedia:(MVMedia*)media {
+    
+}
+
+- (void) didBatchDownloadStatusChange:(int)downloadStatus ofMedias:(NSArray<MVMedia *>*)medias {
+    
+}
+
+- (void) didDownloadingsHung {
+    
+}
+
+- (void) didReceiveStorageWarning {
+    
+}
 
 @end
