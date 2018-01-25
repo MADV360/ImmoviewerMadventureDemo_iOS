@@ -44,6 +44,9 @@
                             </button>
                             <switch hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e04-PB-2v4">
                                 <rect key="frame" x="163" y="395" width="51" height="31"/>
+                                <connections>
+                                    <action selector="switchValueChanged:" destination="9pv-A4-QxB" eventType="valueChanged" id="CK3-QE-u99"/>
+                                </connections>
                             </switch>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

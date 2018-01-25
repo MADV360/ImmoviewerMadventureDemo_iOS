@@ -51,6 +51,17 @@
     [[MVCameraClient sharedInstance] startShooting];
 }
 
+-(IBAction)switchValueChanged:(id)sender {
+    if (self.bracketingSwitch.on)
+    {
+        [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoSurroundExp param:0];
+    }
+    else
+    {
+        [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoNormal param:0];
+    }
+}
+
 #pragma mark MVCameraClientObserver
 
 -(void) didConnectSuccess:(MVCameraDevice *)device {
@@ -61,7 +72,7 @@
     self.shootButton.hidden = NO;
     self.bracketingSwitch.hidden = NO;
     
-    [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoSurroundExp param:0];
+    //[self switchValueChanged:self.bracketingSwitch];
 }
 
 -(void) didConnectFail:(NSString *)errorMessage {
@@ -78,9 +89,24 @@
 }
 
 -(void) didCameraModeChange:(CameraMode)mode subMode:(CameraSubMode)subMode param:(NSInteger)param {
-    if (mode == CameraModePhoto && subMode == CameraSubmodePhotoSurroundExp && param != 6)
+    if (self.bracketingSwitch.on)
     {
-        [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoSurroundExp param:6];
+        if (mode != CameraModePhoto)
+        {
+            [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoSurroundExp param:0];
+        }
+        else if (subMode != CameraSubmodePhotoSurroundExp)
+        {
+            [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoSurroundExp param:6];
+        }
+        else if (param != 6)
+        {
+            [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoSurroundExp param:6];
+        }
+    }
+    else if (mode != CameraModePhoto)
+    {
+        [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoNormal param:0];
     }
 }
 
