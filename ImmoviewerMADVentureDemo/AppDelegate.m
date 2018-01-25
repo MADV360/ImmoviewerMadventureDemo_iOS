@@ -9,6 +9,10 @@
 #import "AppDelegate.h"
 #import <MVMediaManager.h>
 
+NSString* kNotificationDownloadedListUpdated = @"NSString* kNotificationDownloadedListUpdated";
+
+NSMutableArray<NSString* >* g_downloadedFileNames = nil;
+
 @interface AppDelegate () <MVMediaDataSourceObserver, MVMediaDownloadStatusObserver>
 
 @end
@@ -18,8 +22,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    [[MVMediaManager sharedInstance] addMediaDataSourceObserver:self];
-    [[MVMediaManager sharedInstance] addMediaDownloadStatusObserver:self];
+    g_downloadedFileNames = [[NSMutableArray alloc] init];
+    
+    MVMediaManager* mediaManager = [MVMediaManager sharedInstance];
+    mediaManager.downloadMediasIntoDocuments = YES;// :This is necessary
+    [mediaManager addMediaDataSourceObserver:self];
+    [mediaManager addMediaDownloadStatusObserver:self];
     return YES;
 }
 
@@ -85,6 +93,8 @@
     if (!errorCode && downloadStatus == MVMediaDownloadStatusFinished)
     {
         NSLog(@"Media downloaded, localPath = %@", media.localPath);
+        [g_downloadedFileNames addObject:media.localPath];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationDownloadedListUpdated object:g_downloadedFileNames];
     }
 }
 

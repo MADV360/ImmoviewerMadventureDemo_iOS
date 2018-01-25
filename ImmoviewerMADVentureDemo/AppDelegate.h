@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+extern NSString* kNotificationDownloadedListUpdated;
+
+extern NSMutableArray<NSString* >* g_downloadedFileNames;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
