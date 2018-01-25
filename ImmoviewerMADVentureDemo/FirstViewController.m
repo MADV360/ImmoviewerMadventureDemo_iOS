@@ -23,7 +23,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     self.connectButton.tag = 0;
-    
+    // Register as an observer for camera state:
     [[MVCameraClient sharedInstance] addObserver:self];
 }
 
@@ -39,15 +39,18 @@
     if (0 == self.connectButton.tag)
     {
         self.connectButton.enabled = NO;
+        // Connect camera(should get wifi connected first):
         [[MVCameraClient sharedInstance] connectCamera];
     }
     else
     {
+        // Disconnect camera(destroy session):
         [[MVCameraClient sharedInstance] disconnectCamera];
     }
 }
 
 -(IBAction)shootButtonClicked:(id)sender {
+    // Take photo(or video, depends on which mode the camera is in):
     [[MVCameraClient sharedInstance] startShooting];
 }
 
@@ -58,6 +61,7 @@
     }
     else
     {
+        // According to the present design of camera's workflow, we cannot directly change its mode to bracketing if it is not already in bracketing photo mode. So first change mode to Photo, then bracketing photo, finally set EV param to +-3. Following requests are sent in -(void)didCameraModeChange:subMode:param: callback :
         [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoNormal param:0];
     }
 }
@@ -71,8 +75,6 @@
     
     self.shootButton.hidden = NO;
     self.bracketingSwitch.hidden = NO;
-    
-    //[self switchValueChanged:self.bracketingSwitch];
 }
 
 -(void) didConnectFail:(NSString *)errorMessage {
@@ -92,20 +94,20 @@
     if (self.bracketingSwitch.on)
     {
         if (mode != CameraModePhoto)
-        {
+        {// Change to Photo mode:
             [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoSurroundExp param:0];
         }
         else if (subMode != CameraSubmodePhotoSurroundExp)
-        {
+        {// Change to Bracketing Photo submode:
             [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoSurroundExp param:6];
         }
         else if (param != 6)
-        {
+        {// Set EV value to +-3 (with param=6):
             [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoSurroundExp param:6];
         }
     }
     else if (mode != CameraModePhoto)
-    {
+    {// Change to Photo mode:
         [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoNormal param:0];
     }
 }
