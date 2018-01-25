@@ -92,7 +92,8 @@ NSMutableArray<NSString* >* g_downloadedFileNames = nil;
 
 - (void) didDownloadStatusChange:(int)downloadStatus errorCode:(int)errorCode ofMedia:(MVMedia*)media {
     if (!errorCode && downloadStatus == MVMediaDownloadStatusFinished)
-    {// When a media file has been successfully downloaded, get its local file name(relative to sandbox document directory) from this callback:
+    {// When a media file has been successfully downloaded, get its local file name(relative to sandbox document directory) from this callback
+        //To download files into sandbox from camera, "Application supports iTunes file sharing" and "App Transport Security Settings"->"Allow Arbitrary Loads" in Info.plist should all be set to YES
         NSLog(@"Media downloaded, localPath = %@", media.localPath);
         [g_downloadedFileNames addObject:media.localPath];
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationDownloadedListUpdated object:g_downloadedFileNames];
