@@ -1,0 +1,1419 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		521A4F331F0B95C200E5F155 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 521A4F321F0B95C200E5F155 /* libxml2.2.dylib */; };
+		BB190ECF1F0B30330045BAD0 /* MADVCamera.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB190EC51F0B30330045BAD0 /* MADVCamera.framework */; };
+		BB190ED41F0B30330045BAD0 /* MADVCameraTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190ED31F0B30330045BAD0 /* MADVCameraTests.m */; };
+		BB190ED61F0B30330045BAD0 /* MADVCamera.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190EC81F0B30330045BAD0 /* MADVCamera.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BB190F4A1F0B30A70045BAD0 /* AMBACommands.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190EE01F0B30A70045BAD0 /* AMBACommands.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BB190F4C1F0B30A70045BAD0 /* AMBAGetFileRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190EE31F0B30A70045BAD0 /* AMBAGetFileRequest.h */; };
+		BB190F4E1F0B30A70045BAD0 /* AMBAGetFileRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190EE51F0B30A70045BAD0 /* AMBAGetFileRequest.m */; };
+		BB190F4F1F0B30A70045BAD0 /* AMBAPutFileRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190EE61F0B30A70045BAD0 /* AMBAPutFileRequest.h */; };
+		BB190F511F0B30A70045BAD0 /* AMBAPutFileRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190EE81F0B30A70045BAD0 /* AMBAPutFileRequest.m */; };
+		BB190F521F0B30A70045BAD0 /* AMBARequest.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190EE91F0B30A70045BAD0 /* AMBARequest.h */; };
+		BB190F541F0B30A70045BAD0 /* AMBARequest.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190EEB1F0B30A70045BAD0 /* AMBARequest.m */; };
+		BB190F551F0B30A70045BAD0 /* AMBASetWifiRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190EEC1F0B30A70045BAD0 /* AMBASetWifiRequest.h */; };
+		BB190F571F0B30A70045BAD0 /* AMBASetWifiRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190EEE1F0B30A70045BAD0 /* AMBASetWifiRequest.m */; };
+		BB190F591F0B30A70045BAD0 /* AMBACancelFileTransferResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190EF11F0B30A70045BAD0 /* AMBACancelFileTransferResponse.h */; };
+		BB190F5B1F0B30A70045BAD0 /* AMBACancelFileTransferResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190EF31F0B30A70045BAD0 /* AMBACancelFileTransferResponse.m */; };
+		BB190F5C1F0B30A70045BAD0 /* AMBAFileTransferResultResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190EF41F0B30A70045BAD0 /* AMBAFileTransferResultResponse.h */; };
+		BB190F5E1F0B30A70045BAD0 /* AMBAFileTransferResultResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190EF61F0B30A70045BAD0 /* AMBAFileTransferResultResponse.m */; };
+		BB190F5F1F0B30A70045BAD0 /* AMBAGetAllModeParamResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190EF71F0B30A70045BAD0 /* AMBAGetAllModeParamResponse.h */; };
+		BB190F611F0B30A70045BAD0 /* AMBAGetAllModeParamResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190EF91F0B30A70045BAD0 /* AMBAGetAllModeParamResponse.m */; };
+		BB190F621F0B30A70045BAD0 /* AMBAGetAllSettingParamResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190EFA1F0B30A70045BAD0 /* AMBAGetAllSettingParamResponse.h */; };
+		BB190F641F0B30A70045BAD0 /* AMBAGetAllSettingParamResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190EFC1F0B30A70045BAD0 /* AMBAGetAllSettingParamResponse.m */; };
+		BB190F651F0B30A70045BAD0 /* AMBAGetFileResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190EFD1F0B30A70045BAD0 /* AMBAGetFileResponse.h */; };
+		BB190F671F0B30A70045BAD0 /* AMBAGetFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190EFF1F0B30A70045BAD0 /* AMBAGetFileResponse.m */; };
+		BB190F681F0B30A70045BAD0 /* AMBAGetMediaInfoResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F001F0B30A70045BAD0 /* AMBAGetMediaInfoResponse.h */; };
+		BB190F6A1F0B30A70045BAD0 /* AMBAGetMediaInfoResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F021F0B30A70045BAD0 /* AMBAGetMediaInfoResponse.m */; };
+		BB190F6B1F0B30A70045BAD0 /* AMBAGetThumbnailResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F031F0B30A70045BAD0 /* AMBAGetThumbnailResponse.h */; };
+		BB190F6D1F0B30A70045BAD0 /* AMBAGetThumbnailResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F051F0B30A70045BAD0 /* AMBAGetThumbnailResponse.m */; };
+		BB190F6E1F0B30A70045BAD0 /* AMBAGetWiFiStatusResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F061F0B30A70045BAD0 /* AMBAGetWiFiStatusResponse.h */; };
+		BB190F701F0B30A70045BAD0 /* AMBAGetWiFiStatusResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F081F0B30A70045BAD0 /* AMBAGetWiFiStatusResponse.m */; };
+		BB190F711F0B30A70045BAD0 /* AMBAListResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F091F0B30A70045BAD0 /* AMBAListResponse.h */; };
+		BB190F731F0B30A70045BAD0 /* AMBAListResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F0B1F0B30A70045BAD0 /* AMBAListResponse.m */; };
+		BB190F741F0B30A70045BAD0 /* AMBAPutFileResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F0C1F0B30A70045BAD0 /* AMBAPutFileResponse.h */; };
+		BB190F761F0B30A70045BAD0 /* AMBAPutFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F0E1F0B30A70045BAD0 /* AMBAPutFileResponse.m */; };
+		BB190F771F0B30A70045BAD0 /* AMBAResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F0F1F0B30A70045BAD0 /* AMBAResponse.h */; };
+		BB190F791F0B30A70045BAD0 /* AMBAResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F111F0B30A70045BAD0 /* AMBAResponse.m */; };
+		BB190F7A1F0B30A70045BAD0 /* AMBASaveMediaFileDoneResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F121F0B30A70045BAD0 /* AMBASaveMediaFileDoneResponse.h */; };
+		BB190F7C1F0B30A70045BAD0 /* AMBASaveMediaFileDoneResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F141F0B30A70045BAD0 /* AMBASaveMediaFileDoneResponse.m */; };
+		BB190F7D1F0B30A70045BAD0 /* AMBASetClientInfoResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F151F0B30A70045BAD0 /* AMBASetClientInfoResponse.h */; };
+		BB190F7E1F0B30A70045BAD0 /* AMBASetClientInfoResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F161F0B30A70045BAD0 /* AMBASetClientInfoResponse.m */; };
+		BB190F7F1F0B30A70045BAD0 /* AMBASyncStorageAllStateResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F171F0B30A70045BAD0 /* AMBASyncStorageAllStateResponse.h */; };
+		BB190F811F0B30A70045BAD0 /* AMBASyncStorageAllStateResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F191F0B30A70045BAD0 /* AMBASyncStorageAllStateResponse.m */; };
+		BB190F831F0B30A70045BAD0 /* CMDConnectManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F1B1F0B30A70045BAD0 /* CMDConnectManager.h */; };
+		BB190F851F0B30A70045BAD0 /* CMDConnectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F1D1F0B30A70045BAD0 /* CMDConnectManager.m */; };
+		BB190F861F0B30A70045BAD0 /* DATAConnectManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F1E1F0B30A70045BAD0 /* DATAConnectManager.h */; };
+		BB190F881F0B30A70045BAD0 /* DATAConnectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F201F0B30A70045BAD0 /* DATAConnectManager.m */; };
+		BB190F891F0B30A70045BAD0 /* ImageFilterBean.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F211F0B30A70045BAD0 /* ImageFilterBean.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BB190F8B1F0B30A70045BAD0 /* ImageFilterBean.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F231F0B30A70045BAD0 /* ImageFilterBean.m */; };
+		BB190F8D1F0B30A70045BAD0 /* MVCameraClient.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F251F0B30A70045BAD0 /* MVCameraClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BB190F8F1F0B30A70045BAD0 /* MVCameraClient.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F271F0B30A70045BAD0 /* MVCameraClient.m */; };
+		BB190F951F0B30A70045BAD0 /* MVCameraDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F2D1F0B30A70045BAD0 /* MVCameraDevice.m */; };
+		BB190F961F0B30A70045BAD0 /* MVCameraDownloadManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F2E1F0B30A70045BAD0 /* MVCameraDownloadManager.h */; };
+		BB190F981F0B30A70045BAD0 /* MVCameraDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F301F0B30A70045BAD0 /* MVCameraDownloadManager.m */; };
+		BB190F9A1F0B30A70045BAD0 /* MVCameraUploadManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F321F0B30A70045BAD0 /* MVCameraUploadManager.h */; };
+		BB190F9C1F0B30A70045BAD0 /* MVCameraUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F341F0B30A70045BAD0 /* MVCameraUploadManager.m */; };
+		BB190F9D1F0B30A70045BAD0 /* MVMedia.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F351F0B30A70045BAD0 /* MVMedia.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BB190F9F1F0B30A70045BAD0 /* MVMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F371F0B30A70045BAD0 /* MVMedia.m */; };
+		BB190FA11F0B30A70045BAD0 /* MVMediaManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F391F0B30A70045BAD0 /* MVMediaManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BB190FA31F0B30A70045BAD0 /* MVMediaManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F3B1F0B30A70045BAD0 /* MVMediaManager.m */; };
+		BB190FA91F0B30A70045BAD0 /* PathTreeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F411F0B30A70045BAD0 /* PathTreeNode.h */; };
+		BB190FAB1F0B30A70045BAD0 /* PathTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F431F0B30A70045BAD0 /* PathTreeNode.m */; };
+		BB190FAC1F0B30A70045BAD0 /* SettingTreeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F441F0B30A70045BAD0 /* SettingTreeNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BB190FAE1F0B30A70045BAD0 /* SettingTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F461F0B30A70045BAD0 /* SettingTreeNode.m */; };
+		BB190FAF1F0B30A70045BAD0 /* WiFiConnectManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F471F0B30A70045BAD0 /* WiFiConnectManager.h */; };
+		BB190FB11F0B30A70045BAD0 /* WiFiConnectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190F491F0B30A70045BAD0 /* WiFiConnectManager.m */; };
+		BB190FB61F0B33800045BAD0 /* MADVPano.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB190FB51F0B33800045BAD0 /* MADVPano.framework */; };
+		BB190FB81F0B33910045BAD0 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB190FB71F0B33910045BAD0 /* AssetsLibrary.framework */; };
+		BB190FBA1F0B33990045BAD0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB190FB91F0B33990045BAD0 /* CoreGraphics.framework */; };
+		BB190FBC1F0B33A30045BAD0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB190FBB1F0B33A30045BAD0 /* Foundation.framework */; };
+		BB190FBE1F0B33A90045BAD0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB190FBD1F0B33A90045BAD0 /* QuartzCore.framework */; };
+		BB190FC01F0B33AF0045BAD0 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB190FBF1F0B33AF0045BAD0 /* ImageIO.framework */; };
+		BB190FC21F0B33B40045BAD0 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB190FC11F0B33B40045BAD0 /* MapKit.framework */; };
+		BB190FC41F0B33BA0045BAD0 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB190FC31F0B33BA0045BAD0 /* MessageUI.framework */; };
+		BB190FC61F0B33BF0045BAD0 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB190FC51F0B33BF0045BAD0 /* MobileCoreServices.framework */; };
+		BB190FC81F0B33C50045BAD0 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB190FC71F0B33C50045BAD0 /* Security.framework */; };
+		BB190FCA1F0B33CF0045BAD0 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB190FC91F0B33CF0045BAD0 /* SystemConfiguration.framework */; };
+		BB190FCC1F0B33E00045BAD0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB190FCB1F0B33E00045BAD0 /* UIKit.framework */; };
+		BB19101D1F0B38D40045BAD0 /* RealmSerialQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = BB1910171F0B38D40045BAD0 /* RealmSerialQueue.h */; };
+		BB19101E1F0B38D40045BAD0 /* RealmSerialQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1910181F0B38D40045BAD0 /* RealmSerialQueue.m */; };
+		BB19101F1F0B38D40045BAD0 /* RLModel.h in Headers */ = {isa = PBXBuildFile; fileRef = BB1910191F0B38D40045BAD0 /* RLModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BB1910201F0B38D40045BAD0 /* RLModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB19101A1F0B38D40045BAD0 /* RLModel.m */; };
+		BB1910441F0B3C1A0045BAD0 /* GDataXMLNode.h in Headers */ = {isa = PBXBuildFile; fileRef = BB1910401F0B3C1A0045BAD0 /* GDataXMLNode.h */; };
+		BB1910451F0B3C1A0045BAD0 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1910411F0B3C1A0045BAD0 /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		BB1910461F0B3C1A0045BAD0 /* XMLTool.h in Headers */ = {isa = PBXBuildFile; fileRef = BB1910421F0B3C1A0045BAD0 /* XMLTool.h */; };
+		BB1910471F0B3C1A0045BAD0 /* XMLTool.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1910431F0B3C1A0045BAD0 /* XMLTool.m */; };
+		BB19105B1F0B42650045BAD0 /* MadvGLRenderer_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = BB1910591F0B42650045BAD0 /* MadvGLRenderer_iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BB19105C1F0B42650045BAD0 /* MadvGLRenderer_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB19105A1F0B42650045BAD0 /* MadvGLRenderer_iOS.mm */; };
+		BB1910701F0B42BA0045BAD0 /* kxmovie-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = BB1910621F0B42BA0045BAD0 /* kxmovie-Prefix.pch */; };
+		BB1910711F0B42BA0045BAD0 /* kxmovie.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BB1910631F0B42BA0045BAD0 /* kxmovie.bundle */; };
+		BB1910731F0B42BA0045BAD0 /* KxMovieDecoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB1910651F0B42BA0045BAD0 /* KxMovieDecoder.mm */; };
+		BB1910951F0B49A00045BAD0 /* ImageBlender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1910931F0B49A00045BAD0 /* ImageBlender.cpp */; };
+		BB1910961F0B49A00045BAD0 /* ImageBlender.h in Headers */ = {isa = PBXBuildFile; fileRef = BB1910941F0B49A00045BAD0 /* ImageBlender.h */; };
+		BB1910E91F0B4A510045BAD0 /* SdWhiteDetail.h in Headers */ = {isa = PBXBuildFile; fileRef = BB1910BB1F0B4A510045BAD0 /* SdWhiteDetail.h */; };
+		BB1910EA1F0B4A510045BAD0 /* SdWhiteDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1910BC1F0B4A510045BAD0 /* SdWhiteDetail.m */; };
+		BB206DC91F4A93EC00EB50C0 /* MVGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB206DC71F4A93EB00EB50C0 /* MVGLView.mm */; };
+		BB206DCA1F4A93EC00EB50C0 /* MVGLView.h in Headers */ = {isa = PBXBuildFile; fileRef = BB206DC81F4A93EB00EB50C0 /* MVGLView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BB20FA3820183A7A00B300DD /* ResourceKeys.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190FDB1F0B36780045BAD0 /* ResourceKeys.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BB89B5B31F5510A5007AC0A2 /* AMBASetCameraModeResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = BB89B5B11F5510A5007AC0A2 /* AMBASetCameraModeResponse.h */; };
+		BB89B5B41F5510A5007AC0A2 /* AMBASetCameraModeResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = BB89B5B21F5510A5007AC0A2 /* AMBASetCameraModeResponse.m */; };
+		BB89B5B71F5510C9007AC0A2 /* AMBAShootPhotoIntervalResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = BB89B5B51F5510C9007AC0A2 /* AMBAShootPhotoIntervalResponse.h */; };
+		BB89B5B81F5510C9007AC0A2 /* AMBAShootPhotoIntervalResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = BB89B5B61F5510C9007AC0A2 /* AMBAShootPhotoIntervalResponse.m */; };
+		BB89B5C51F556994007AC0A2 /* KxMovieDecoder_douyin.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB89B5C31F556994007AC0A2 /* KxMovieDecoder_douyin.mm */; };
+		BB89B5C61F556994007AC0A2 /* KxMovieDecoder_douyin.h in Headers */ = {isa = PBXBuildFile; fileRef = BB89B5C41F556994007AC0A2 /* KxMovieDecoder_douyin.h */; };
+		BB9CB1211F1E0FA300FFC6C7 /* FGLanguageTool.h in Headers */ = {isa = PBXBuildFile; fileRef = BB9CB11F1F1E0FA300FFC6C7 /* FGLanguageTool.h */; };
+		BB9CB1221F1E0FA300FFC6C7 /* FGLanguageTool.m in Sources */ = {isa = PBXBuildFile; fileRef = BB9CB1201F1E0FA300FFC6C7 /* FGLanguageTool.m */; };
+		BB9CB1351F1E0FF800FFC6C7 /* LogManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BB9CB1231F1E0FF800FFC6C7 /* LogManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BB9CB1361F1E0FF800FFC6C7 /* MyReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = BB9CB1241F1E0FF800FFC6C7 /* MyReachability.h */; };
+		BB9CB1371F1E0FF800FFC6C7 /* MyReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BB9CB1251F1E0FF800FFC6C7 /* MyReachability.m */; };
+		BB9CB1381F1E0FF800FFC6C7 /* NSCondition+Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = BB9CB1261F1E0FF800FFC6C7 /* NSCondition+Extensions.h */; };
+		BB9CB1391F1E0FF800FFC6C7 /* NSCondition+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = BB9CB1271F1E0FF800FFC6C7 /* NSCondition+Extensions.m */; };
+		BB9CB13A1F1E0FF800FFC6C7 /* NSMutableArray+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = BB9CB1281F1E0FF800FFC6C7 /* NSMutableArray+Extensions.m */; };
+		BB9CB13B1F1E0FF800FFC6C7 /* NSString+Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = BB9CB1291F1E0FF800FFC6C7 /* NSString+Extensions.h */; };
+		BB9CB13C1F1E0FF800FFC6C7 /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = BB9CB12A1F1E0FF800FFC6C7 /* NSString+Extensions.m */; };
+		BB9CB13D1F1E0FF800FFC6C7 /* SocketHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = BB9CB12B1F1E0FF800FFC6C7 /* SocketHelper.h */; };
+		BB9CB13E1F1E0FF800FFC6C7 /* SocketHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB9CB12C1F1E0FF800FFC6C7 /* SocketHelper.mm */; };
+		BB9CB13F1F1E0FF800FFC6C7 /* z_Sandbox.h in Headers */ = {isa = PBXBuildFile; fileRef = BB9CB12D1F1E0FF800FFC6C7 /* z_Sandbox.h */; };
+		BB9CB1401F1E0FF800FFC6C7 /* z_Sandbox.m in Sources */ = {isa = PBXBuildFile; fileRef = BB9CB12E1F1E0FF800FFC6C7 /* z_Sandbox.m */; };
+		BB9CB1411F1E0FF800FFC6C7 /* helper.h in Headers */ = {isa = PBXBuildFile; fileRef = BB9CB12F1F1E0FF800FFC6C7 /* helper.h */; };
+		BB9CB1421F1E0FF800FFC6C7 /* helper.m in Sources */ = {isa = PBXBuildFile; fileRef = BB9CB1301F1E0FF800FFC6C7 /* helper.m */; };
+		BB9CB1431F1E0FF800FFC6C7 /* LogManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB9CB1311F1E0FF800FFC6C7 /* LogManager.m */; };
+		BB9CB1441F1E0FF800FFC6C7 /* NSMutableArray+Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = BB9CB1321F1E0FF800FFC6C7 /* NSMutableArray+Extensions.h */; };
+		BB9CB1451F1E0FF800FFC6C7 /* NSRecursiveCondition.h in Headers */ = {isa = PBXBuildFile; fileRef = BB9CB1331F1E0FF800FFC6C7 /* NSRecursiveCondition.h */; };
+		BBAAD38B20045BE300928F3C /* UIDevice+DeviceModel.h in Headers */ = {isa = PBXBuildFile; fileRef = BBAAD38920045BE100928F3C /* UIDevice+DeviceModel.h */; };
+		BBAAD38C20045BE300928F3C /* UIDevice+DeviceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD38A20045BE300928F3C /* UIDevice+DeviceModel.m */; };
+		BBAD0654201869B3005BAD6F /* MVMediaPlayerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = BBAD0652201869B2005BAD6F /* MVMediaPlayerViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BBAD0655201869B3005BAD6F /* MVMediaPlayerViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBAD0653201869B3005BAD6F /* MVMediaPlayerViewController.mm */; };
+		BBAD07AF20186B63005BAD6F /* VideoExportView.h in Headers */ = {isa = PBXBuildFile; fileRef = BBAD070220186B62005BAD6F /* VideoExportView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BBAD07B020186B63005BAD6F /* VideoExportView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD070320186B62005BAD6F /* VideoExportView.m */; };
+		BBB599A61F5818B7006A8528 /* JsonSerializableObject.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB599A41F5818B6006A8528 /* JsonSerializableObject.m */; };
+		BBB599A71F5818B7006A8528 /* JsonSerializableObject.h in Headers */ = {isa = PBXBuildFile; fileRef = BBB599A51F5818B6006A8528 /* JsonSerializableObject.h */; };
+		BBC7BC502016EC1200767A35 /* AMBAShootPhotoSurroundexpResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = BBC7BC4E2016EC1200767A35 /* AMBAShootPhotoSurroundexpResponse.h */; };
+		BBC7BC512016EC1200767A35 /* AMBAShootPhotoSurroundexpResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC7BC4F2016EC1200767A35 /* AMBAShootPhotoSurroundexpResponse.m */; };
+		BBC7BC572016FFAB00767A35 /* MVPhotosManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BBC7BC552016FFAA00767A35 /* MVPhotosManager.h */; };
+		BBC7BC582016FFAB00767A35 /* MVPhotosManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC7BC562016FFAA00767A35 /* MVPhotosManager.m */; };
+		BBC7BC5B201708EA00767A35 /* MVKxMovieViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = BBC7BC59201708E900767A35 /* MVKxMovieViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BBC7BC5C201708EA00767A35 /* MVKxMovieViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBC7BC5A201708E900767A35 /* MVKxMovieViewController.mm */; };
+		BBC7BC6720170A6000767A35 /* CycordAudioRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = BBC7BC5E20170A6000767A35 /* CycordAudioRecorder.h */; };
+		BBC7BC6920170A6000767A35 /* CycordNewAudioRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = BBC7BC6020170A6000767A35 /* CycordNewAudioRecorder.h */; };
+		BBC7BC6B20170A6000767A35 /* CycordVideoRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = BBC7BC6220170A6000767A35 /* CycordVideoRecorder.h */; };
+		BBC7BC6D20170A6000767A35 /* CycordVideoRecorderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = BBC7BC6420170A6000767A35 /* CycordVideoRecorderDelegate.h */; };
+		BBC7BC6E20170A6000767A35 /* postex_vert.h in Headers */ = {isa = PBXBuildFile; fileRef = BBC7BC6520170A6000767A35 /* postex_vert.h */; };
+		BBC7BC6F20170A6000767A35 /* tex_frag.h in Headers */ = {isa = PBXBuildFile; fileRef = BBC7BC6620170A6000767A35 /* tex_frag.h */; };
+		BBC7BC7E20171AD100767A35 /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBC7BC7920171ACE00767A35 /* libswresample.a */; };
+		BBC7BC7F20171AD100767A35 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBC7BC7A20171ACF00767A35 /* libavformat.a */; };
+		BBC7BC8020171AD100767A35 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBC7BC7B20171ACF00767A35 /* libavcodec.a */; };
+		BBC7BC8120171AD100767A35 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBC7BC7C20171AD000767A35 /* libswscale.a */; };
+		BBC7BC8220171AD100767A35 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBC7BC7D20171AD000767A35 /* libavutil.a */; };
+		BBDFA0B91F468A3100C816F4 /* MVCameraDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F2B1F0B30A70045BAD0 /* MVCameraDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BBF390AC1F22100B0023DC8B /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBF390AB1F22100B0023DC8B /* CoreLocation.framework */; };
+		BBF390AF1F2217400023DC8B /* AMBASetGPSInfoRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = BB130BAF1F1DE0B90052A6F3 /* AMBASetGPSInfoRequest.m */; };
+		BBF393771F26FD0F0023DC8B /* IDRDecoder.c in Sources */ = {isa = PBXBuildFile; fileRef = BBF393751F26FD0F0023DC8B /* IDRDecoder.c */; };
+		BBF393781F26FD0F0023DC8B /* IDRDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = BBF393761F26FD0F0023DC8B /* IDRDecoder.h */; };
+		BBF3937B1F26FDED0023DC8B /* h264_iOS8VTHD.h in Headers */ = {isa = PBXBuildFile; fileRef = BBF393791F26FDED0023DC8B /* h264_iOS8VTHD.h */; };
+		BBF3937C1F26FDED0023DC8B /* h264_iOS8VTHD.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBF3937A1F26FDED0023DC8B /* h264_iOS8VTHD.mm */; };
+		BBF393881F2700880023DC8B /* AudioRingBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = BBF393831F2700880023DC8B /* AudioRingBuffer.h */; };
+		BBF393891F2700880023DC8B /* KxAudioManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BBF393841F2700880023DC8B /* KxAudioManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BBF3938A1F2700880023DC8B /* KxAudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF393851F2700880023DC8B /* KxAudioManager.m */; };
+		BBF3938B1F2700880023DC8B /* KxLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = BBF393861F2700880023DC8B /* KxLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BBF3938C1F2700880023DC8B /* KxMovieDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = BBF393871F2700880023DC8B /* KxMovieDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BBF3939A1F29D32C0023DC8B /* TimeUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBF393961F29D32C0023DC8B /* TimeUtils.cpp */; };
+		BBF3939B1F29D32C0023DC8B /* TimeUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = BBF393971F29D32C0023DC8B /* TimeUtils.h */; };
+		BBFE0BF91F396B4500D38C4D /* CycleView.h in Headers */ = {isa = PBXBuildFile; fileRef = BBFE0BF31F396B4500D38C4D /* CycleView.h */; };
+		BBFE0BFA1F396B4500D38C4D /* CycleView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBFE0BF41F396B4500D38C4D /* CycleView.m */; };
+		BBFE0BFB1F396B4500D38C4D /* KDGoalBar.h in Headers */ = {isa = PBXBuildFile; fileRef = BBFE0BF51F396B4500D38C4D /* KDGoalBar.h */; };
+		BBFE0BFC1F396B4500D38C4D /* KDGoalBar.m in Sources */ = {isa = PBXBuildFile; fileRef = BBFE0BF61F396B4500D38C4D /* KDGoalBar.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		BBFE0BFD1F396B4500D38C4D /* KDGoalBarPercentLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = BBFE0BF71F396B4500D38C4D /* KDGoalBarPercentLayer.h */; };
+		BBFE0BFE1F396B4500D38C4D /* KDGoalBarPercentLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = BBFE0BF81F396B4500D38C4D /* KDGoalBarPercentLayer.m */; };
+		BBFE0C241F39B39800D38C4D /* UIColor+MVExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = BBFE0C201F39B39800D38C4D /* UIColor+MVExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BBFE0C251F39B39800D38C4D /* UIColor+MVExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = BBFE0C211F39B39800D38C4D /* UIColor+MVExtensions.m */; };
+		BBFE0C261F39B39800D38C4D /* UIViewController+MVExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = BBFE0C221F39B39800D38C4D /* UIViewController+MVExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BBFE0C271F39B39800D38C4D /* UIViewController+MVExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = BBFE0C231F39B39800D38C4D /* UIViewController+MVExtensions.m */; };
+		E0CB0E769C93EB3BE5C64145 /* libPods-MADVCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D27E8279C21A0191FBAEA102 /* libPods-MADVCamera.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BB190ED01F0B30330045BAD0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BB190EBC1F0B30330045BAD0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BB190EC41F0B30330045BAD0;
+			remoteInfo = MADVCamera;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		3669D4C9161936220403636F /* Pods-MADVCamera.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MADVCamera.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MADVCamera/Pods-MADVCamera.debug.xcconfig"; sourceTree = "<group>"; };
+		521A4F321F0B95C200E5F155 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = ../../../../../usr/lib/libxml2.2.dylib; sourceTree = "<group>"; };
+		BB130BAE1F1DE0B90052A6F3 /* AMBASetGPSInfoRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMBASetGPSInfoRequest.h; sourceTree = "<group>"; };
+		BB130BAF1F1DE0B90052A6F3 /* AMBASetGPSInfoRequest.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = AMBASetGPSInfoRequest.m; sourceTree = "<group>"; };
+		BB190EC51F0B30330045BAD0 /* MADVCamera.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADVCamera.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB190EC81F0B30330045BAD0 /* MADVCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADVCamera.h; sourceTree = "<group>"; };
+		BB190EC91F0B30330045BAD0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BB190ECE1F0B30330045BAD0 /* MADVCameraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADVCameraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB190ED31F0B30330045BAD0 /* MADVCameraTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADVCameraTests.m; sourceTree = "<group>"; };
+		BB190ED51F0B30330045BAD0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BB190EE01F0B30A70045BAD0 /* AMBACommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBACommands.h; sourceTree = "<group>"; };
+		BB190EE31F0B30A70045BAD0 /* AMBAGetFileRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBAGetFileRequest.h; sourceTree = "<group>"; };
+		BB190EE51F0B30A70045BAD0 /* AMBAGetFileRequest.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBAGetFileRequest.m; sourceTree = "<group>"; };
+		BB190EE61F0B30A70045BAD0 /* AMBAPutFileRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBAPutFileRequest.h; sourceTree = "<group>"; };
+		BB190EE81F0B30A70045BAD0 /* AMBAPutFileRequest.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBAPutFileRequest.m; sourceTree = "<group>"; };
+		BB190EE91F0B30A70045BAD0 /* AMBARequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBARequest.h; sourceTree = "<group>"; };
+		BB190EEB1F0B30A70045BAD0 /* AMBARequest.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBARequest.m; sourceTree = "<group>"; };
+		BB190EEC1F0B30A70045BAD0 /* AMBASetWifiRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBASetWifiRequest.h; sourceTree = "<group>"; };
+		BB190EEE1F0B30A70045BAD0 /* AMBASetWifiRequest.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBASetWifiRequest.m; sourceTree = "<group>"; };
+		BB190EF11F0B30A70045BAD0 /* AMBACancelFileTransferResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBACancelFileTransferResponse.h; sourceTree = "<group>"; };
+		BB190EF31F0B30A70045BAD0 /* AMBACancelFileTransferResponse.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBACancelFileTransferResponse.m; sourceTree = "<group>"; };
+		BB190EF41F0B30A70045BAD0 /* AMBAFileTransferResultResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBAFileTransferResultResponse.h; sourceTree = "<group>"; };
+		BB190EF61F0B30A70045BAD0 /* AMBAFileTransferResultResponse.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBAFileTransferResultResponse.m; sourceTree = "<group>"; };
+		BB190EF71F0B30A70045BAD0 /* AMBAGetAllModeParamResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBAGetAllModeParamResponse.h; sourceTree = "<group>"; };
+		BB190EF91F0B30A70045BAD0 /* AMBAGetAllModeParamResponse.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBAGetAllModeParamResponse.m; sourceTree = "<group>"; };
+		BB190EFA1F0B30A70045BAD0 /* AMBAGetAllSettingParamResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBAGetAllSettingParamResponse.h; sourceTree = "<group>"; };
+		BB190EFC1F0B30A70045BAD0 /* AMBAGetAllSettingParamResponse.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBAGetAllSettingParamResponse.m; sourceTree = "<group>"; };
+		BB190EFD1F0B30A70045BAD0 /* AMBAGetFileResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBAGetFileResponse.h; sourceTree = "<group>"; };
+		BB190EFF1F0B30A70045BAD0 /* AMBAGetFileResponse.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBAGetFileResponse.m; sourceTree = "<group>"; };
+		BB190F001F0B30A70045BAD0 /* AMBAGetMediaInfoResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBAGetMediaInfoResponse.h; sourceTree = "<group>"; };
+		BB190F021F0B30A70045BAD0 /* AMBAGetMediaInfoResponse.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBAGetMediaInfoResponse.m; sourceTree = "<group>"; };
+		BB190F031F0B30A70045BAD0 /* AMBAGetThumbnailResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBAGetThumbnailResponse.h; sourceTree = "<group>"; };
+		BB190F051F0B30A70045BAD0 /* AMBAGetThumbnailResponse.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBAGetThumbnailResponse.m; sourceTree = "<group>"; };
+		BB190F061F0B30A70045BAD0 /* AMBAGetWiFiStatusResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBAGetWiFiStatusResponse.h; sourceTree = "<group>"; };
+		BB190F081F0B30A70045BAD0 /* AMBAGetWiFiStatusResponse.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBAGetWiFiStatusResponse.m; sourceTree = "<group>"; };
+		BB190F091F0B30A70045BAD0 /* AMBAListResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBAListResponse.h; sourceTree = "<group>"; };
+		BB190F0B1F0B30A70045BAD0 /* AMBAListResponse.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBAListResponse.m; sourceTree = "<group>"; };
+		BB190F0C1F0B30A70045BAD0 /* AMBAPutFileResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBAPutFileResponse.h; sourceTree = "<group>"; };
+		BB190F0E1F0B30A70045BAD0 /* AMBAPutFileResponse.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBAPutFileResponse.m; sourceTree = "<group>"; };
+		BB190F0F1F0B30A70045BAD0 /* AMBAResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBAResponse.h; sourceTree = "<group>"; };
+		BB190F111F0B30A70045BAD0 /* AMBAResponse.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBAResponse.m; sourceTree = "<group>"; };
+		BB190F121F0B30A70045BAD0 /* AMBASaveMediaFileDoneResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBASaveMediaFileDoneResponse.h; sourceTree = "<group>"; };
+		BB190F141F0B30A70045BAD0 /* AMBASaveMediaFileDoneResponse.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBASaveMediaFileDoneResponse.m; sourceTree = "<group>"; };
+		BB190F151F0B30A70045BAD0 /* AMBASetClientInfoResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBASetClientInfoResponse.h; sourceTree = "<group>"; };
+		BB190F161F0B30A70045BAD0 /* AMBASetClientInfoResponse.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBASetClientInfoResponse.m; sourceTree = "<group>"; };
+		BB190F171F0B30A70045BAD0 /* AMBASyncStorageAllStateResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBASyncStorageAllStateResponse.h; sourceTree = "<group>"; };
+		BB190F191F0B30A70045BAD0 /* AMBASyncStorageAllStateResponse.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AMBASyncStorageAllStateResponse.m; sourceTree = "<group>"; };
+		BB190F1B1F0B30A70045BAD0 /* CMDConnectManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMDConnectManager.h; sourceTree = "<group>"; };
+		BB190F1D1F0B30A70045BAD0 /* CMDConnectManager.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = CMDConnectManager.m; sourceTree = "<group>"; };
+		BB190F1E1F0B30A70045BAD0 /* DATAConnectManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DATAConnectManager.h; sourceTree = "<group>"; };
+		BB190F201F0B30A70045BAD0 /* DATAConnectManager.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = DATAConnectManager.m; sourceTree = "<group>"; };
+		BB190F211F0B30A70045BAD0 /* ImageFilterBean.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFilterBean.h; sourceTree = "<group>"; };
+		BB190F231F0B30A70045BAD0 /* ImageFilterBean.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = ImageFilterBean.m; sourceTree = "<group>"; };
+		BB190F251F0B30A70045BAD0 /* MVCameraClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MVCameraClient.h; sourceTree = "<group>"; };
+		BB190F271F0B30A70045BAD0 /* MVCameraClient.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = MVCameraClient.m; sourceTree = "<group>"; };
+		BB190F2B1F0B30A70045BAD0 /* MVCameraDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MVCameraDevice.h; sourceTree = "<group>"; };
+		BB190F2D1F0B30A70045BAD0 /* MVCameraDevice.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = MVCameraDevice.m; sourceTree = "<group>"; };
+		BB190F2E1F0B30A70045BAD0 /* MVCameraDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MVCameraDownloadManager.h; sourceTree = "<group>"; };
+		BB190F301F0B30A70045BAD0 /* MVCameraDownloadManager.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = MVCameraDownloadManager.m; sourceTree = "<group>"; };
+		BB190F321F0B30A70045BAD0 /* MVCameraUploadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MVCameraUploadManager.h; sourceTree = "<group>"; };
+		BB190F341F0B30A70045BAD0 /* MVCameraUploadManager.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = MVCameraUploadManager.m; sourceTree = "<group>"; };
+		BB190F351F0B30A70045BAD0 /* MVMedia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MVMedia.h; sourceTree = "<group>"; };
+		BB190F371F0B30A70045BAD0 /* MVMedia.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = MVMedia.m; sourceTree = "<group>"; };
+		BB190F391F0B30A70045BAD0 /* MVMediaManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MVMediaManager.h; sourceTree = "<group>"; };
+		BB190F3B1F0B30A70045BAD0 /* MVMediaManager.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = MVMediaManager.m; sourceTree = "<group>"; };
+		BB190F411F0B30A70045BAD0 /* PathTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PathTreeNode.h; sourceTree = "<group>"; };
+		BB190F431F0B30A70045BAD0 /* PathTreeNode.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = PathTreeNode.m; sourceTree = "<group>"; };
+		BB190F441F0B30A70045BAD0 /* SettingTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingTreeNode.h; sourceTree = "<group>"; };
+		BB190F461F0B30A70045BAD0 /* SettingTreeNode.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = SettingTreeNode.m; sourceTree = "<group>"; };
+		BB190F471F0B30A70045BAD0 /* WiFiConnectManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WiFiConnectManager.h; sourceTree = "<group>"; };
+		BB190F491F0B30A70045BAD0 /* WiFiConnectManager.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = WiFiConnectManager.m; sourceTree = "<group>"; };
+		BB190FB51F0B33800045BAD0 /* MADVPano.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MADVPano.framework; sourceTree = "<group>"; };
+		BB190FB71F0B33910045BAD0 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		BB190FB91F0B33990045BAD0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		BB190FBB1F0B33A30045BAD0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		BB190FBD1F0B33A90045BAD0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		BB190FBF1F0B33AF0045BAD0 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		BB190FC11F0B33B40045BAD0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		BB190FC31F0B33BA0045BAD0 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		BB190FC51F0B33BF0045BAD0 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		BB190FC71F0B33C50045BAD0 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		BB190FC91F0B33CF0045BAD0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		BB190FCB1F0B33E00045BAD0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		BB190FD11F0B34E20045BAD0 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		BB190FDB1F0B36780045BAD0 /* ResourceKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResourceKeys.h; sourceTree = "<group>"; };
+		BB1910171F0B38D40045BAD0 /* RealmSerialQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RealmSerialQueue.h; path = DBHelper/RealmSerialQueue.h; sourceTree = "<group>"; };
+		BB1910181F0B38D40045BAD0 /* RealmSerialQueue.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = RealmSerialQueue.m; path = DBHelper/RealmSerialQueue.m; sourceTree = "<group>"; };
+		BB1910191F0B38D40045BAD0 /* RLModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RLModel.h; path = DBHelper/RLModel.h; sourceTree = "<group>"; };
+		BB19101A1F0B38D40045BAD0 /* RLModel.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = RLModel.m; path = DBHelper/RLModel.m; sourceTree = "<group>"; };
+		BB1910401F0B3C1A0045BAD0 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
+		BB1910411F0B3C1A0045BAD0 /* GDataXMLNode.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; path = GDataXMLNode.m; sourceTree = "<group>"; };
+		BB1910421F0B3C1A0045BAD0 /* XMLTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLTool.h; sourceTree = "<group>"; };
+		BB1910431F0B3C1A0045BAD0 /* XMLTool.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = XMLTool.m; sourceTree = "<group>"; };
+		BB19104C1F0B3CA10045BAD0 /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
+		BB19104E1F0B3CDD0045BAD0 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
+		BB1910591F0B42650045BAD0 /* MadvGLRenderer_iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MadvGLRenderer_iOS.h; sourceTree = "<group>"; };
+		BB19105A1F0B42650045BAD0 /* MadvGLRenderer_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MadvGLRenderer_iOS.mm; sourceTree = "<group>"; };
+		BB1910621F0B42BA0045BAD0 /* kxmovie-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "kxmovie-Prefix.pch"; sourceTree = "<group>"; };
+		BB1910631F0B42BA0045BAD0 /* kxmovie.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = kxmovie.bundle; sourceTree = "<group>"; };
+		BB1910651F0B42BA0045BAD0 /* KxMovieDecoder.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = KxMovieDecoder.mm; sourceTree = "<group>"; };
+		BB1910931F0B49A00045BAD0 /* ImageBlender.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = ImageBlender.cpp; sourceTree = "<group>"; };
+		BB1910941F0B49A00045BAD0 /* ImageBlender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageBlender.h; sourceTree = "<group>"; };
+		BB1910BB1F0B4A510045BAD0 /* SdWhiteDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdWhiteDetail.h; sourceTree = "<group>"; };
+		BB1910BC1F0B4A510045BAD0 /* SdWhiteDetail.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = SdWhiteDetail.m; sourceTree = "<group>"; };
+		BB1910F51F0B4AFD0045BAD0 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = ../../../../usr/lib/libxml2.2.dylib; sourceTree = "<group>"; };
+		BB206DC71F4A93EB00EB50C0 /* MVGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MVGLView.mm; sourceTree = "<group>"; };
+		BB206DC81F4A93EB00EB50C0 /* MVGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MVGLView.h; sourceTree = "<group>"; };
+		BB89B5B11F5510A5007AC0A2 /* AMBASetCameraModeResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBASetCameraModeResponse.h; sourceTree = "<group>"; };
+		BB89B5B21F5510A5007AC0A2 /* AMBASetCameraModeResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMBASetCameraModeResponse.m; sourceTree = "<group>"; };
+		BB89B5B51F5510C9007AC0A2 /* AMBAShootPhotoIntervalResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBAShootPhotoIntervalResponse.h; sourceTree = "<group>"; };
+		BB89B5B61F5510C9007AC0A2 /* AMBAShootPhotoIntervalResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMBAShootPhotoIntervalResponse.m; sourceTree = "<group>"; };
+		BB89B5C31F556994007AC0A2 /* KxMovieDecoder_douyin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KxMovieDecoder_douyin.mm; sourceTree = "<group>"; };
+		BB89B5C41F556994007AC0A2 /* KxMovieDecoder_douyin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxMovieDecoder_douyin.h; sourceTree = "<group>"; };
+		BB89B6661F5569FA007AC0A2 /* MADVCamera copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MADVCamera copy-Info.plist"; path = "/Users/qiudong/Projects/MADVCameraFramework/MADVCamera copy-Info.plist"; sourceTree = "<absolute>"; };
+		BB9CB11F1F1E0FA300FFC6C7 /* FGLanguageTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FGLanguageTool.h; path = Utils/FGLanguageTool.h; sourceTree = "<group>"; };
+		BB9CB1201F1E0FA300FFC6C7 /* FGLanguageTool.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = FGLanguageTool.m; path = Utils/FGLanguageTool.m; sourceTree = "<group>"; };
+		BB9CB1231F1E0FF800FFC6C7 /* LogManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogManager.h; path = Utils/LogManager.h; sourceTree = "<group>"; };
+		BB9CB1241F1E0FF800FFC6C7 /* MyReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyReachability.h; path = Utils/MyReachability.h; sourceTree = "<group>"; };
+		BB9CB1251F1E0FF800FFC6C7 /* MyReachability.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = MyReachability.m; path = Utils/MyReachability.m; sourceTree = "<group>"; };
+		BB9CB1261F1E0FF800FFC6C7 /* NSCondition+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSCondition+Extensions.h"; path = "Utils/NSCondition+Extensions.h"; sourceTree = "<group>"; };
+		BB9CB1271F1E0FF800FFC6C7 /* NSCondition+Extensions.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = "NSCondition+Extensions.m"; path = "Utils/NSCondition+Extensions.m"; sourceTree = "<group>"; };
+		BB9CB1281F1E0FF800FFC6C7 /* NSMutableArray+Extensions.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = "NSMutableArray+Extensions.m"; path = "Utils/NSMutableArray+Extensions.m"; sourceTree = "<group>"; };
+		BB9CB1291F1E0FF800FFC6C7 /* NSString+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Extensions.h"; path = "Utils/NSString+Extensions.h"; sourceTree = "<group>"; };
+		BB9CB12A1F1E0FF800FFC6C7 /* NSString+Extensions.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = "NSString+Extensions.m"; path = "Utils/NSString+Extensions.m"; sourceTree = "<group>"; };
+		BB9CB12B1F1E0FF800FFC6C7 /* SocketHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocketHelper.h; path = Utils/SocketHelper.h; sourceTree = "<group>"; };
+		BB9CB12C1F1E0FF800FFC6C7 /* SocketHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SocketHelper.mm; path = Utils/SocketHelper.mm; sourceTree = "<group>"; };
+		BB9CB12D1F1E0FF800FFC6C7 /* z_Sandbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = z_Sandbox.h; path = Utils/z_Sandbox.h; sourceTree = "<group>"; };
+		BB9CB12E1F1E0FF800FFC6C7 /* z_Sandbox.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = z_Sandbox.m; path = Utils/z_Sandbox.m; sourceTree = "<group>"; };
+		BB9CB12F1F1E0FF800FFC6C7 /* helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = helper.h; path = Utils/helper.h; sourceTree = "<group>"; };
+		BB9CB1301F1E0FF800FFC6C7 /* helper.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = helper.m; path = Utils/helper.m; sourceTree = "<group>"; };
+		BB9CB1311F1E0FF800FFC6C7 /* LogManager.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = LogManager.m; path = Utils/LogManager.m; sourceTree = "<group>"; };
+		BB9CB1321F1E0FF800FFC6C7 /* NSMutableArray+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSMutableArray+Extensions.h"; path = "Utils/NSMutableArray+Extensions.h"; sourceTree = "<group>"; };
+		BB9CB1331F1E0FF800FFC6C7 /* NSRecursiveCondition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSRecursiveCondition.h; path = Utils/NSRecursiveCondition.h; sourceTree = "<group>"; };
+		BBAAD38920045BE100928F3C /* UIDevice+DeviceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+DeviceModel.h"; sourceTree = "<group>"; };
+		BBAAD38A20045BE300928F3C /* UIDevice+DeviceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+DeviceModel.m"; sourceTree = "<group>"; };
+		BBAD0652201869B2005BAD6F /* MVMediaPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MVMediaPlayerViewController.h; sourceTree = "<group>"; };
+		BBAD0653201869B3005BAD6F /* MVMediaPlayerViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MVMediaPlayerViewController.mm; sourceTree = "<group>"; };
+		BBAD070220186B62005BAD6F /* VideoExportView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoExportView.h; sourceTree = "<group>"; };
+		BBAD070320186B62005BAD6F /* VideoExportView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoExportView.m; sourceTree = "<group>"; };
+		BBB599A41F5818B6006A8528 /* JsonSerializableObject.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = JsonSerializableObject.m; sourceTree = "<group>"; };
+		BBB599A51F5818B6006A8528 /* JsonSerializableObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonSerializableObject.h; sourceTree = "<group>"; };
+		BBC7BC4E2016EC1200767A35 /* AMBAShootPhotoSurroundexpResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMBAShootPhotoSurroundexpResponse.h; sourceTree = "<group>"; };
+		BBC7BC4F2016EC1200767A35 /* AMBAShootPhotoSurroundexpResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMBAShootPhotoSurroundexpResponse.m; sourceTree = "<group>"; };
+		BBC7BC552016FFAA00767A35 /* MVPhotosManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MVPhotosManager.h; sourceTree = "<group>"; };
+		BBC7BC562016FFAA00767A35 /* MVPhotosManager.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = MVPhotosManager.m; sourceTree = "<group>"; };
+		BBC7BC59201708E900767A35 /* MVKxMovieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MVKxMovieViewController.h; sourceTree = "<group>"; };
+		BBC7BC5A201708E900767A35 /* MVKxMovieViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MVKxMovieViewController.mm; sourceTree = "<group>"; };
+		BBC7BC5E20170A6000767A35 /* CycordAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CycordAudioRecorder.h; sourceTree = "<group>"; };
+		BBC7BC6020170A6000767A35 /* CycordNewAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CycordNewAudioRecorder.h; sourceTree = "<group>"; };
+		BBC7BC6220170A6000767A35 /* CycordVideoRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CycordVideoRecorder.h; sourceTree = "<group>"; };
+		BBC7BC6420170A6000767A35 /* CycordVideoRecorderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CycordVideoRecorderDelegate.h; sourceTree = "<group>"; };
+		BBC7BC6520170A6000767A35 /* postex_vert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = postex_vert.h; sourceTree = "<group>"; };
+		BBC7BC6620170A6000767A35 /* tex_frag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tex_frag.h; sourceTree = "<group>"; };
+		BBC7BC7920171ACE00767A35 /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = libs/FFmpeg/libswresample.a; sourceTree = "<group>"; };
+		BBC7BC7A20171ACF00767A35 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = libs/FFmpeg/libavformat.a; sourceTree = "<group>"; };
+		BBC7BC7B20171ACF00767A35 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = libs/FFmpeg/libavcodec.a; sourceTree = "<group>"; };
+		BBC7BC7C20171AD000767A35 /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = libs/FFmpeg/libswscale.a; sourceTree = "<group>"; };
+		BBC7BC7D20171AD000767A35 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = libs/FFmpeg/libavutil.a; sourceTree = "<group>"; };
+		BBF390AB1F22100B0023DC8B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		BBF393751F26FD0F0023DC8B /* IDRDecoder.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; path = IDRDecoder.c; sourceTree = "<group>"; };
+		BBF393761F26FD0F0023DC8B /* IDRDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDRDecoder.h; sourceTree = "<group>"; };
+		BBF393791F26FDED0023DC8B /* h264_iOS8VTHD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = h264_iOS8VTHD.h; sourceTree = "<group>"; };
+		BBF3937A1F26FDED0023DC8B /* h264_iOS8VTHD.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = h264_iOS8VTHD.mm; sourceTree = "<group>"; };
+		BBF393831F2700880023DC8B /* AudioRingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRingBuffer.h; sourceTree = "<group>"; };
+		BBF393841F2700880023DC8B /* KxAudioManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxAudioManager.h; sourceTree = "<group>"; };
+		BBF393851F2700880023DC8B /* KxAudioManager.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = KxAudioManager.m; sourceTree = "<group>"; };
+		BBF393861F2700880023DC8B /* KxLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxLogger.h; sourceTree = "<group>"; };
+		BBF393871F2700880023DC8B /* KxMovieDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxMovieDecoder.h; sourceTree = "<group>"; };
+		BBF393961F29D32C0023DC8B /* TimeUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = TimeUtils.cpp; sourceTree = "<group>"; };
+		BBF393971F29D32C0023DC8B /* TimeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeUtils.h; sourceTree = "<group>"; };
+		BBFE0BF31F396B4500D38C4D /* CycleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CycleView.h; sourceTree = "<group>"; };
+		BBFE0BF41F396B4500D38C4D /* CycleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CycleView.m; sourceTree = "<group>"; };
+		BBFE0BF51F396B4500D38C4D /* KDGoalBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KDGoalBar.h; sourceTree = "<group>"; };
+		BBFE0BF61F396B4500D38C4D /* KDGoalBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KDGoalBar.m; sourceTree = "<group>"; };
+		BBFE0BF71F396B4500D38C4D /* KDGoalBarPercentLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KDGoalBarPercentLayer.h; sourceTree = "<group>"; };
+		BBFE0BF81F396B4500D38C4D /* KDGoalBarPercentLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KDGoalBarPercentLayer.m; sourceTree = "<group>"; };
+		BBFE0C201F39B39800D38C4D /* UIColor+MVExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+MVExtensions.h"; path = "Utils/UIColor+MVExtensions.h"; sourceTree = "<group>"; };
+		BBFE0C211F39B39800D38C4D /* UIColor+MVExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+MVExtensions.m"; path = "Utils/UIColor+MVExtensions.m"; sourceTree = "<group>"; };
+		BBFE0C221F39B39800D38C4D /* UIViewController+MVExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+MVExtensions.h"; path = "Utils/UIViewController+MVExtensions.h"; sourceTree = "<group>"; };
+		BBFE0C231F39B39800D38C4D /* UIViewController+MVExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+MVExtensions.m"; path = "Utils/UIViewController+MVExtensions.m"; sourceTree = "<group>"; };
+		D27E8279C21A0191FBAEA102 /* libPods-MADVCamera.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MADVCamera.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA354E2846541E7994D9FCB9 /* Pods-MADVCamera.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MADVCamera.release.xcconfig"; path = "Pods/Target Support Files/Pods-MADVCamera/Pods-MADVCamera.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BB190EC11F0B30330045BAD0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BBC7BC7E20171AD100767A35 /* libswresample.a in Frameworks */,
+				BBC7BC7F20171AD100767A35 /* libavformat.a in Frameworks */,
+				BBC7BC8020171AD100767A35 /* libavcodec.a in Frameworks */,
+				BBC7BC8120171AD100767A35 /* libswscale.a in Frameworks */,
+				BBC7BC8220171AD100767A35 /* libavutil.a in Frameworks */,
+				BBF390AC1F22100B0023DC8B /* CoreLocation.framework in Frameworks */,
+				521A4F331F0B95C200E5F155 /* libxml2.2.dylib in Frameworks */,
+				BB190FCC1F0B33E00045BAD0 /* UIKit.framework in Frameworks */,
+				BB190FCA1F0B33CF0045BAD0 /* SystemConfiguration.framework in Frameworks */,
+				BB190FC81F0B33C50045BAD0 /* Security.framework in Frameworks */,
+				BB190FC61F0B33BF0045BAD0 /* MobileCoreServices.framework in Frameworks */,
+				BB190FC41F0B33BA0045BAD0 /* MessageUI.framework in Frameworks */,
+				BB190FC21F0B33B40045BAD0 /* MapKit.framework in Frameworks */,
+				BB190FC01F0B33AF0045BAD0 /* ImageIO.framework in Frameworks */,
+				BB190FBE1F0B33A90045BAD0 /* QuartzCore.framework in Frameworks */,
+				BB190FBC1F0B33A30045BAD0 /* Foundation.framework in Frameworks */,
+				BB190FBA1F0B33990045BAD0 /* CoreGraphics.framework in Frameworks */,
+				BB190FB81F0B33910045BAD0 /* AssetsLibrary.framework in Frameworks */,
+				BB190FB61F0B33800045BAD0 /* MADVPano.framework in Frameworks */,
+				E0CB0E769C93EB3BE5C64145 /* libPods-MADVCamera.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB190ECB1F0B30330045BAD0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB190ECF1F0B30330045BAD0 /* MADVCamera.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0F4FBC8870951436C89D7F13 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3669D4C9161936220403636F /* Pods-MADVCamera.debug.xcconfig */,
+				DA354E2846541E7994D9FCB9 /* Pods-MADVCamera.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		BB190EBB1F0B30330045BAD0 = {
+			isa = PBXGroup;
+			children = (
+				BB190EC71F0B30330045BAD0 /* MADVCamera */,
+				BB190ED21F0B30330045BAD0 /* MADVCameraTests */,
+				BB190EC61F0B30330045BAD0 /* Products */,
+				0F4FBC8870951436C89D7F13 /* Pods */,
+				D526D1E1463C953F44D44324 /* Frameworks */,
+				BB89B6661F5569FA007AC0A2 /* MADVCamera copy-Info.plist */,
+			);
+			sourceTree = "<group>";
+		};
+		BB190EC61F0B30330045BAD0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BB190EC51F0B30330045BAD0 /* MADVCamera.framework */,
+				BB190ECE1F0B30330045BAD0 /* MADVCameraTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BB190EC71F0B30330045BAD0 /* MADVCamera */ = {
+			isa = PBXGroup;
+			children = (
+				BBAD065620186B62005BAD6F /* Views */,
+				BBC7BC5D20170A6000767A35 /* CycordKit */,
+				BBC7BC542016FFAA00767A35 /* PhotosManager */,
+				BB206DC81F4A93EB00EB50C0 /* MVGLView.h */,
+				BB206DC71F4A93EB00EB50C0 /* MVGLView.mm */,
+				BB1910971F0B4A510045BAD0 /* DataModel */,
+				BB19107A1F0B430B0045BAD0 /* FFMpegExt */,
+				BB19105D1F0B42BA0045BAD0 /* kxmovie */,
+				BB1910581F0B42650045BAD0 /* Renderer */,
+				BB19103F1F0B3C1A0045BAD0 /* XMLManager */,
+				BB1910211F0B39770045BAD0 /* ThirdParty */,
+				BB190FEC1F0B37850045BAD0 /* DBHelper */,
+				BB190FD21F0B35D10045BAD0 /* Utils */,
+				BB190EDF1F0B30A70045BAD0 /* CameraManager */,
+				BB190EC81F0B30330045BAD0 /* MADVCamera.h */,
+				BB190EC91F0B30330045BAD0 /* Info.plist */,
+				BB190FD11F0B34E20045BAD0 /* PrefixHeader.pch */,
+				BB190FDB1F0B36780045BAD0 /* ResourceKeys.h */,
+			);
+			path = MADVCamera;
+			sourceTree = "<group>";
+		};
+		BB190ED21F0B30330045BAD0 /* MADVCameraTests */ = {
+			isa = PBXGroup;
+			children = (
+				BB190ED31F0B30330045BAD0 /* MADVCameraTests.m */,
+				BB190ED51F0B30330045BAD0 /* Info.plist */,
+			);
+			path = MADVCameraTests;
+			sourceTree = "<group>";
+		};
+		BB190EDF1F0B30A70045BAD0 /* CameraManager */ = {
+			isa = PBXGroup;
+			children = (
+				BB190EE01F0B30A70045BAD0 /* AMBACommands.h */,
+				BB190F1B1F0B30A70045BAD0 /* CMDConnectManager.h */,
+				BB190F1E1F0B30A70045BAD0 /* DATAConnectManager.h */,
+				BB190F211F0B30A70045BAD0 /* ImageFilterBean.h */,
+				BB190F251F0B30A70045BAD0 /* MVCameraClient.h */,
+				BB190F2B1F0B30A70045BAD0 /* MVCameraDevice.h */,
+				BB190F2E1F0B30A70045BAD0 /* MVCameraDownloadManager.h */,
+				BB190F321F0B30A70045BAD0 /* MVCameraUploadManager.h */,
+				BB190F351F0B30A70045BAD0 /* MVMedia.h */,
+				BB190F391F0B30A70045BAD0 /* MVMediaManager.h */,
+				BB190F411F0B30A70045BAD0 /* PathTreeNode.h */,
+				BB190F441F0B30A70045BAD0 /* SettingTreeNode.h */,
+				BB190F471F0B30A70045BAD0 /* WiFiConnectManager.h */,
+				BB190F1D1F0B30A70045BAD0 /* CMDConnectManager.m */,
+				BB190F201F0B30A70045BAD0 /* DATAConnectManager.m */,
+				BB190F231F0B30A70045BAD0 /* ImageFilterBean.m */,
+				BB190F271F0B30A70045BAD0 /* MVCameraClient.m */,
+				BB190F2D1F0B30A70045BAD0 /* MVCameraDevice.m */,
+				BB190F301F0B30A70045BAD0 /* MVCameraDownloadManager.m */,
+				BB190F341F0B30A70045BAD0 /* MVCameraUploadManager.m */,
+				BB190F371F0B30A70045BAD0 /* MVMedia.m */,
+				BB190F3B1F0B30A70045BAD0 /* MVMediaManager.m */,
+				BB190F431F0B30A70045BAD0 /* PathTreeNode.m */,
+				BB190F461F0B30A70045BAD0 /* SettingTreeNode.m */,
+				BB190F491F0B30A70045BAD0 /* WiFiConnectManager.m */,
+				BB190EE21F0B30A70045BAD0 /* ambarequest */,
+				BB190EF01F0B30A70045BAD0 /* ambaresponse */,
+			);
+			path = CameraManager;
+			sourceTree = "<group>";
+		};
+		BB190EE21F0B30A70045BAD0 /* ambarequest */ = {
+			isa = PBXGroup;
+			children = (
+				BB130BAF1F1DE0B90052A6F3 /* AMBASetGPSInfoRequest.m */,
+				BB130BAE1F1DE0B90052A6F3 /* AMBASetGPSInfoRequest.h */,
+				BB190EE31F0B30A70045BAD0 /* AMBAGetFileRequest.h */,
+				BB190EE61F0B30A70045BAD0 /* AMBAPutFileRequest.h */,
+				BB190EE91F0B30A70045BAD0 /* AMBARequest.h */,
+				BB190EEC1F0B30A70045BAD0 /* AMBASetWifiRequest.h */,
+				BB190EE51F0B30A70045BAD0 /* AMBAGetFileRequest.m */,
+				BB190EE81F0B30A70045BAD0 /* AMBAPutFileRequest.m */,
+				BB190EEB1F0B30A70045BAD0 /* AMBARequest.m */,
+				BB190EEE1F0B30A70045BAD0 /* AMBASetWifiRequest.m */,
+			);
+			path = ambarequest;
+			sourceTree = "<group>";
+		};
+		BB190EF01F0B30A70045BAD0 /* ambaresponse */ = {
+			isa = PBXGroup;
+			children = (
+				BBC7BC4E2016EC1200767A35 /* AMBAShootPhotoSurroundexpResponse.h */,
+				BBC7BC4F2016EC1200767A35 /* AMBAShootPhotoSurroundexpResponse.m */,
+				BB89B5B51F5510C9007AC0A2 /* AMBAShootPhotoIntervalResponse.h */,
+				BB89B5B61F5510C9007AC0A2 /* AMBAShootPhotoIntervalResponse.m */,
+				BB89B5B11F5510A5007AC0A2 /* AMBASetCameraModeResponse.h */,
+				BB89B5B21F5510A5007AC0A2 /* AMBASetCameraModeResponse.m */,
+				BB190EF11F0B30A70045BAD0 /* AMBACancelFileTransferResponse.h */,
+				BB190EF41F0B30A70045BAD0 /* AMBAFileTransferResultResponse.h */,
+				BB190EF71F0B30A70045BAD0 /* AMBAGetAllModeParamResponse.h */,
+				BB190EFA1F0B30A70045BAD0 /* AMBAGetAllSettingParamResponse.h */,
+				BB190EFD1F0B30A70045BAD0 /* AMBAGetFileResponse.h */,
+				BB190F001F0B30A70045BAD0 /* AMBAGetMediaInfoResponse.h */,
+				BB190F031F0B30A70045BAD0 /* AMBAGetThumbnailResponse.h */,
+				BB190F061F0B30A70045BAD0 /* AMBAGetWiFiStatusResponse.h */,
+				BB190F091F0B30A70045BAD0 /* AMBAListResponse.h */,
+				BB190F0C1F0B30A70045BAD0 /* AMBAPutFileResponse.h */,
+				BB190F0F1F0B30A70045BAD0 /* AMBAResponse.h */,
+				BB190F121F0B30A70045BAD0 /* AMBASaveMediaFileDoneResponse.h */,
+				BB190F151F0B30A70045BAD0 /* AMBASetClientInfoResponse.h */,
+				BB190F171F0B30A70045BAD0 /* AMBASyncStorageAllStateResponse.h */,
+				BB190EF31F0B30A70045BAD0 /* AMBACancelFileTransferResponse.m */,
+				BB190EF61F0B30A70045BAD0 /* AMBAFileTransferResultResponse.m */,
+				BB190EF91F0B30A70045BAD0 /* AMBAGetAllModeParamResponse.m */,
+				BB190EFC1F0B30A70045BAD0 /* AMBAGetAllSettingParamResponse.m */,
+				BB190EFF1F0B30A70045BAD0 /* AMBAGetFileResponse.m */,
+				BB190F021F0B30A70045BAD0 /* AMBAGetMediaInfoResponse.m */,
+				BB190F051F0B30A70045BAD0 /* AMBAGetThumbnailResponse.m */,
+				BB190F081F0B30A70045BAD0 /* AMBAGetWiFiStatusResponse.m */,
+				BB190F0B1F0B30A70045BAD0 /* AMBAListResponse.m */,
+				BB190F0E1F0B30A70045BAD0 /* AMBAPutFileResponse.m */,
+				BB190F111F0B30A70045BAD0 /* AMBAResponse.m */,
+				BB190F141F0B30A70045BAD0 /* AMBASaveMediaFileDoneResponse.m */,
+				BB190F161F0B30A70045BAD0 /* AMBASetClientInfoResponse.m */,
+				BB190F191F0B30A70045BAD0 /* AMBASyncStorageAllStateResponse.m */,
+			);
+			path = ambaresponse;
+			sourceTree = "<group>";
+		};
+		BB190FD21F0B35D10045BAD0 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				BBAAD38920045BE100928F3C /* UIDevice+DeviceModel.h */,
+				BBAAD38A20045BE300928F3C /* UIDevice+DeviceModel.m */,
+				BBFE0C201F39B39800D38C4D /* UIColor+MVExtensions.h */,
+				BBFE0C211F39B39800D38C4D /* UIColor+MVExtensions.m */,
+				BBFE0C221F39B39800D38C4D /* UIViewController+MVExtensions.h */,
+				BBFE0C231F39B39800D38C4D /* UIViewController+MVExtensions.m */,
+				BB9CB1231F1E0FF800FFC6C7 /* LogManager.h */,
+				BB9CB1241F1E0FF800FFC6C7 /* MyReachability.h */,
+				BB9CB1251F1E0FF800FFC6C7 /* MyReachability.m */,
+				BB9CB1261F1E0FF800FFC6C7 /* NSCondition+Extensions.h */,
+				BB9CB1271F1E0FF800FFC6C7 /* NSCondition+Extensions.m */,
+				BB9CB1281F1E0FF800FFC6C7 /* NSMutableArray+Extensions.m */,
+				BB9CB1291F1E0FF800FFC6C7 /* NSString+Extensions.h */,
+				BB9CB12A1F1E0FF800FFC6C7 /* NSString+Extensions.m */,
+				BB9CB12B1F1E0FF800FFC6C7 /* SocketHelper.h */,
+				BB9CB12C1F1E0FF800FFC6C7 /* SocketHelper.mm */,
+				BB9CB12D1F1E0FF800FFC6C7 /* z_Sandbox.h */,
+				BB9CB12E1F1E0FF800FFC6C7 /* z_Sandbox.m */,
+				BB9CB12F1F1E0FF800FFC6C7 /* helper.h */,
+				BB9CB1301F1E0FF800FFC6C7 /* helper.m */,
+				BB9CB1311F1E0FF800FFC6C7 /* LogManager.m */,
+				BB9CB1321F1E0FF800FFC6C7 /* NSMutableArray+Extensions.h */,
+				BB9CB1331F1E0FF800FFC6C7 /* NSRecursiveCondition.h */,
+				BB9CB11F1F1E0FA300FFC6C7 /* FGLanguageTool.h */,
+				BB9CB1201F1E0FA300FFC6C7 /* FGLanguageTool.m */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		BB190FEC1F0B37850045BAD0 /* DBHelper */ = {
+			isa = PBXGroup;
+			children = (
+				BB1910171F0B38D40045BAD0 /* RealmSerialQueue.h */,
+				BB1910191F0B38D40045BAD0 /* RLModel.h */,
+				BB1910181F0B38D40045BAD0 /* RealmSerialQueue.m */,
+				BB19101A1F0B38D40045BAD0 /* RLModel.m */,
+			);
+			name = DBHelper;
+			sourceTree = "<group>";
+		};
+		BB1910211F0B39770045BAD0 /* ThirdParty */ = {
+			isa = PBXGroup;
+			children = (
+				BBFE0BF21F396B4500D38C4D /* KDCustom */,
+				BB1910931F0B49A00045BAD0 /* ImageBlender.cpp */,
+				BB1910941F0B49A00045BAD0 /* ImageBlender.h */,
+			);
+			path = ThirdParty;
+			sourceTree = "<group>";
+		};
+		BB19103F1F0B3C1A0045BAD0 /* XMLManager */ = {
+			isa = PBXGroup;
+			children = (
+				BB1910401F0B3C1A0045BAD0 /* GDataXMLNode.h */,
+				BB1910421F0B3C1A0045BAD0 /* XMLTool.h */,
+				BB1910411F0B3C1A0045BAD0 /* GDataXMLNode.m */,
+				BB1910431F0B3C1A0045BAD0 /* XMLTool.m */,
+			);
+			path = XMLManager;
+			sourceTree = "<group>";
+		};
+		BB1910581F0B42650045BAD0 /* Renderer */ = {
+			isa = PBXGroup;
+			children = (
+				BB1910591F0B42650045BAD0 /* MadvGLRenderer_iOS.h */,
+				BB19105A1F0B42650045BAD0 /* MadvGLRenderer_iOS.mm */,
+			);
+			path = Renderer;
+			sourceTree = "<group>";
+		};
+		BB19105D1F0B42BA0045BAD0 /* kxmovie */ = {
+			isa = PBXGroup;
+			children = (
+				BBAD0652201869B2005BAD6F /* MVMediaPlayerViewController.h */,
+				BBAD0653201869B3005BAD6F /* MVMediaPlayerViewController.mm */,
+				BBC7BC59201708E900767A35 /* MVKxMovieViewController.h */,
+				BBC7BC5A201708E900767A35 /* MVKxMovieViewController.mm */,
+				BB89B5C31F556994007AC0A2 /* KxMovieDecoder_douyin.mm */,
+				BB89B5C41F556994007AC0A2 /* KxMovieDecoder_douyin.h */,
+				BBF393831F2700880023DC8B /* AudioRingBuffer.h */,
+				BBF393841F2700880023DC8B /* KxAudioManager.h */,
+				BBF393851F2700880023DC8B /* KxAudioManager.m */,
+				BBF393861F2700880023DC8B /* KxLogger.h */,
+				BBF393871F2700880023DC8B /* KxMovieDecoder.h */,
+				BB1910631F0B42BA0045BAD0 /* kxmovie.bundle */,
+				BB1910651F0B42BA0045BAD0 /* KxMovieDecoder.mm */,
+				BB1910621F0B42BA0045BAD0 /* kxmovie-Prefix.pch */,
+			);
+			path = kxmovie;
+			sourceTree = "<group>";
+		};
+		BB19107A1F0B430B0045BAD0 /* FFMpegExt */ = {
+			isa = PBXGroup;
+			children = (
+				BBF393961F29D32C0023DC8B /* TimeUtils.cpp */,
+				BBF393971F29D32C0023DC8B /* TimeUtils.h */,
+				BBF393791F26FDED0023DC8B /* h264_iOS8VTHD.h */,
+				BBF3937A1F26FDED0023DC8B /* h264_iOS8VTHD.mm */,
+				BBF393751F26FD0F0023DC8B /* IDRDecoder.c */,
+				BBF393761F26FD0F0023DC8B /* IDRDecoder.h */,
+			);
+			path = FFMpegExt;
+			sourceTree = "<group>";
+		};
+		BB1910971F0B4A510045BAD0 /* DataModel */ = {
+			isa = PBXGroup;
+			children = (
+				BBB599A41F5818B6006A8528 /* JsonSerializableObject.m */,
+				BBB599A51F5818B6006A8528 /* JsonSerializableObject.h */,
+				BB1910BB1F0B4A510045BAD0 /* SdWhiteDetail.h */,
+				BB1910BC1F0B4A510045BAD0 /* SdWhiteDetail.m */,
+			);
+			path = DataModel;
+			sourceTree = "<group>";
+		};
+		BBAD065620186B62005BAD6F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BBAD070220186B62005BAD6F /* VideoExportView.h */,
+				BBAD070320186B62005BAD6F /* VideoExportView.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		BBC7BC542016FFAA00767A35 /* PhotosManager */ = {
+			isa = PBXGroup;
+			children = (
+				BBC7BC552016FFAA00767A35 /* MVPhotosManager.h */,
+				BBC7BC562016FFAA00767A35 /* MVPhotosManager.m */,
+			);
+			path = PhotosManager;
+			sourceTree = "<group>";
+		};
+		BBC7BC5D20170A6000767A35 /* CycordKit */ = {
+			isa = PBXGroup;
+			children = (
+				BBC7BC5E20170A6000767A35 /* CycordAudioRecorder.h */,
+				BBC7BC6020170A6000767A35 /* CycordNewAudioRecorder.h */,
+				BBC7BC6220170A6000767A35 /* CycordVideoRecorder.h */,
+				BBC7BC6420170A6000767A35 /* CycordVideoRecorderDelegate.h */,
+				BBC7BC6520170A6000767A35 /* postex_vert.h */,
+				BBC7BC6620170A6000767A35 /* tex_frag.h */,
+			);
+			path = CycordKit;
+			sourceTree = "<group>";
+		};
+		BBFE0BF21F396B4500D38C4D /* KDCustom */ = {
+			isa = PBXGroup;
+			children = (
+				BBFE0BF31F396B4500D38C4D /* CycleView.h */,
+				BBFE0BF41F396B4500D38C4D /* CycleView.m */,
+				BBFE0BF51F396B4500D38C4D /* KDGoalBar.h */,
+				BBFE0BF61F396B4500D38C4D /* KDGoalBar.m */,
+				BBFE0BF71F396B4500D38C4D /* KDGoalBarPercentLayer.h */,
+				BBFE0BF81F396B4500D38C4D /* KDGoalBarPercentLayer.m */,
+			);
+			path = KDCustom;
+			sourceTree = "<group>";
+		};
+		D526D1E1463C953F44D44324 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BBC7BC7B20171ACF00767A35 /* libavcodec.a */,
+				BBC7BC7A20171ACF00767A35 /* libavformat.a */,
+				BBC7BC7D20171AD000767A35 /* libavutil.a */,
+				BBC7BC7920171ACE00767A35 /* libswresample.a */,
+				BBC7BC7C20171AD000767A35 /* libswscale.a */,
+				BBF390AB1F22100B0023DC8B /* CoreLocation.framework */,
+				521A4F321F0B95C200E5F155 /* libxml2.2.dylib */,
+				BB1910F51F0B4AFD0045BAD0 /* libxml2.2.dylib */,
+				BB19104E1F0B3CDD0045BAD0 /* libxml2.tbd */,
+				BB19104C1F0B3CA10045BAD0 /* libxml2.2.tbd */,
+				BB190FCB1F0B33E00045BAD0 /* UIKit.framework */,
+				BB190FC91F0B33CF0045BAD0 /* SystemConfiguration.framework */,
+				BB190FC71F0B33C50045BAD0 /* Security.framework */,
+				BB190FC51F0B33BF0045BAD0 /* MobileCoreServices.framework */,
+				BB190FC31F0B33BA0045BAD0 /* MessageUI.framework */,
+				BB190FC11F0B33B40045BAD0 /* MapKit.framework */,
+				BB190FBF1F0B33AF0045BAD0 /* ImageIO.framework */,
+				BB190FBD1F0B33A90045BAD0 /* QuartzCore.framework */,
+				BB190FBB1F0B33A30045BAD0 /* Foundation.framework */,
+				BB190FB91F0B33990045BAD0 /* CoreGraphics.framework */,
+				BB190FB71F0B33910045BAD0 /* AssetsLibrary.framework */,
+				BB190FB51F0B33800045BAD0 /* MADVPano.framework */,
+				D27E8279C21A0191FBAEA102 /* libPods-MADVCamera.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		BB190EC21F0B30330045BAD0 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BBAD07AF20186B63005BAD6F /* VideoExportView.h in Headers */,
+				BBAD0654201869B3005BAD6F /* MVMediaPlayerViewController.h in Headers */,
+				BBF3938B1F2700880023DC8B /* KxLogger.h in Headers */,
+				BBF393891F2700880023DC8B /* KxAudioManager.h in Headers */,
+				BBF3938C1F2700880023DC8B /* KxMovieDecoder.h in Headers */,
+				BBC7BC5B201708EA00767A35 /* MVKxMovieViewController.h in Headers */,
+				BB20FA3820183A7A00B300DD /* ResourceKeys.h in Headers */,
+				BB206DCA1F4A93EC00EB50C0 /* MVGLView.h in Headers */,
+				BBDFA0B91F468A3100C816F4 /* MVCameraDevice.h in Headers */,
+				BBFE0C241F39B39800D38C4D /* UIColor+MVExtensions.h in Headers */,
+				BBFE0C261F39B39800D38C4D /* UIViewController+MVExtensions.h in Headers */,
+				BBC7BC6D20170A6000767A35 /* CycordVideoRecorderDelegate.h in Headers */,
+				BB9CB1351F1E0FF800FFC6C7 /* LogManager.h in Headers */,
+				BB190F6E1F0B30A70045BAD0 /* AMBAGetWiFiStatusResponse.h in Headers */,
+				BBF393881F2700880023DC8B /* AudioRingBuffer.h in Headers */,
+				BB190F891F0B30A70045BAD0 /* ImageFilterBean.h in Headers */,
+				BBB599A71F5818B7006A8528 /* JsonSerializableObject.h in Headers */,
+				BB190FAC1F0B30A70045BAD0 /* SettingTreeNode.h in Headers */,
+				BB19101F1F0B38D40045BAD0 /* RLModel.h in Headers */,
+				BB190F8D1F0B30A70045BAD0 /* MVCameraClient.h in Headers */,
+				BBFE0BF91F396B4500D38C4D /* CycleView.h in Headers */,
+				BB190FA11F0B30A70045BAD0 /* MVMediaManager.h in Headers */,
+				BBFE0BFD1F396B4500D38C4D /* KDGoalBarPercentLayer.h in Headers */,
+				BB9CB13F1F1E0FF800FFC6C7 /* z_Sandbox.h in Headers */,
+				BB9CB1451F1E0FF800FFC6C7 /* NSRecursiveCondition.h in Headers */,
+				BB190F9D1F0B30A70045BAD0 /* MVMedia.h in Headers */,
+				BBF3937B1F26FDED0023DC8B /* h264_iOS8VTHD.h in Headers */,
+				BB19105B1F0B42650045BAD0 /* MadvGLRenderer_iOS.h in Headers */,
+				BB190F4A1F0B30A70045BAD0 /* AMBACommands.h in Headers */,
+				BB190F6E1F0B30A70045BAD0 /* AMBAGetWiFiStatusResponse.h in Headers */,
+				BB9CB13D1F1E0FF800FFC6C7 /* SocketHelper.h in Headers */,
+				BB190F9A1F0B30A70045BAD0 /* MVCameraUploadManager.h in Headers */,
+				BB190F711F0B30A70045BAD0 /* AMBAListResponse.h in Headers */,
+				BB9CB1381F1E0FF800FFC6C7 /* NSCondition+Extensions.h in Headers */,
+				BB89B5B71F5510C9007AC0A2 /* AMBAShootPhotoIntervalResponse.h in Headers */,
+				BB19101D1F0B38D40045BAD0 /* RealmSerialQueue.h in Headers */,
+				BBFE0BFB1F396B4500D38C4D /* KDGoalBar.h in Headers */,
+				BB190F7A1F0B30A70045BAD0 /* AMBASaveMediaFileDoneResponse.h in Headers */,
+				BB190F521F0B30A70045BAD0 /* AMBARequest.h in Headers */,
+				BB190F591F0B30A70045BAD0 /* AMBACancelFileTransferResponse.h in Headers */,
+				BB1910961F0B49A00045BAD0 /* ImageBlender.h in Headers */,
+				BB9CB1211F1E0FA300FFC6C7 /* FGLanguageTool.h in Headers */,
+				BB190F7D1F0B30A70045BAD0 /* AMBASetClientInfoResponse.h in Headers */,
+				BB89B5B31F5510A5007AC0A2 /* AMBASetCameraModeResponse.h in Headers */,
+				BB190FA91F0B30A70045BAD0 /* PathTreeNode.h in Headers */,
+				BB190FA11F0B30A70045BAD0 /* MVMediaManager.h in Headers */,
+				BBC7BC6E20170A6000767A35 /* postex_vert.h in Headers */,
+				BB190F741F0B30A70045BAD0 /* AMBAPutFileResponse.h in Headers */,
+				BB1910461F0B3C1A0045BAD0 /* XMLTool.h in Headers */,
+				BB190FAF1F0B30A70045BAD0 /* WiFiConnectManager.h in Headers */,
+				BB190F5F1F0B30A70045BAD0 /* AMBAGetAllModeParamResponse.h in Headers */,
+				BB9CB1441F1E0FF800FFC6C7 /* NSMutableArray+Extensions.h in Headers */,
+				BB190ED61F0B30330045BAD0 /* MADVCamera.h in Headers */,
+				BB190F681F0B30A70045BAD0 /* AMBAGetMediaInfoResponse.h in Headers */,
+				BB190F831F0B30A70045BAD0 /* CMDConnectManager.h in Headers */,
+				BB89B5C61F556994007AC0A2 /* KxMovieDecoder_douyin.h in Headers */,
+				BB190F651F0B30A70045BAD0 /* AMBAGetFileResponse.h in Headers */,
+				BB1910E91F0B4A510045BAD0 /* SdWhiteDetail.h in Headers */,
+				BB9CB1361F1E0FF800FFC6C7 /* MyReachability.h in Headers */,
+				BB190F4F1F0B30A70045BAD0 /* AMBAPutFileRequest.h in Headers */,
+				BBC7BC6F20170A6000767A35 /* tex_frag.h in Headers */,
+				BB190F5C1F0B30A70045BAD0 /* AMBAFileTransferResultResponse.h in Headers */,
+				BBF393781F26FD0F0023DC8B /* IDRDecoder.h in Headers */,
+				BBC7BC572016FFAB00767A35 /* MVPhotosManager.h in Headers */,
+				BB1910701F0B42BA0045BAD0 /* kxmovie-Prefix.pch in Headers */,
+				BB9CB13B1F1E0FF800FFC6C7 /* NSString+Extensions.h in Headers */,
+				BB190F7F1F0B30A70045BAD0 /* AMBASyncStorageAllStateResponse.h in Headers */,
+				BBC7BC6B20170A6000767A35 /* CycordVideoRecorder.h in Headers */,
+				BB190F771F0B30A70045BAD0 /* AMBAResponse.h in Headers */,
+				BB1910441F0B3C1A0045BAD0 /* GDataXMLNode.h in Headers */,
+				BBAAD38B20045BE300928F3C /* UIDevice+DeviceModel.h in Headers */,
+				BBC7BC502016EC1200767A35 /* AMBAShootPhotoSurroundexpResponse.h in Headers */,
+				BBC7BC6720170A6000767A35 /* CycordAudioRecorder.h in Headers */,
+				BB190F4C1F0B30A70045BAD0 /* AMBAGetFileRequest.h in Headers */,
+				BB9CB1411F1E0FF800FFC6C7 /* helper.h in Headers */,
+				BB190F961F0B30A70045BAD0 /* MVCameraDownloadManager.h in Headers */,
+				BBC7BC6920170A6000767A35 /* CycordNewAudioRecorder.h in Headers */,
+				BB190F621F0B30A70045BAD0 /* AMBAGetAllSettingParamResponse.h in Headers */,
+				BBF3939B1F29D32C0023DC8B /* TimeUtils.h in Headers */,
+				BB190F551F0B30A70045BAD0 /* AMBASetWifiRequest.h in Headers */,
+				BB190F6B1F0B30A70045BAD0 /* AMBAGetThumbnailResponse.h in Headers */,
+				BB190F861F0B30A70045BAD0 /* DATAConnectManager.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		BB190EC41F0B30330045BAD0 /* MADVCamera */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BB190ED91F0B30330045BAD0 /* Build configuration list for PBXNativeTarget "MADVCamera" */;
+			buildPhases = (
+				C8328067BB428B23ABD60A08 /* [CP] Check Pods Manifest.lock */,
+				BB190EC01F0B30330045BAD0 /* Sources */,
+				BB190EC11F0B30330045BAD0 /* Frameworks */,
+				BB190EC21F0B30330045BAD0 /* Headers */,
+				BB190EC31F0B30330045BAD0 /* Resources */,
+				65BA0E9DFFE8F26FFCD830AC /* [CP] Copy Pods Resources */,
+				521A4ED21F0B70DC00E5F155 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MADVCamera;
+			productName = MADVCamera;
+			productReference = BB190EC51F0B30330045BAD0 /* MADVCamera.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		BB190ECD1F0B30330045BAD0 /* MADVCameraTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BB190EDC1F0B30330045BAD0 /* Build configuration list for PBXNativeTarget "MADVCameraTests" */;
+			buildPhases = (
+				BB190ECA1F0B30330045BAD0 /* Sources */,
+				BB190ECB1F0B30330045BAD0 /* Frameworks */,
+				BB190ECC1F0B30330045BAD0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BB190ED11F0B30330045BAD0 /* PBXTargetDependency */,
+			);
+			name = MADVCameraTests;
+			productName = MADVCameraTests;
+			productReference = BB190ECE1F0B30330045BAD0 /* MADVCameraTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BB190EBC1F0B30330045BAD0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = QiuDong;
+				TargetAttributes = {
+					BB190EC41F0B30330045BAD0 = {
+						CreatedOnToolsVersion = 8.3.1;
+						DevelopmentTeam = QBAB3CS86A;
+						ProvisioningStyle = Automatic;
+					};
+					BB190ECD1F0B30330045BAD0 = {
+						CreatedOnToolsVersion = 8.3.1;
+						DevelopmentTeam = QBAB3CS86A;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = BB190EBF1F0B30330045BAD0 /* Build configuration list for PBXProject "MADVCamera" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = BB190EBB1F0B30330045BAD0;
+			productRefGroup = BB190EC61F0B30330045BAD0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BB190EC41F0B30330045BAD0 /* MADVCamera */,
+				BB190ECD1F0B30330045BAD0 /* MADVCameraTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BB190EC31F0B30330045BAD0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB1910711F0B42BA0045BAD0 /* kxmovie.bundle in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB190ECC1F0B30330045BAD0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		521A4ED21F0B70DC00E5F155 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\nset +u\n# Avoid recursively calling this script.\nif [[ $SF_MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport SF_MASTER_SCRIPT_RUNNING=1\n\n\n# Constants\nSF_TARGET_NAME=${PROJECT_NAME}\n#UNIVERSAL_OUTPUTFOLDER=`pwd`/${CONFIGURATION}-universal\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-iphoneos\n\n# Take build target\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSF_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\n#if [[ \"$SF_SDK_PLATFORM\" = \"iphoneos\" ]]\n#then\n#echo \"Please choose iPhone simulator as the build target.\"\n#exit 1\n#fi\n\nIPHONE_DEVICE_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphoneos\nIPHONE_SIM_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphonesimulator\n#echo ${IPHONE_SIM_BUILD_DIR}\n# Build the other (non-simulator) platform\nxcodebuild -workspace \"${SRCROOT}/MADVCamera.xcworkspace\" -scheme MADVCamera -configuration \"${CONFIGURATION}\" -sdk iphonesimulator BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" CONFIGURATION_BUILD_DIR=\"${IPHONE_SIM_BUILD_DIR}/x86_64\" SYMROOT=\"${SYMROOT}\" ARCHS='x86_64' VALID_ARCHS='x86_64' $ACTION\n\n#xcodebuild -project \"${SRCROOT}/MADVCamera.xcodeproj\" -target MADVPano -configuration \"${CONFIGURATION}\" -sdk iphonesimulator BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" CONFIGURATION_BUILD_DIR=\"${IPHONE_SIM_BUILD_DIR}/i386\" SYMROOT=\"${SYMROOT}\" ARCHS='i386' VALID_ARCHS='i386' $ACTION\n\nxcodebuild -workspace \"${SRCROOT}/MADVCamera.xcworkspace\" -scheme MADVCamera -configuration \"${CONFIGURATION}\" -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" CONFIGURATION_BUILD_DIR=\"${IPHONE_DEVICE_BUILD_DIR}/arm64\" SYMROOT=\"${SYMROOT}\" ARCHS='arm64' VALID_ARCHS='arm64' $ACTION\n\nxcodebuild -workspace \"${SRCROOT}/MADVCamera.xcworkspace\" -scheme MADVCamera -configuration \"${CONFIGURATION}\" -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\"  CONFIGURATION_BUILD_DIR=\"${IPHONE_DEVICE_BUILD_DIR}/armv7\" SYMROOT=\"${SYMROOT}\" ARCHS='armv7 armv7s' VALID_ARCHS='armv7 armv7s' $ACTION\n\n# Copy the framework structure to the universal folder (clean it first)\nrm -rf \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework\"\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/armv7/${PROJECT_NAME}.framework\" \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework\"\n\n# Smash them together to combine all architectures\n# \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/i386/${PROJECT_NAME}.framework/${PROJECT_NAME}\"\nlipo -create \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/arm64/${PROJECT_NAME}.framework/${PROJECT_NAME}\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/armv7/${PROJECT_NAME}.framework/${PROJECT_NAME}\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/x86_64/${PROJECT_NAME}.framework/${PROJECT_NAME}\" -output \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework/${PROJECT_NAME}\"";
+		};
+		65BA0E9DFFE8F26FFCD830AC /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MADVCamera/Pods-MADVCamera-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C8328067BB428B23ABD60A08 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MADVCamera-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BB190EC01F0B30330045BAD0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB190F541F0B30A70045BAD0 /* AMBARequest.m in Sources */,
+				BB190F761F0B30A70045BAD0 /* AMBAPutFileResponse.m in Sources */,
+				BB1910EA1F0B4A510045BAD0 /* SdWhiteDetail.m in Sources */,
+				BB19105C1F0B42650045BAD0 /* MadvGLRenderer_iOS.mm in Sources */,
+				BB1910951F0B49A00045BAD0 /* ImageBlender.cpp in Sources */,
+				BB190F731F0B30A70045BAD0 /* AMBAListResponse.m in Sources */,
+				BB190F8B1F0B30A70045BAD0 /* ImageFilterBean.m in Sources */,
+				BBC7BC582016FFAB00767A35 /* MVPhotosManager.m in Sources */,
+				BB9CB1391F1E0FF800FFC6C7 /* NSCondition+Extensions.m in Sources */,
+				BB190F671F0B30A70045BAD0 /* AMBAGetFileResponse.m in Sources */,
+				BBF3937C1F26FDED0023DC8B /* h264_iOS8VTHD.mm in Sources */,
+				BBC7BC5C201708EA00767A35 /* MVKxMovieViewController.mm in Sources */,
+				BB190FB11F0B30A70045BAD0 /* WiFiConnectManager.m in Sources */,
+				BBAAD38C20045BE300928F3C /* UIDevice+DeviceModel.m in Sources */,
+				BBF3938A1F2700880023DC8B /* KxAudioManager.m in Sources */,
+				BB190F881F0B30A70045BAD0 /* DATAConnectManager.m in Sources */,
+				BB1910201F0B38D40045BAD0 /* RLModel.m in Sources */,
+				BBFE0BFC1F396B4500D38C4D /* KDGoalBar.m in Sources */,
+				BB1910731F0B42BA0045BAD0 /* KxMovieDecoder.mm in Sources */,
+				BB1910451F0B3C1A0045BAD0 /* GDataXMLNode.m in Sources */,
+				BB190F9C1F0B30A70045BAD0 /* MVCameraUploadManager.m in Sources */,
+				BBFE0C271F39B39800D38C4D /* UIViewController+MVExtensions.m in Sources */,
+				BB190F791F0B30A70045BAD0 /* AMBAResponse.m in Sources */,
+				BB1910471F0B3C1A0045BAD0 /* XMLTool.m in Sources */,
+				BB190F511F0B30A70045BAD0 /* AMBAPutFileRequest.m in Sources */,
+				BBFE0C251F39B39800D38C4D /* UIColor+MVExtensions.m in Sources */,
+				BB190F611F0B30A70045BAD0 /* AMBAGetAllModeParamResponse.m in Sources */,
+				BB190FAE1F0B30A70045BAD0 /* SettingTreeNode.m in Sources */,
+				BB190F701F0B30A70045BAD0 /* AMBAGetWiFiStatusResponse.m in Sources */,
+				BBF393771F26FD0F0023DC8B /* IDRDecoder.c in Sources */,
+				BB190F571F0B30A70045BAD0 /* AMBASetWifiRequest.m in Sources */,
+				BB190F9F1F0B30A70045BAD0 /* MVMedia.m in Sources */,
+				BB190F951F0B30A70045BAD0 /* MVCameraDevice.m in Sources */,
+				BB190F5B1F0B30A70045BAD0 /* AMBACancelFileTransferResponse.m in Sources */,
+				BB9CB13C1F1E0FF800FFC6C7 /* NSString+Extensions.m in Sources */,
+				BBF390AF1F2217400023DC8B /* AMBASetGPSInfoRequest.m in Sources */,
+				BB190FA31F0B30A70045BAD0 /* MVMediaManager.m in Sources */,
+				BB9CB13A1F1E0FF800FFC6C7 /* NSMutableArray+Extensions.m in Sources */,
+				BB9CB13E1F1E0FF800FFC6C7 /* SocketHelper.mm in Sources */,
+				BB9CB1221F1E0FA300FFC6C7 /* FGLanguageTool.m in Sources */,
+				BBAD07B020186B63005BAD6F /* VideoExportView.m in Sources */,
+				BB190F5E1F0B30A70045BAD0 /* AMBAFileTransferResultResponse.m in Sources */,
+				BBFE0BFE1F396B4500D38C4D /* KDGoalBarPercentLayer.m in Sources */,
+				BBF3939A1F29D32C0023DC8B /* TimeUtils.cpp in Sources */,
+				BBAD0655201869B3005BAD6F /* MVMediaPlayerViewController.mm in Sources */,
+				BB190F851F0B30A70045BAD0 /* CMDConnectManager.m in Sources */,
+				BB190F7E1F0B30A70045BAD0 /* AMBASetClientInfoResponse.m in Sources */,
+				BB89B5B81F5510C9007AC0A2 /* AMBAShootPhotoIntervalResponse.m in Sources */,
+				BB9CB1371F1E0FF800FFC6C7 /* MyReachability.m in Sources */,
+				BB190F6D1F0B30A70045BAD0 /* AMBAGetThumbnailResponse.m in Sources */,
+				BB190F7C1F0B30A70045BAD0 /* AMBASaveMediaFileDoneResponse.m in Sources */,
+				BB190F4E1F0B30A70045BAD0 /* AMBAGetFileRequest.m in Sources */,
+				BBFE0BFA1F396B4500D38C4D /* CycleView.m in Sources */,
+				BB9CB1431F1E0FF800FFC6C7 /* LogManager.m in Sources */,
+				BB190FAB1F0B30A70045BAD0 /* PathTreeNode.m in Sources */,
+				BB190F641F0B30A70045BAD0 /* AMBAGetAllSettingParamResponse.m in Sources */,
+				BB89B5C51F556994007AC0A2 /* KxMovieDecoder_douyin.mm in Sources */,
+				BB206DC91F4A93EC00EB50C0 /* MVGLView.mm in Sources */,
+				BB190F811F0B30A70045BAD0 /* AMBASyncStorageAllStateResponse.m in Sources */,
+				BB190F8F1F0B30A70045BAD0 /* MVCameraClient.m in Sources */,
+				BB9CB1421F1E0FF800FFC6C7 /* helper.m in Sources */,
+				BB9CB1401F1E0FF800FFC6C7 /* z_Sandbox.m in Sources */,
+				BBB599A61F5818B7006A8528 /* JsonSerializableObject.m in Sources */,
+				BB190F6A1F0B30A70045BAD0 /* AMBAGetMediaInfoResponse.m in Sources */,
+				BB190F981F0B30A70045BAD0 /* MVCameraDownloadManager.m in Sources */,
+				BB19101E1F0B38D40045BAD0 /* RealmSerialQueue.m in Sources */,
+				BBC7BC512016EC1200767A35 /* AMBAShootPhotoSurroundexpResponse.m in Sources */,
+				BB89B5B41F5510A5007AC0A2 /* AMBASetCameraModeResponse.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB190ECA1F0B30330045BAD0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB190ED41F0B30330045BAD0 /* MADVCameraTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BB190ED11F0B30330045BAD0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BB190EC41F0B30330045BAD0 /* MADVCamera */;
+			targetProxy = BB190ED01F0B30330045BAD0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		BB190ED71F0B30330045BAD0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		BB190ED81F0B30330045BAD0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		BB190EDA1F0B30330045BAD0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3669D4C9161936220403636F /* Pods-MADVCamera.debug.xcconfig */;
+			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_MOVE = NO;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				DEVELOPMENT_TEAM = QBAB3CS86A;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/**",
+					/usr/lib/libxml2.2.dylib,
+				);
+				GCC_PREFIX_HEADER = MADVCamera/PrefixHeader.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					TARGET_DARWIN_IOS,
+					MADVCAMERA_EXPORT,
+				);
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"",
+					"\"${PODS_ROOT}/Headers/Public/DACircularProgress\"",
+					"\"${PODS_ROOT}/Headers/Public/JLRoutes\"",
+					"\"${PODS_ROOT}/Headers/Public/MBProgressHUD\"",
+					"\"${PODS_ROOT}/Headers/Public/MJExtension\"",
+					"\"${PODS_ROOT}/Headers/Public/MJRefresh\"",
+					"\"${PODS_ROOT}/Headers/Public/MWPhotoBrowser\"",
+					"\"${PODS_ROOT}/Headers/Public/Masonry\"",
+					"\"${PODS_ROOT}/Headers/Public/PSTCollectionView\"",
+					"\"${PODS_ROOT}/Headers/Public/Realm\"",
+					"\"${PODS_ROOT}/Headers/Public/SDWebImage\"",
+					"\"${PODS_ROOT}/Headers/Public/SSKeychain\"",
+					"\"${PODS_ROOT}/Headers/Public/SSZipArchive/minizip\"",
+					"\"${PODS_ROOT}/Headers/Public/THProgressView\"",
+					"$(SDKROOT)/usr/include/libxml2",
+				);
+				INFOPLIST_FILE = MADVCamera/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/AFNetworking\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/DACircularProgress\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/JLRoutes\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/MBProgressHUD\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/MJExtension\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/MJRefresh\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/MWPhotoBrowser\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/Masonry\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/PSTCollectionView\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/Realm\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/SDWebImage\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/SSKeychain\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/SSZipArchive\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/THProgressView\"",
+					"$(inherited)",
+					"\"${PODS_ROOT}/Realm/core\"",
+					"$(PROJECT_DIR)/libs/FFmpeg",
+					"\"$(SRCROOT)/libs/FFmpeg\"",
+					"$(PROJECT_DIR)/MADVCamera/libs/FFmpeg",
+				);
+				MACH_O_TYPE = staticlib;
+				PRELINK_FLAGS = "-unexported_symbols_list $(PROJECT_DIR)/libavcodec.symbol -unexported_symbols_list $(PROJECT_DIR)/libavutil.symbol -unexported_symbols_list $(PROJECT_DIR)/libavformat.symbol -unexported_symbols_list $(PROJECT_DIR)/libswresample.symbol -unexported_symbols_list $(PROJECT_DIR)/libswscale.symbol";
+				PRELINK_LIBS = "$(PROJECT_DIR)/MADVCamera/libs/FFmpeg/libavutil.a $(PROJECT_DIR)/MADVCamera/libs/FFmpeg/libavformat.a $(PROJECT_DIR)/MADVCamera/libs/FFmpeg/libavcodec.a $(PROJECT_DIR)/MADVCamera/libs/FFmpeg/libswscale.a $(PROJECT_DIR)/MADVCamera/libs/FFmpeg/libswresample.a";
+				PRODUCT_BUNDLE_IDENTIFIER = com.madv360.sv1.MADVCamera;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SEPARATE_STRIP = YES;
+				SKIP_INSTALL = YES;
+				STRIP_STYLE = "non-global";
+				USER_HEADER_SEARCH_PATHS = ffmpeg;
+			};
+			name = Debug;
+		};
+		BB190EDB1F0B30330045BAD0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DA354E2846541E7994D9FCB9 /* Pods-MADVCamera.release.xcconfig */;
+			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_MOVE = NO;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				DEVELOPMENT_TEAM = QBAB3CS86A;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/**",
+					/usr/lib/libxml2.2.dylib,
+				);
+				GCC_PREFIX_HEADER = MADVCamera/PrefixHeader.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					TARGET_DARWIN_IOS,
+					MADVCAMERA_EXPORT,
+				);
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"",
+					"\"${PODS_ROOT}/Headers/Public/DACircularProgress\"",
+					"\"${PODS_ROOT}/Headers/Public/JLRoutes\"",
+					"\"${PODS_ROOT}/Headers/Public/MBProgressHUD\"",
+					"\"${PODS_ROOT}/Headers/Public/MJExtension\"",
+					"\"${PODS_ROOT}/Headers/Public/MJRefresh\"",
+					"\"${PODS_ROOT}/Headers/Public/MWPhotoBrowser\"",
+					"\"${PODS_ROOT}/Headers/Public/Masonry\"",
+					"\"${PODS_ROOT}/Headers/Public/PSTCollectionView\"",
+					"\"${PODS_ROOT}/Headers/Public/Realm\"",
+					"\"${PODS_ROOT}/Headers/Public/SDWebImage\"",
+					"\"${PODS_ROOT}/Headers/Public/SSKeychain\"",
+					"\"${PODS_ROOT}/Headers/Public/SSZipArchive/minizip\"",
+					"\"${PODS_ROOT}/Headers/Public/THProgressView\"",
+					"$(SDKROOT)/usr/include/libxml2",
+				);
+				INFOPLIST_FILE = MADVCamera/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/AFNetworking\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/DACircularProgress\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/JLRoutes\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/MBProgressHUD\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/MJExtension\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/MJRefresh\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/MWPhotoBrowser\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/Masonry\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/PSTCollectionView\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/Realm\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/SDWebImage\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/SSKeychain\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/SSZipArchive\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/THProgressView\"",
+					"$(inherited)",
+					"\"${PODS_ROOT}/Realm/core\"",
+					"$(PROJECT_DIR)/libs/FFmpeg",
+					"\"$(SRCROOT)/libs/FFmpeg\"",
+					"$(PROJECT_DIR)/MADVCamera/libs/FFmpeg",
+				);
+				MACH_O_TYPE = staticlib;
+				PRELINK_FLAGS = "-unexported_symbols_list $(PROJECT_DIR)/libavcodec.symbol -unexported_symbols_list $(PROJECT_DIR)/libavutil.symbol -unexported_symbols_list $(PROJECT_DIR)/libavformat.symbol -unexported_symbols_list $(PROJECT_DIR)/libswresample.symbol -unexported_symbols_list $(PROJECT_DIR)/libswscale.symbol";
+				PRELINK_LIBS = "$(PROJECT_DIR)/MADVCamera/libs/FFmpeg/libavutil.a $(PROJECT_DIR)/MADVCamera/libs/FFmpeg/libavformat.a $(PROJECT_DIR)/MADVCamera/libs/FFmpeg/libavcodec.a $(PROJECT_DIR)/MADVCamera/libs/FFmpeg/libswscale.a $(PROJECT_DIR)/MADVCamera/libs/FFmpeg/libswresample.a";
+				PRODUCT_BUNDLE_IDENTIFIER = com.madv360.sv1.MADVCamera;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SEPARATE_STRIP = YES;
+				SKIP_INSTALL = YES;
+				STRIP_STYLE = "non-global";
+				USER_HEADER_SEARCH_PATHS = ffmpeg;
+			};
+			name = Release;
+		};
+		BB190EDD1F0B30330045BAD0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = QBAB3CS86A;
+				INFOPLIST_FILE = MADVCameraTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.madv360.sv1.MADVCameraTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BB190EDE1F0B30330045BAD0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = QBAB3CS86A;
+				INFOPLIST_FILE = MADVCameraTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.madv360.sv1.MADVCameraTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BB190EBF1F0B30330045BAD0 /* Build configuration list for PBXProject "MADVCamera" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB190ED71F0B30330045BAD0 /* Debug */,
+				BB190ED81F0B30330045BAD0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BB190ED91F0B30330045BAD0 /* Build configuration list for PBXNativeTarget "MADVCamera" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB190EDA1F0B30330045BAD0 /* Debug */,
+				BB190EDB1F0B30330045BAD0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BB190EDC1F0B30330045BAD0 /* Build configuration list for PBXNativeTarget "MADVCameraTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB190EDD1F0B30330045BAD0 /* Debug */,
+				BB190EDE1F0B30330045BAD0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BB190EBC1F0B30330045BAD0 /* Project object */;
+}

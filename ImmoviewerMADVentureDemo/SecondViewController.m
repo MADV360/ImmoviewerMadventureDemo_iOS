@@ -60,8 +60,8 @@ static NSString* MediaCellIdentifier = @"MediaCellIdentifier";
     MediaCell* cell = [tableView dequeueReusableCellWithIdentifier:MediaCellIdentifier forIndexPath:indexPath];
     NSString* fileName = [g_downloadedFileNames objectAtIndex:indexPath.row];
     NSString* filePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:fileName];
-    UIImage* image = [UIImage imageWithContentsOfFile:filePath];
-    cell.photoView.image = image;
+    //UIImage* image = [UIImage imageWithContentsOfFile:filePath];
+    ///!!!cell.photoView.image = image;
     return cell;
 }
 

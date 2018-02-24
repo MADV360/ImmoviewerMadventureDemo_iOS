@@ -1,0 +1,180 @@
+// jpegReader.C
+// Copyright (c) 2009 The Foundry Visionmongers Ltd.  All Rights Reserved.
+
+/* Reads Jpeg files (actually JFIF files) using the public domain libjpeg.
+   This is an example of a file reader that is not a subclass of
+   FileReader. Instead this uses the library's reader functions and
+   a single lock so that multiple threads do not crash the library.
+ */
+
+#include "DDImage/Reader.h"
+#include "DDImage/Row.h"
+#include "DDImage/ARRAY.h"
+#include <stdio.h>
+#include <limits>
+
+#include "jpeg.h"
+
+#include "DDImage/Thread.h"
+#include "DDImage/MetaData.h"
+
+#include "exifReader.h"
+
+#include "boost/foreach.hpp"
+
+using namespace DD::Image;
+
+namespace
+{
+  struct MetaWrapper
+  {
+    void * rawData;
+    int size;
+
+    MetaWrapper( void * data, int dataSize ) : rawData( data ), size( dataSize )
+    {
+    }
+  };
+}
+
+class JpegReader : public ExifReader
+{
+
+  FILE* file;
+  struct jpeg_decompress_struct cinfo;
+  int depth;
+  unsigned char** lines;
+  int nextline;
+  int getline(int y);
+  Lock lock;
+
+public:
+
+  JpegReader(Read*, int fd);
+  ~JpegReader();
+  void engine(int y, int x, int r, ChannelMask, Row &);
+  void open();
+  static const Description d;
+
+  const MetaData::Bundle& fetchMetaData(const char* key);
+
+  MetaData::Bundle _meta;
+};
+
+const MetaData::Bundle& JpegReader::fetchMetaData(const char* key)
+{
+  return _meta;
+}
+
+// I don't know what the official test for jpeg is. There appears to
+// be some complexity at the start, probably they assume you will use
+// a jpeg_decompress object. These 3 bytes are the only constant between
+// all the example files I have seen:
+static bool test(int fd, const unsigned char* block, int length)
+{
+  return block[0] == 0xff && block[1] == 0xd8 && block[2] == 0xff;
+  //   return (!strcmp((char*)block+6, "JFIF") ||
+  //      !strcmp((char*)block+6, "Exif"));
+}
+
+static Reader* build(Read* iop, int fd, const unsigned char* b, int n)
+{
+  return new JpegReader(iop, fd);
+}
+
+const Reader::Description JpegReader::d("jpeg\0jpg\0", build, test);
+
+static struct jpeg_error_mgr jerr;
+
+JpegReader::JpegReader(Read* r, int fd) : ExifReader(r)
+{
+  file = fdopen(fd, "rb");
+  fseek(file, 0L, SEEK_SET);
+  cinfo.err = jpeg_std_error(&jerr);
+  jpeg_create_decompress(&cinfo);
+  jpeg_stdio_src(&cinfo, file);
+
+  jpeg_save_markers(&cinfo, JPEG_APP0 + 1, 0xffff);
+
+  jpeg_read_header(&cinfo, TRUE);
+  jpeg_start_decompress(&cinfo);
+  nextline = 0;
+  lines = new unsigned char*[cinfo.output_height];
+  double aspect = 0;
+  if ( cinfo.X_density > 0 && cinfo.Y_density > 0 &&
+       cinfo.X_density != 0xffff && cinfo.Y_density != 0xffff
+       && (cinfo.X_density != 1 || cinfo.Y_density != 1) )
+    aspect = (float)cinfo.X_density / (float)cinfo.Y_density;
+
+  depth = cinfo.output_components;
+  set_info(cinfo.output_width, cinfo.output_height, depth, aspect);
+  info_.ydirection(-1);
+
+  jpeg_saved_marker_ptr mptr = cinfo.marker_list;
+
+  std::vector< MetaWrapper > metaList;
+
+  while (mptr != NULL) {
+    if (mptr->marker == 0xe1) {
+
+      MetaWrapper metaData( mptr->data, mptr->data_length );
+      metaList.push_back( metaData );
+    }
+    mptr = mptr->next;
+  }
+
+  BOOST_FOREACH(MetaWrapper& mw, metaList) {
+    fetchExifMetaData(_meta, mw.rawData, mw.size);
+  }
+
+  _meta.setData(MetaData::DEPTH, MetaData::DEPTH_FIXED(cinfo.data_precision));
+
+  _meta.setDataCopy(MetaData::FILE_CREATION_TIME, _meta.getData("exif/0/DateTime"));
+  _meta.setDataCopy(MetaData::FOCAL_LENGTH, _meta.getData("exif/2/FocalLength"));
+  _meta.setDataCopy(MetaData::FNUMBER, _meta.getData("exif/2/FNumber"));
+  _meta.setDataCopy(MetaData::EXPOSURE, _meta.getData("exif/2/ExposureTime"));
+}
+
+// delay anything unneeded for info_ until this is called:
+void JpegReader::open() { Reader::open(); }
+
+JpegReader::~JpegReader()
+{
+  if (file) {
+    jpeg_destroy_decompress(&cinfo);
+    fclose(file);
+  }
+  for (int n = 0; n < nextline; n++)
+    delete[] lines[n];
+  delete[] lines;
+}
+
+// The engine reads individual rows out of the input.
+void JpegReader::engine(int y, int x, int r, ChannelMask channels, Row& row)
+{
+  unsigned char* buffer;
+  int Y = height() - y - 1;
+  lock.lock();
+  if (Y < nextline) {
+    buffer = lines[Y];
+  }
+  else {
+    // Read forward until we get the line:
+    for (; nextline <= Y; nextline++) {
+      buffer = lines[nextline] =
+                 new unsigned char[depth * width()];
+      jpeg_read_scanlines(&cinfo, &buffer, 1);
+    }
+    // When we read the entire file we don't need the the cinfo anymore:
+    if (nextline >= height()) {
+      jpeg_destroy_decompress(&cinfo);
+      fclose(file);
+      file = 0;
+    }
+  }
+  lock.unlock();
+  // Convert the necessary channels to floating point:
+  foreach (z, channels) {
+    from_byte(z, row.writable(z) + x, buffer + x * depth + z - 1, 0 /*alpha*/, r - x, depth /*delta*/);
+  }
+}

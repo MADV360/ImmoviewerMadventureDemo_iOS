@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina3_5" orientation="landscape">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" restorationIdentifier="share" id="iN0-l3-epB" customClass="MediaShareView">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="320"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U9M-sf-b5b">
+                    <rect key="frame" x="65" y="135" width="50" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="50" id="0oF-74-dUc"/>
+                    </constraints>
+                    <state key="normal" backgroundImage="wechat.png"/>
+                    <connections>
+                        <action selector="shareClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="RA7-lH-FNV"/>
+                    </connections>
+                </button>
+                <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="644-vn-oDD">
+                    <rect key="frame" x="265" y="135" width="50" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="JzW-eX-NrJ"/>
+                        <constraint firstAttribute="width" constant="50" id="Zul-de-z8c"/>
+                    </constraints>
+                    <state key="normal" backgroundImage="new_qq.png"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="JzW-eX-NrJ"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=compact">
+                        <mask key="constraints">
+                            <include reference="JzW-eX-NrJ"/>
+                        </mask>
+                    </variation>
+                    <connections>
+                        <action selector="shareClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="ozc-8J-lBR"/>
+                    </connections>
+                </button>
+                <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5dI-fE-bFP">
+                    <rect key="frame" x="365" y="135" width="50" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="cNB-cH-bvX"/>
+                        <constraint firstAttribute="width" constant="50" id="uul-E1-FlB"/>
+                    </constraints>
+                    <state key="normal" backgroundImage="copy.png"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="uul-E1-FlB"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=compact">
+                        <mask key="constraints">
+                            <exclude reference="cNB-cH-bvX"/>
+                            <include reference="uul-E1-FlB"/>
+                        </mask>
+                    </variation>
+                    <connections>
+                        <action selector="shareClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="Vdi-0z-gmX"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="分享" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JkH-hj-mXz">
+                    <rect key="frame" x="219" y="39.5" width="42" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="0MP-i4-Oag"/>
+                        <constraint firstAttribute="width" constant="42" id="0UE-S5-Oii"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="微信" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vD7-AF-SOf">
+                    <rect key="frame" x="60" y="200" width="60" height="15"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="15" id="3Qs-EK-JFM"/>
+                        <constraint firstAttribute="width" constant="60" id="iZj-dt-RqT"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="朋友圈" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wiu-Y5-Juw">
+                    <rect key="frame" x="160" y="200" width="60" height="15"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="60" id="9Uq-JQ-wGJ"/>
+                        <constraint firstAttribute="height" constant="15" id="Zy2-nI-aAx"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="QQ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ANK-LP-yqK">
+                    <rect key="frame" x="260" y="200" width="60" height="15"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="15" id="kHP-qU-mK5"/>
+                        <constraint firstAttribute="width" constant="60" id="kol-L5-gcd"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="复制链接" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cQ0-Tk-IrS">
+                    <rect key="frame" x="355" y="200" width="70" height="15"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="70" id="6un-DO-Dop"/>
+                        <constraint firstAttribute="height" constant="15" id="CcA-XV-li6"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bpb-07-uol">
+                    <rect key="frame" x="165" y="135" width="50" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="2Tb-a8-8VW"/>
+                        <constraint firstAttribute="width" constant="50" id="ssg-F1-0UU"/>
+                    </constraints>
+                    <state key="normal" backgroundImage="wechat_friends.png"/>
+                    <connections>
+                        <action selector="shareClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="CZL-Vb-0r1"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="cQ0-Tk-IrS" firstAttribute="centerX" secondItem="5dI-fE-bFP" secondAttribute="centerX" id="09W-3e-5O9"/>
+                <constraint firstItem="JkH-hj-mXz" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="1Gf-HL-nul"/>
+                <constraint firstItem="vD7-AF-SOf" firstAttribute="centerX" secondItem="U9M-sf-b5b" secondAttribute="centerX" id="3B6-MI-Xyj"/>
+                <constraint firstItem="ANK-LP-yqK" firstAttribute="top" secondItem="644-vn-oDD" secondAttribute="bottom" constant="15" id="7Mw-j5-qrg"/>
+                <constraint firstItem="Bpb-07-uol" firstAttribute="bottom" secondItem="U9M-sf-b5b" secondAttribute="bottom" id="7pv-NQ-hwh"/>
+                <constraint firstItem="5dI-fE-bFP" firstAttribute="trailing" secondItem="U9M-sf-b5b" secondAttribute="trailing" id="7qr-Z4-77e"/>
+                <constraint firstItem="Bpb-07-uol" firstAttribute="top" secondItem="U9M-sf-b5b" secondAttribute="top" id="Ckt-8Q-bOa"/>
+                <constraint firstItem="644-vn-oDD" firstAttribute="top" secondItem="Bpb-07-uol" secondAttribute="top" id="FRH-fe-wEa"/>
+                <constraint firstItem="644-vn-oDD" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" constant="50" id="HEh-Gt-Jcy"/>
+                <constraint firstItem="Bpb-07-uol" firstAttribute="top" secondItem="U9M-sf-b5b" secondAttribute="top" id="HpO-jS-w9n"/>
+                <constraint firstItem="5dI-fE-bFP" firstAttribute="top" secondItem="644-vn-oDD" secondAttribute="top" id="IBC-i8-qJN"/>
+                <constraint firstItem="5dI-fE-bFP" firstAttribute="top" secondItem="U9M-sf-b5b" secondAttribute="bottom" constant="50" id="IJv-NS-Usj"/>
+                <constraint firstItem="Bpb-07-uol" firstAttribute="top" secondItem="JkH-hj-mXz" secondAttribute="bottom" constant="30" id="Jjc-gD-1ep"/>
+                <constraint firstItem="Bpb-07-uol" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="KHd-yG-VqT"/>
+                <constraint firstItem="cQ0-Tk-IrS" firstAttribute="top" secondItem="5dI-fE-bFP" secondAttribute="bottom" constant="15" id="MVh-Js-bXk"/>
+                <constraint firstItem="Bpb-07-uol" firstAttribute="leading" secondItem="U9M-sf-b5b" secondAttribute="trailing" constant="50" id="NRu-pi-P67"/>
+                <constraint firstItem="5dI-fE-bFP" firstAttribute="leading" secondItem="644-vn-oDD" secondAttribute="trailing" constant="50" id="ONy-ci-0gq"/>
+                <constraint firstItem="644-vn-oDD" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="OTf-Hr-5UO"/>
+                <constraint firstItem="5dI-fE-bFP" firstAttribute="leading" secondItem="U9M-sf-b5b" secondAttribute="leading" id="Rkm-a5-94F"/>
+                <constraint firstItem="5dI-fE-bFP" firstAttribute="bottom" secondItem="644-vn-oDD" secondAttribute="bottom" id="Rpx-OI-b6X"/>
+                <constraint firstItem="JkH-hj-mXz" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="W4M-ZU-2RJ"/>
+                <constraint firstItem="ANK-LP-yqK" firstAttribute="centerX" secondItem="644-vn-oDD" secondAttribute="centerX" id="aEK-qd-YLs"/>
+                <constraint firstItem="644-vn-oDD" firstAttribute="leading" secondItem="Bpb-07-uol" secondAttribute="trailing" constant="50" id="alU-zm-uRV"/>
+                <constraint firstItem="644-vn-oDD" firstAttribute="leading" secondItem="Bpb-07-uol" secondAttribute="trailing" constant="50" id="bjz-nG-BMz"/>
+                <constraint firstItem="Bpb-07-uol" firstAttribute="leading" secondItem="U9M-sf-b5b" secondAttribute="trailing" constant="50" id="cdQ-0e-h3V"/>
+                <constraint firstItem="wiu-Y5-Juw" firstAttribute="top" secondItem="Bpb-07-uol" secondAttribute="bottom" constant="15" id="duQ-Pt-ccJ"/>
+                <constraint firstItem="644-vn-oDD" firstAttribute="bottom" secondItem="Bpb-07-uol" secondAttribute="bottom" id="h8n-OF-cBQ"/>
+                <constraint firstItem="vD7-AF-SOf" firstAttribute="top" secondItem="U9M-sf-b5b" secondAttribute="bottom" constant="15" id="sRk-8E-R6Q"/>
+                <constraint firstItem="JkH-hj-mXz" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-110" id="xIf-3O-jpW"/>
+                <constraint firstItem="644-vn-oDD" firstAttribute="centerY" secondItem="Bpb-07-uol" secondAttribute="centerY" id="yQJ-yy-x97"/>
+                <constraint firstItem="wiu-Y5-Juw" firstAttribute="centerX" secondItem="Bpb-07-uol" secondAttribute="centerX" id="yqK-0V-pFE"/>
+                <constraint firstItem="Bpb-07-uol" firstAttribute="bottom" secondItem="U9M-sf-b5b" secondAttribute="bottom" id="yu9-PU-nW7"/>
+            </constraints>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="HpO-jS-w9n"/>
+                    <exclude reference="cdQ-0e-h3V"/>
+                    <exclude reference="yu9-PU-nW7"/>
+                    <exclude reference="1Gf-HL-nul"/>
+                    <exclude reference="HEh-Gt-Jcy"/>
+                    <exclude reference="OTf-Hr-5UO"/>
+                    <exclude reference="alU-zm-uRV"/>
+                    <exclude reference="yQJ-yy-x97"/>
+                    <exclude reference="IBC-i8-qJN"/>
+                    <exclude reference="ONy-ci-0gq"/>
+                    <exclude reference="Rpx-OI-b6X"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=compact">
+                <mask key="constraints">
+                    <exclude reference="7pv-NQ-hwh"/>
+                    <exclude reference="Ckt-8Q-bOa"/>
+                    <include reference="HpO-jS-w9n"/>
+                    <exclude reference="Jjc-gD-1ep"/>
+                    <exclude reference="KHd-yG-VqT"/>
+                    <exclude reference="NRu-pi-P67"/>
+                    <include reference="cdQ-0e-h3V"/>
+                    <include reference="yu9-PU-nW7"/>
+                    <include reference="1Gf-HL-nul"/>
+                    <exclude reference="W4M-ZU-2RJ"/>
+                    <exclude reference="FRH-fe-wEa"/>
+                    <include reference="HEh-Gt-Jcy"/>
+                    <include reference="OTf-Hr-5UO"/>
+                    <include reference="alU-zm-uRV"/>
+                    <exclude reference="bjz-nG-BMz"/>
+                    <exclude reference="h8n-OF-cBQ"/>
+                    <include reference="yQJ-yy-x97"/>
+                    <exclude reference="7qr-Z4-77e"/>
+                    <include reference="IBC-i8-qJN"/>
+                    <exclude reference="IJv-NS-Usj"/>
+                    <include reference="ONy-ci-0gq"/>
+                    <exclude reference="Rkm-a5-94F"/>
+                    <include reference="Rpx-OI-b6X"/>
+                </mask>
+            </variation>
+            <connections>
+                <outlet property="momentsLabel" destination="wiu-Y5-Juw" id="68B-59-dJQ"/>
+                <outlet property="qqBtn" destination="5dI-fE-bFP" id="Rwp-ZS-c11"/>
+                <outlet property="shareLabel" destination="JkH-hj-mXz" id="D0E-cE-Qsp"/>
+                <outlet property="sinaBtn" destination="644-vn-oDD" id="rN5-4N-rgQ"/>
+                <outlet property="urlLabel" destination="cQ0-Tk-IrS" id="VLy-mv-cth"/>
+                <outlet property="weChatLabel" destination="vD7-AF-SOf" id="r86-UN-KHk"/>
+                <outlet property="wechatBtn" destination="U9M-sf-b5b" id="Er9-Ev-EMz"/>
+                <outlet property="wechatFriendBtn" destination="Bpb-07-uol" id="Yhs-vB-gt6"/>
+            </connections>
+            <point key="canvasLocation" x="230" y="259"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="copy.png" width="51" height="51"/>
+        <image name="new_qq.png" width="50" height="51"/>
+        <image name="wechat.png" width="47" height="47"/>
+        <image name="wechat_friends.png" width="51" height="51"/>
+    </resources>
+</document>

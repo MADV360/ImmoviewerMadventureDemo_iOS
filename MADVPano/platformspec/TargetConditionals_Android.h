@@ -1,0 +1,7 @@
+#ifndef __TARGET_CONDITIONALS_ANDROID__
+#define __TARGET_CONDITIONALS_ANDROID__
+
+#define TARGET_OS_ANDROID   1
+#define TARGET_OS_LINUX   1
+
+#endif
