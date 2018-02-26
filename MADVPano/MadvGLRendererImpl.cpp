@@ -434,7 +434,7 @@ STRINGIZE0(#ifdef FLAG_TO_CUBEMAP) \n
      //STRINGIZE0(#endif) \n
      highp vec2 dstTexcoord = texcoordFromVertexIndex(srcTexcoord); \n ///, u_columns, u_rows); \n
      //highp vec2 dstTexcoord = a_texCoord; \n
-     highp vec2 wrappedDstTexcoord = wrappedTexcoord(dstTexcoord); \n
+     highp vec2 wrappedDstTexcoord = (dstTexcoord); \n
      STRINGIZE0(#if defined(FLAG_STITCH_WITH_LUT_IN_SHADER)) \n
      highp vec2 texcoordInLUT = 0.5 / u_dstSize + (u_dstSize - vec2(1.0, 1.0)) / u_dstSize * (dstTexcoord); \n
      texcoordInLUT = wrappedTexcoord(texcoordInLUT); \n
