@@ -32,26 +32,21 @@
 
 #elif defined(TARGET_OS_UNIX) && TARGET_OS_UNIX != 0
 
-  #ifdef REAL_GLES2
-    #include <EGL/egl.h>
-    #include <GLES2/gl2platform.h>
-    #include <GLES2/gl2.h>
-    #include <GLES2/gl2ext.h>
-  #else //#ifdef REAL_GLES2
     #include "GL/osmesa.h"
     //#include "gl_wrap.h"
     #include "GL/glu.h"
-    #include <X11/Xlib.h>
-    #include <X11/Xutil.h>
-    #include <X11/keysym.h>
-    #include <GL/glext.h>
+	#include <X11/Xlib.h>
+	#include <X11/Xutil.h>
+	#include <X11/keysym.h>
+	#include <GL/glext.h>
+    #include <EGL/egl.h>
 
     #define glDeleteVertexArraysOES glDeleteVertexArrays
     #define glGenVertexArraysOES glGenVertexArrays
-    #define glBindVertexArrayOES glBindVertexArray
+	#define glBindVertexArrayOES glBindVertexArray
 
-    #define GL_VERTEX_ARRAY_BINDING_OES GL_VERTEX_ARRAY_BINDING
-  #endif //#ifdef REAL_GLES2
+	#define GL_VERTEX_ARRAY_BINDING_OES GL_VERTEX_ARRAY_BINDING
+
 #elif defined(TARGET_OS_IOS) && TARGET_OS_IOS != 0
 
     #include <OpenGLES/ES2/gl.h>
@@ -62,7 +57,7 @@
     #pragma comment(lib, "glext.lib")
     #include <windows.h>
     #include <gl/gl.h>
-    #include <gl/glext.h>
+    #include <gl/glext.h>//ע�ⶨ��˳��
     //#include <gl/glu.h>
 
     #define _USE_MATH_DEFINES

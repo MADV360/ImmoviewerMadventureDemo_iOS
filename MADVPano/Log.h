@@ -11,7 +11,7 @@
 
 #include "TargetConditionals.h"
 #include <stdio.h>
-//#define DEBUG 0
+#define DEBUG 1
 
 #if defined(TARGET_OS_ANDROID) && TARGET_OS_ANDROID != 0
 

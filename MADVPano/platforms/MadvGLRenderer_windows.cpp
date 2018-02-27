@@ -10,11 +10,11 @@
 
 #include "MadvGLRenderer_windows.h"
 #include "MadvGLRendererImpl.h"
-#include "MadvUtils.h"
 #include "OpenGLHelper.h"
 #include "GLRenderTexture.h"
 #include "GLFilterCache.h"
 #include "JPEGUtils.h"
+#include "ImageBlender.h"
 #include "Log.h"
 //#include "../Device/CCameraDetect.h"
 #include <windows.h>
@@ -37,11 +37,7 @@
 #define TEMP_PIC_LUT_DIR "C:\\Madv360\\tmplut_pic\\"
 #define GLFILTER_RESOURCE_DIR "/filters/"
 //*/
-///!!!#define USE_IMAGE_BLENDER
-
-#ifdef USE_IMAGE_BLENDER
-#include "ImageBlender.h"
-#endif
+#define USE_IMAGE_BLENDER
 
 static std::string s_resourceRootDirectory = "C:\\MADVPano\\res\\";
 static HINSTANCE s_hInstance = NULL;
@@ -343,7 +339,7 @@ WGLContext::WGLContext(HWND hWindow, HINSTANCE hInstance, int width, int height)
 		GLuint status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		if (GL_FRAMEBUFFER_COMPLETE != status)
 		{
-			ALOGE("\nError in framebuffer setup: 0x%x\n", status);
+			ALOGE("\nError in framebuffer setup: %d\n", status);
 			CHECK_GL_ERROR();
 		}
 
@@ -714,7 +710,6 @@ void MadvGLRenderer_windows::exportJPEGFromMadvJPEG(const char* destJPEGPath, co
 		WGLContext* ptrWGLContext = new WGLContext(hWndForCreatingWGLContext, s_hInstance, jpegInfo.image_width, jpegInfo.image_height);
 		ptrWGLContext->makeCurrent();
 		ALOGE("\nMadvGLRenderer_windows $ exportJPEGFromMadvJPEG() : After ptrWGLContext->makeCurrent()\n");
-#ifdef USE_IMAGE_BLENDER
 		char tmpJPEGPathExt[] = ".tmp.jpg";
 		char* tmpJPEGPath = (char*)malloc(strlen(destJPEGPath) + sizeof(tmpJPEGPathExt));
 		sprintf(tmpJPEGPath, "%s%s", destJPEGPath, tmpJPEGPathExt);
@@ -744,17 +739,6 @@ void MadvGLRenderer_windows::exportJPEGFromMadvJPEG(const char* destJPEGPath, co
 			renderJPEGToJPEG(destJPEGPath, destJPEGPath, jpegInfo.image_width, jpegInfo.image_height, false, NULL, 0, madvExtension.cameraParams.gyroMatrix, 3);
 		}
 		//*/
-#else //#ifdef USE_IMAGE_BLENDER
-		if (enableGyroTransform && madvExtension.gyroMatrixBytes > 0)
-		{
-			renderJPEGToJPEG(destJPEGPath, sourceJPEGPath, jpegInfo.image_width, jpegInfo.image_height, false, &madvExtension, filterID, madvExtension.cameraParams.gyroMatrix, 3);
-		}
-		else
-		{
-			renderJPEGToJPEG(destJPEGPath, sourceJPEGPath, jpegInfo.image_width, jpegInfo.image_height, false, &madvExtension, filterID, NULL, 0);
-		}
-#endif //#ifdef USE_IMAGE_BLENDER
-		
 		if (NULL != progressClosure.callback)
 		{
 			progressClosure.callback(100, progressClosure.context);

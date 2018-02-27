@@ -8,7 +8,6 @@
 
 #include "MadvGLRenderer.h"
 #include "MadvGLRendererImpl.h"
-#include "MadvUtils.h"
 #include "EXIFParser.h"
 #include "JPEGUtils.h"
 #include "GLRenderTexture.h"
@@ -403,16 +402,16 @@ void MadvGLRenderer::setDebugTexcoord(bool debugTexcoord) {
     impl->setDebugTexcoord(debugTexcoord);
 }
 
-//void MadvGLRenderer::clearCachedLUT(const char* lutPath) {
-//    MadvGLRendererImpl::clearCachedLUT(lutPath);
-//}
-
-//void MadvGLRenderer::extractLUTFiles(const char* destDirectory, const char* lutBinFilePath, uint32_t fileOffset) {
-//    extractLUTFiles(destDirectory, lutBinFilePath, fileOffset);
-//}
+void MadvGLRenderer::clearCachedLUT(const char* lutPath) {
+    MadvGLRendererImpl::clearCachedLUT(lutPath);
+}
 
 AutoRef<GLCamera> MadvGLRenderer::glCamera() {
     return _glCamera;
+}
+
+void MadvGLRenderer::extractLUTFiles(const char* destDirectory, const char* lutBinFilePath, uint32_t fileOffset) {
+    MadvGLRendererImpl::extractLUTFiles(destDirectory, lutBinFilePath, fileOffset);
 }
 
 void MadvGLRenderer::prepareTextureWithRenderSource(void* renderSource) {

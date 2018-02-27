@@ -174,9 +174,9 @@ public:
     
     inline void setDebugTexcoord(bool debugTexcoord) {_debugTexcoord = debugTexcoord;}
     
-//    static void clearCachedLUT(const char* lutPath);
+    static void clearCachedLUT(const char* lutPath);
     
-//    static void extractLUTFiles(const char* destDirectory, const char* lutBinFilePath, uint32_t fileOffset);
+    static void extractLUTFiles(const char* destDirectory, const char* lutBinFilePath, uint32_t fileOffset);
     
 protected:
     

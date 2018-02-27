@@ -39,7 +39,7 @@
 
 #include "platformspec/TargetConditionals_Android.h"
 
-#elif !defined(TARGET_OS_UNIX) || TARGET_OS_UNIX == 0 //#if defined(TARGET_OS_ANDROID) && TARGET_OS_ANDROID != 0
+#else //#if defined(TARGET_OS_ANDROID) && TARGET_OS_ANDROID != 0
 /****************************************************************************************************
 
     TARGET_CPU_*

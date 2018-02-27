@@ -17,12 +17,8 @@
     #include <OpenGL/glext.h>
 
 #elif defined(TARGET_OS_UNIX) && TARGET_OS_UNIX != 0
-
-  #ifdef REAL_GLES2
-    #include <GLES2/gl2ext.h>
-  #else //#ifdef REAL_GLES2
-    #include <GL/glext.h>
-  #endif //#ifdef REAL_GLES2
+    
+	#include <GL/glext.h>
 
     #ifndef GL_RGB16F_EXT
     #define GL_RGB16F_EXT                     0x881B

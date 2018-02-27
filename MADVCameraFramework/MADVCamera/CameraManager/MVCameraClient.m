@@ -30,11 +30,6 @@
 #import "z_Sandbox.h"
 #import "RealmSerialQueue.h"
 #import "MadvGLRenderer_iOS.h"
-#ifdef MADVPANO_BY_SOURCE
-#import "MadvUtils.h"
-#else
-#import <MADVPano/MadvUtils.h>
-#endif
 #import "SocketHelper.h"
 #import "MVCameraUploadManager.h"
 #import "SdWhiteDetail.h"
@@ -3290,13 +3285,6 @@ NSString* formatSDStorage(int total, int free) {
     BOOL(^checkMD5AndReturn)(BOOL) = ^(BOOL isExit) {
         DoctorLog(@"#BadLUT# checkAndSynchronizeLUT: checkMD5AndReturn isExit=%d", isExit);
         BOOL isDirectory = YES;
-        if (![fm fileExistsAtPath:lutDirStr isDirectory:&isDirectory] || !isDirectory)
-        {
-            [fm removeItemAtPath:lutDirStr error:nil];
-            [fm createDirectoryAtPath:lutDirStr withIntermediateDirectories:YES attributes:nil error:nil];
-        }
-        
-        isDirectory = YES;
         if ([fm fileExistsAtPath:lutBinFilePath isDirectory:&isDirectory] && !isDirectory)
         {
             NSData* fileData = [NSData dataWithContentsOfFile:lutBinFilePath];
@@ -3304,7 +3292,7 @@ NSString* formatSDStorage(int total, int free) {
             DoctorLog(@"#BadLUT# checkAndSynchronizeLUT: lutBinFilePath exists, Local MD5 = %@", localLUTMD5);
             if ([localLUTMD5 isEqualToString:md5] || !md5) //有时相机会出现无查找表的情况，这时也应允许连接，让用户在设置里恢复厂设来修复问题
             {
-                extractLUTFiles(lutDirStr.UTF8String, lutBinFilePath.UTF8String, 0);
+                [MVPanoRenderer extractLUTFiles:lutDirStr.UTF8String lutBinFilePath:lutBinFilePath.UTF8String fileOffset:0];///!!!To Be Optimized
                 @synchronized (self)
                 {
                     DoctorLog(@"#BadLUT# checkAndSynchronizeLUT: #A0 isLUTSynchronized=%d, isSettingsSynchronized=%d, isConnectedStateNotified=%d", self.isLUTSynchronized, self.isSettingsSynchronized, self.isConnectedStateNotified);

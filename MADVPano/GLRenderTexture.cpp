@@ -77,7 +77,7 @@ GLRenderTexture::GLRenderTexture(GLint texture, GLenum textureTarget, GLint widt
 #endif
         GLint prevFramebuffer;
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevFramebuffer);
-
+        CHECK_GL_ERROR();
         glBindTexture(_textureTarget, _texture);
         glTexParameteri(_textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);//GL_LINEAR//GL_NEAREST
         glTexParameteri(_textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);//GL_LINEAR//GL_NEAREST
@@ -85,7 +85,7 @@ GLRenderTexture::GLRenderTexture(GLint texture, GLenum textureTarget, GLint widt
         glTexParameteri(_textureTarget, GL_TEXTURE_WRAP_T, _wrapT);//GL_CLAMP_TO_EDGE);//GL_REPEAT
         glPixelStorei(GL_PACK_ALIGNMENT, 4);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-        
+        CHECK_GL_ERROR();
         glBindFramebuffer(GL_FRAMEBUFFER, prevFramebuffer);
         glBindTexture(GL_TEXTURE_2D, prevTexture2D);
         glBindTexture(GL_TEXTURE_3D, prevTexture3D);
@@ -170,7 +170,6 @@ int GLRenderTexture::resizeIfNecessary(GLint width, GLint height) {
             
             //    GLubyte* pixelData = (GLubyte*) malloc(destSize.width * destSize.height * 4);
             glTexImage2D(_textureTarget, 0, _internalFormat, width, height, 0, _format, _dataType, 0);
-            CHECK_GL_ERROR();
             GLenum errorNo = glGetError();
             if (GL_OUT_OF_MEMORY == errorNo)
             {
@@ -223,6 +222,9 @@ int GLRenderTexture::resizeIfNecessary(GLint width, GLint height) {
 
             glBindRenderbuffer(GL_RENDERBUFFER, prevDepthRenderbuffer);
         }
+        CHECK_GL_ERROR();
+        GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        NSLog(@"GLRenderTexture : Framebuffer status = 0x%x", status);
         
         glBindFramebuffer(GL_FRAMEBUFFER, prevFramebuffer);
         glBindTexture(GL_TEXTURE_2D, prevTexture2D);

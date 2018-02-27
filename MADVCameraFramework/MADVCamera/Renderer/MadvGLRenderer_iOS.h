@@ -42,6 +42,10 @@ extern "C" {
         return vec2;
     }
     
+    void createOrUpdateTextureWithBitmap(GLubyte *data, GLint pow2Width, GLint pow2Height, void* userData);
+    
+    GLuint createTextureFromImage(UIImage* image, CGSize destSize);
+    
 #ifdef __cplusplus
 }
 #endif
@@ -73,7 +77,7 @@ extern void cgDataProviderReleaseDataCallback(void * __nullable info, const void
 + (NSString*) stitchedPictureFileName:(NSString*)preStitchPictureFileName;
 + (NSString*) cameraUUIDOfPreStitchFileName:(NSString*)preStitchFileName;
 
-//+ (void) extractLUTFiles:(const char*)destDirectory lutBinFilePath:(const char*)lutBinFilePath fileOffset:(uint32_t)fileOffset;
++ (void) extractLUTFiles:(const char*)destDirectory lutBinFilePath:(const char*)lutBinFilePath fileOffset:(uint32_t)fileOffset;
 #endif //#ifndef MADVPANO_EXPORT
 - (void) setIsYUVColorSpace:(BOOL)isYUVColorSpace;
 

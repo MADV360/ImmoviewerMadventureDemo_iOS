@@ -7,10 +7,12 @@
 //
 
 #include "OpenGLHelper.h"
+#include "AutoRef.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include "vec3.h"
 
 unsigned long nextPOT(unsigned long x)
 {
@@ -60,12 +62,14 @@ int BytesOfBitFormat(GLenum bitformat) {
     }
 }
 
-float* transformMatrix3InNormalizedCoordSystem2D(float* mat, Vec2f viewportOrigin, Vec2f viewportSize, Vec2f boundOrigin, Vec2f boundSize, Orientation2D orientation) {
-    return transformMatrixInNormalizedCoordSystem2D(mat, 3, viewportOrigin, viewportSize, boundOrigin, boundSize, orientation);
+kmMat3* transformMatrix3InNormalizedCoordSystem2D(kmMat3* mat, Vec2f viewportOrigin, Vec2f viewportSize, Vec2f boundOrigin, Vec2f boundSize, Orientation2D orientation) {
+    transformMatrixInNormalizedCoordSystem2D(mat->mat, 3, viewportOrigin, viewportSize, boundOrigin, boundSize, orientation);
+    return mat;
 }
 
-float* transformMatrix4InNormalizedCoordSystem2D(float* mat, Vec2f viewportOrigin, Vec2f viewportSize, Vec2f boundOrigin, Vec2f boundSize, Orientation2D orientation) {
-    return transformMatrixInNormalizedCoordSystem2D(mat, 4, viewportOrigin, viewportSize, boundOrigin, boundSize, orientation);
+kmMat4* transformMatrix4InNormalizedCoordSystem2D(kmMat4* mat, Vec2f viewportOrigin, Vec2f viewportSize, Vec2f boundOrigin, Vec2f boundSize, Orientation2D orientation) {
+    transformMatrixInNormalizedCoordSystem2D(mat->mat, 4, viewportOrigin, viewportSize, boundOrigin, boundSize, orientation);
+    return mat;
 }
 
 float* transformMatrixInNormalizedCoordSystem2D(float* matrix, int rank, Vec2f viewportOrigin, Vec2f viewportSize, Vec2f boundOrigin, Vec2f boundSize, Orientation2D orientation) {
@@ -268,58 +272,6 @@ void createOrUpdateTexture(GLuint* pTextureID, GLint width, GLint height, GLubyt
     
     glBindTexture(GL_TEXTURE_2D, 0);
 }
-
-#if defined(TARGET_OS_IOS) && TARGET_OS_IOS != 0
-#if !defined(TARGET_OS_OSX) || TARGET_OS_OSX == 0
-
-typedef struct {
-    size_t width;
-    size_t height;
-    CGImageRef cgImage;
-} CreateOrUpdateTextureWithBitmapBlockContext;
-
-void createOrUpdateTextureWithBitmap(GLubyte* data, GLint pow2Width, GLint pow2Height, void* userData) {
-    CreateOrUpdateTextureWithBitmapBlockContext* context = (CreateOrUpdateTextureWithBitmapBlockContext*) userData;
-    size_t width = context->width;
-    size_t height = context->height;
-    CGImageRef cgImage = context->cgImage;
-    delete context;
-    
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    NSUInteger bytesPerPixel = 4;
-    NSUInteger bytesPerRow = bytesPerPixel * width;
-    NSUInteger bitsPerComponent = 8;
-    CGContextRef cgContext = CGBitmapContextCreate(data, width, height, bitsPerComponent, bytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
-    CGColorSpaceRelease(colorSpace);
-    
-    CGContextSetFillColorWithColor(cgContext, [UIColor clearColor].CGColor);
-    CGContextSetBlendMode(cgContext, kCGBlendModeCopy);
-    CGContextSetAlpha(cgContext, 1.0f);
-    CGContextFillRect(cgContext, CGRectMake(0, 0, width, height));
-    CGContextDrawImage(cgContext, CGRectMake(0, 0, width, height), cgImage);
-    CGContextRelease(cgContext);
-    CGImageRelease(cgImage);
-}
-
-GLuint createTextureFromImage(UIImage* image, CGSize destSize) {
-    CGImageRef cgImage = [image CGImage];
-    CGImageRetain(cgImage);
-    size_t width = (destSize.width == 0 ? CGImageGetWidth(cgImage) : destSize.width);
-    size_t height = (destSize.height == 0 ? CGImageGetHeight(cgImage) : destSize.height);
-    
-    CreateOrUpdateTextureWithBitmapBlockContext* context = new CreateOrUpdateTextureWithBitmapBlockContext;
-    context->width = width;
-    context->height = height;
-    context->cgImage = cgImage;
-    
-    GLuint texture = 0;
-    createOrUpdateTexture(&texture, (GLint)width, (GLint)height, NULL, NULL, createOrUpdateTextureWithBitmap, context);
-    
-    return texture;
-}
-
-#endif
-#endif
 
 P4C4T2f P4C4T2fMake(GLfloat x, GLfloat y, GLfloat z, GLfloat w, GLfloat r, GLfloat g, GLfloat b, GLfloat a, GLfloat s, GLfloat t) {
     P4C4T2f ret = {x,y,z,w, r,g,b,a, s,t};

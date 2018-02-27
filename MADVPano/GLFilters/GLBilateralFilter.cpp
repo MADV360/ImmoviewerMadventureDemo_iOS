@@ -9,7 +9,6 @@
 #include "GLBilateralFilter.h"
 #include "../gles3.h"
 #include "../gles3ext.h"
-#include <math.h>
 
 static const char* VertexShaderSource = STRINGIZE
 (

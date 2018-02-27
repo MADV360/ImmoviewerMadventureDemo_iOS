@@ -13,7 +13,6 @@
 #include "gles3.h"
 #include "gles3ext.h"
 #include "Log.h"
-#include "MadvUtils.h"
 #include "PNGUtils.h"
 #include "JPEGUtils.h"
 #include "GLRenderTexture.h"
@@ -434,7 +433,7 @@ STRINGIZE0(#ifdef FLAG_TO_CUBEMAP) \n
      //STRINGIZE0(#endif) \n
      highp vec2 dstTexcoord = texcoordFromVertexIndex(srcTexcoord); \n ///, u_columns, u_rows); \n
      //highp vec2 dstTexcoord = a_texCoord; \n
-     highp vec2 wrappedDstTexcoord = (dstTexcoord); \n
+     highp vec2 wrappedDstTexcoord = wrappedTexcoord(dstTexcoord); \n
      STRINGIZE0(#if defined(FLAG_STITCH_WITH_LUT_IN_SHADER)) \n
      highp vec2 texcoordInLUT = 0.5 / u_dstSize + (u_dstSize - vec2(1.0, 1.0)) / u_dstSize * (dstTexcoord); \n
      texcoordInLUT = wrappedTexcoord(texcoordInLUT); \n
@@ -1429,7 +1428,7 @@ void MadvGLRendererImpl::setLUTData(Vec2f lutDstSize, Vec2f leftSrcSize,Vec2f ri
  }
  ALOGV("checkData %s: [0 ~ %d] ... [%d ~ %d] ... [%d ~ %d] = : %s ... %s ... %s .", tag, checkLength, (length-checkLength)/2, (length+checkLength)/2 - 1, length-checkLength, length-1, head, body, rear);
  }*/
-/*
+
 void MadvGLRendererImpl::clearCachedLUT(const char* lutPath) {
     if (NULL == lutPath) return;
     char* lutFilePath = (char*) malloc(strlen(lutPath) + strlen("/lut.png") + 1);
@@ -1437,7 +1436,7 @@ void MadvGLRendererImpl::clearCachedLUT(const char* lutPath) {
     remove(lutFilePath);
     free(lutFilePath);
 }
-//*/
+
 #define USE_MERGED_LUT_FILE
 
 void MadvGLRendererImpl::prepareLUT(const char* lutPath, Vec2f leftSrcSize, Vec2f rightSrcSize) {
@@ -1534,8 +1533,6 @@ void MadvGLRendererImpl::prepareLUT(const char* lutPath, Vec2f leftSrcSize, Vec2
          //*/
         free(lutData);
     }
-    
-    deleteIfTempLUTDirectory(lutPath);
     
     free(lutFilePath);
 }
@@ -1924,7 +1921,7 @@ void MadvGLRendererImpl::setGLProgramVariables(AutoRef<GLCamera> panoCamera, GLi
     kmMat4 screenMatrix;
     Vec2f viewportOrigin = {(GLfloat)x, (GLfloat)y}, viewportSize = {(GLfloat)width, (GLfloat)height};
     Vec2f boundRectOrigin = {(GLfloat)x, (GLfloat)y}, boundRectSize = {(GLfloat)width, (GLfloat)height};
-    transformMatrix4InNormalizedCoordSystem2D(screenMatrix.mat, viewportOrigin, viewportSize, boundRectOrigin, boundRectSize, sourceOrientation);
+    transformMatrix4InNormalizedCoordSystem2D(&screenMatrix, viewportOrigin, viewportSize, boundRectOrigin, boundRectSize, sourceOrientation);
     glUniformMatrix4fv(_currentGLProgram->getScreenMatrixSlot(), 1, 0, screenMatrix.mat);
     
     glUniformMatrix4fv(_currentGLProgram->getTextureMatrixSlot(), 1, 0, _textureMatrix.mat);
@@ -2593,7 +2590,7 @@ void MadvGLRendererImpl::setDebugPrimitive(AutoRef<Mesh3D> mesh, int key) {
     AutoRef<GLVAO> vao = new GLVAO(mesh, GL_DYNAMIC_DRAW);
     _debugVAOs.insert(make_pair(key, vao));
 }
-/*
+
 void MadvGLRendererImpl::extractLUTFiles(const char* destDirectory, const char* lutBinFilePath, uint32_t fileOffset) {
     ifstream ifs(lutBinFilePath, ios::in | ios::binary);
     ALOGE("extractLUTFiles : fileOffset = %u, destDirectory = '%s', lutBinFilePath = '%s'", fileOffset, destDirectory, lutBinFilePath);
@@ -2682,5 +2679,3 @@ void MadvGLRendererImpl::extractLUTFiles(const char* destDirectory, const char* 
     free(pngData);
     free(pngFilePath);
 }
-//*/
-

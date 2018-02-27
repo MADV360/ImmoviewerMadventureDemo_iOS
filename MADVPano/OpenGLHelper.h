@@ -11,6 +11,8 @@
 
 #include "gles2.h"
 #include "gles2ext.h"
+#include "mat3.h"
+#include "mat4.h"
 #include "Log.h"
 #include <stdlib.h>
 
@@ -137,8 +139,8 @@ int ComponentsOfColorSpace(GLenum colorspace);
 int BytesOfBitFormat(GLenum bitformat);
 
 float* transformMatrixInNormalizedCoordSystem2D(float* matrix, int rank, Vec2f viewportOrigin, Vec2f viewportSize, Vec2f boundOrigin, Vec2f boundSize, Orientation2D orientation);
-float* transformMatrix3InNormalizedCoordSystem2D(float* mat, Vec2f viewportOrigin, Vec2f viewportSize, Vec2f boundOrigin, Vec2f boundSize, Orientation2D orientation);
-float* transformMatrix4InNormalizedCoordSystem2D(float* mat, Vec2f viewportOrigin, Vec2f viewportSize, Vec2f boundOrigin, Vec2f boundSize, Orientation2D orientation);
+kmMat3* transformMatrix3InNormalizedCoordSystem2D(kmMat3* mat, Vec2f viewportOrigin, Vec2f viewportSize, Vec2f boundOrigin, Vec2f boundSize, Orientation2D orientation);
+kmMat4* transformMatrix4InNormalizedCoordSystem2D(kmMat4* mat, Vec2f viewportOrigin, Vec2f viewportSize, Vec2f boundOrigin, Vec2f boundSize, Orientation2D orientation);
 
 GLint compileShader(const GLchar* const* shaderSources, int sourcesCount, GLenum type);
 
@@ -151,23 +153,6 @@ GLint compileAndLinkShaderProgramWithShaderPointers(const GLchar* const* vertexS
 
 void createOrUpdateTexture(GLuint* pTextureID, GLint width, GLint height, GLubyte** pTextureData, GLsizei* pTextureDataSize, void(*dataSetter)(GLubyte* data, GLint pow2Width, GLint pow2Height, void* userData), void* userData);
 
-#if defined(TARGET_OS_OSX) && TARGET_OS_OSX != 0
-
-#endif
-    
-#if defined(TARGET_OS_IOS) && TARGET_OS_IOS != 0
-#if !defined(TARGET_OS_OSX) || TARGET_OS_OSX == 0
-    
-#import <UIKit/UIKit.h>
-#import <CoreGraphics/CoreGraphics.h>
-    
-    void createOrUpdateTextureWithBitmap(GLubyte* data, GLint pow2Width, GLint pow2Height, void* userData);
-    
-    GLuint createTextureFromImage(UIImage* image, CGSize destSize);
-    
-#endif
-#endif
-    
 P4C4T2f P4C4T2fMake(GLfloat x, GLfloat y, GLfloat z, GLfloat w, GLfloat r, GLfloat g, GLfloat b, GLfloat a, GLfloat s, GLfloat t);
 
     inline const char* GLSLPredefinedMacros() {

@@ -80,10 +80,10 @@ void GLFilter::render(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLint
 
     Vec2f viewportOrigin = {(GLfloat)viewport[0], (GLfloat)viewport[1]};
     Vec2f viewportSize = {(GLfloat)viewport[2], (GLfloat)viewport[3]};
-    _boundRectOrigin = {(GLfloat)x, (GLfloat)y};
-    _boundRectSize = {(GLfloat)width, (GLfloat)height};
+    _boundRectOrigin = (Vec2f){(GLfloat)x, (GLfloat)y};
+    _boundRectSize = (Vec2f){(GLfloat)width, (GLfloat)height};
     kmMat4 screenMatrix;
-    transformMatrix4InNormalizedCoordSystem2D(screenMatrix.mat, viewportOrigin, viewportSize, _boundRectOrigin, _boundRectSize, sourceOrientation);
+    transformMatrix4InNormalizedCoordSystem2D(&screenMatrix, viewportOrigin, viewportSize, _boundRectOrigin, _boundRectSize, sourceOrientation);
 
     _texcoordOrigin = texcoordOrigin;
     _texcoordSize = texcoordSize;

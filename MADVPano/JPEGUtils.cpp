@@ -12,6 +12,7 @@
 #include <string>
 #include <string.h>
 #include <setjmp.h>
+#include <sys/errno.h>
 
 //#define USE_MEM_IO
 
@@ -20,8 +21,6 @@
 //#pragma comment(lib, "libjpeg.lib")
 #pragma comment(lib, "jpeg.lib")
 #pragma comment(lib, "turbojpeg.lib")
-#else
-#include <sys/errno.h>
 #endif
 
 typedef struct jpeg_error_info_struct {

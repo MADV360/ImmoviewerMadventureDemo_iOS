@@ -9,7 +9,6 @@
 #include "Mesh3D.h"
 #include "AutoRef.h"
 #include <string.h>
-#include <math.h>
 
 #pragma mark    Mesh3D & Impl
 

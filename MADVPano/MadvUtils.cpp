@@ -16,47 +16,14 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#ifdef WIN32
-#include <windows.h>
+#if defined(TARGET_OS_WINDOWS) && TARGET_OS_WINDOWS != 0
 #include <direct.h>
 #include <io.h>
-#else
-#include <unistd.h>
-#include <dirent.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#endif // !WIN32
-
-#include <cstring>
-#include <string>
-
-#ifdef WIN32
-#define STRDUP(a) _strdup((a))
-#define ACCESS _access
+#define ACCESS _access  
 #define MKDIR(a) _mkdir((a))
-#define RMDIR(a) _rmdir((a))
 #else
-#define STRDUP(a) strdup((a))
-#define ACCESS access
-#define MKDIR(a) mkdir((a), 0755)
-#define RMDIR(a) remove((a))
+#include <unistd.h>
 #endif
-
-struct BASE_DIR
-{
-#ifdef WIN32
-    HANDLE dir;
-    WIN32_FIND_DATAA file;
-    bool eof;
-#else
-    DIR *dir;
-    struct dirent *file;
-#endif
-    
-    bool file_is_dir;
-    std::string dir_name;
-    std::string file_name;
-};
 
 using namespace std;
 
@@ -156,123 +123,6 @@ int createDirectories(const char* sPathName)
     return   0;
 }
 #endif
-
-bool openDirectory(const char* dir_name, BASE_DIR& base_dir)
-{
-    if (NULL == dir_name || '\0' == dir_name[0])
-        return false;
-    
-    base_dir.dir_name = dir_name;
-    if ('/' != *base_dir.dir_name.rbegin())
-    {
-        base_dir.dir_name += "/";
-    }
-    
-#ifdef WIN32
-    base_dir.file_name = base_dir.dir_name + "*";
-    base_dir.dir = FindFirstFileA(base_dir.file_name.c_str(), &base_dir.file);
-    if (INVALID_HANDLE_VALUE == base_dir.dir) {
-        return false;
-    }
-    base_dir.eof = false;
-#else
-    base_dir.dir = opendir(dir_name);
-    if (NULL == base_dir.dir)
-        return false;
-    
-    base_dir.file = readdir(base_dir.dir);
-#endif // WIN32
-    
-    return true;
-}
-
-bool isDirectoryOpened(const BASE_DIR& base_dir)
-{
-#ifdef WIN32
-    return (INVALID_HANDLE_VALUE != base_dir.dir);
-#else
-    return (NULL != base_dir.dir);
-#endif // WIN32
-}
-
-void closeDirectory(BASE_DIR& base_dir)
-{
-    if (!isDirectoryOpened(base_dir))
-        return;
-    
-#ifdef WIN32
-    FindClose(base_dir.dir);
-    base_dir.dir = INVALID_HANDLE_VALUE;
-#else
-    closedir(base_dir.dir);
-    base_dir.dir = NULL;
-#endif // WIN32
-}
-
-bool removeDirectory(const char* dir_name)
-{
-    ALOGE("#removeDirectory# %s\n", dir_name);
-    BASE_DIR base_dir;
-    
-    if (!openDirectory(dir_name, base_dir))
-        return false;
-    
-#ifdef WIN32
-    while (!base_dir.eof)
-    {
-        WIN32_FIND_DATAA file = base_dir.file;
-        base_dir.eof = !FindNextFileA(base_dir.dir, &base_dir.file);
-        
-        if (0 != strcmp(file.cFileName, ".") && 0 != strcmp(file.cFileName, ".."))
-        {
-            base_dir.file_name = base_dir.dir_name + file.cFileName;
-            base_dir.file_is_dir = (0 != (file.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY));
-            if (base_dir.file_is_dir)
-            {
-                removeDirectory(base_dir.file_name.c_str());
-                RMDIR(base_dir.file_name.c_str());
-            }
-            else
-            {
-                remove(base_dir.file_name.c_str());
-            }
-        }
-    }
-#else
-    while (NULL != base_dir.file)
-    {
-        struct dirent* file = base_dir.file;
-        base_dir.file = readdir(base_dir.dir);
-        
-        if (0 != strcmp(file->d_name, ".") && 0 != strcmp(file->d_name, ".."))
-        {
-            base_dir.file_name = base_dir.dir_name + file->d_name;
-            base_dir.file_is_dir = false;
-            
-            struct stat stat_buf;
-            if (-1 != lstat(base_dir.file_name.c_str(), &stat_buf) && 0 != (S_IFDIR & stat_buf.st_mode))
-            {
-                base_dir.file_is_dir = true;
-            }
-            if (base_dir.file_is_dir)
-            {
-                removeDirectory(base_dir.file_name.c_str());
-                RMDIR(base_dir.file_name.c_str());
-            }
-            else
-            {
-                remove(base_dir.file_name.c_str());
-            }
-        }
-    }
-#endif // WIN32
-    
-    closeDirectory(base_dir);
-    RMDIR(base_dir.dir_name.c_str());
-    
-    return true;
-}
-
 void extractLUTFiles(const char* destDirectory, const char* lutBinFilePath, uint32_t fileOffset) {
     ifstream ifs(lutBinFilePath, ios::in | ios::binary);
     //DoctorLog(@"#Bug3763# extractLUTFiles : fileOffset=%u, destDirectory='%s', lutBinFilePath='%s'", fileOffset, destDirectory, lutBinFilePath);
@@ -353,29 +203,4 @@ void extractLUTFiles(const char* destDirectory, const char* lutBinFilePath, uint
     ofs.close();
     free(pngData);
     free(pngFilePath);
-}
-
-void clearCachedLUT(const char* lutPath) {
-    if (NULL == lutPath) return;
-    char* lutFilePath = (char*) malloc(strlen(lutPath) + strlen("/lut.png") + 1);
-    sprintf(lutFilePath, "%s/lut.png", lutPath);
-    remove(lutFilePath);
-    free(lutFilePath);
-}
-
-#define TempLUTDirectoryPrefix "tmplut"
-
-char* createTempLUTDirectory(const char* parentDirectory) {
-    char* path = (char*) malloc(strlen(parentDirectory) + 18);
-    sprintf(path, "%s/%s%d", parentDirectory, TempLUTDirectoryPrefix, rand());
-    createDirectories(path);
-    //free(path);
-    return path;
-}
-
-void deleteIfTempLUTDirectory(const char* directory) {
-    if (strstr(directory, TempLUTDirectoryPrefix))
-    {
-        removeDirectory(directory);
-    }
 }

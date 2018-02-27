@@ -225,7 +225,7 @@ public:
 
     void setDebugTexcoord(bool debugTexcoord);
     
-//    static void clearCachedLUT(const char* lutPath);
+    static void clearCachedLUT(const char* lutPath);
 
     AutoRef<GLCamera> glCamera();
 
@@ -234,7 +234,7 @@ public:
      * @param lutBinFilePath   Path of file that contains LUT data, could be a JPEG or MP4 file
      * @param fileOffset       Byte position of begining of the LUT data in file. It should be get by APIs for reading MADV360 metadata in JPEG or MP4 box
      */
-//    static void extractLUTFiles(const char* destDirectory, const char* lutBinFilePath, uint32_t fileOffset);
+	static void extractLUTFiles(const char* destDirectory, const char* lutBinFilePath, uint32_t fileOffset);
 
     /** Render JPEG into another(or itself) JPEG file
      * @param lutPath    Path of directory which already contains LUT data files extracted from this MADV360 JPEG file. NULL if no LUT stitching is needed

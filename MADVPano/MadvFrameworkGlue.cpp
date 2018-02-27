@@ -181,7 +181,7 @@ JNIEXPORT jlong JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_clearCachedLU
         (JNIEnv* env, jclass clazz, jstring lutPath) {
     jboolean copied = false;
     const char* cstrLUTPath = (lutPath == NULL ? NULL : env->GetStringUTFChars(lutPath, &copied));
-    clearCachedLUT(cstrLUTPath);
+    MadvGLRenderer::clearCachedLUT(cstrLUTPath);
     if (lutPath && copied)
     {
         env->ReleaseStringUTFChars(lutPath, cstrLUTPath);

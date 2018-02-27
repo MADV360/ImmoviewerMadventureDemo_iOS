@@ -11,37 +11,15 @@
 
 #include <inttypes.h>
 
-#ifdef MADVPANO_DLL
-
-#ifdef MADVPANO_EXPORTS
-#define MADVPANO_API _declspec(dllexport)
-#else
-#define MADVPANO_API _declspec(dllimport)
-#endif
-
-#else
-
-#define MADVPANO_API
-
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-	MADVPANO_API int copyGyroMatrixFromString(float* matrix, const char* gyroString);
+    int copyGyroMatrixFromString(float* matrix, const char* gyroString);
 
-	MADVPANO_API int createDirectories(const char* sPathName);
+    int createDirectories(const char* sPathName);
     
-	MADVPANO_API bool removeDirectory(const char* pDir);
-    
-	MADVPANO_API void extractLUTFiles(const char* destDirectory, const char* lutBinFilePath, uint32_t fileOffset);
-    
-	MADVPANO_API void clearCachedLUT(const char* lutPath);
-    
-    MADVPANO_API char* createTempLUTDirectory(const char* parentDirectory);
-    
-    MADVPANO_API void deleteIfTempLUTDirectory(const char* directory);
+    void extractLUTFiles(const char* destDirectory, const char* lutBinFilePath, uint32_t fileOffset);
     
 #ifdef __cplusplus
 }
