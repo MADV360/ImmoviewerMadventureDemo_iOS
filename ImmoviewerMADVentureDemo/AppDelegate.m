@@ -25,7 +25,7 @@ NSMutableArray<NSString* >* g_downloadedFileNames = nil;
     g_downloadedFileNames = [[NSMutableArray alloc] init];
     
     MVMediaManager* mediaManager = [MVMediaManager sharedInstance];
-    ///!!!mediaManager.downloadMediasIntoDocuments = YES;// :This is necessary
+    mediaManager.downloadMediasIntoDocuments = YES;// :This is necessary
     // Add as observer for media manager:
     [mediaManager addMediaDataSourceObserver:self];
     [mediaManager addMediaDownloadStatusObserver:self];

@@ -17,6 +17,49 @@
 #import "CycordVideoRecorder.h"
 #include "AudioRingBuffer.h"
 
+#import <Accelerate/Accelerate.h>
+#ifdef USE_TWIRLING_VR_AUDIO
+
+#include "AudioEngineApi.h"
+#import "MVPanoCameraController.h"
+
+void processAudioFrameWithTwirling(float* binauralOutput, const float* input, void* twirlingAudioPtr, AudioStreamBasicDescription format, const int frameSize, int inputAudioChannels) {
+    if (NULL == twirlingAudioPtr)
+        return;
+    
+    for (int framesLeft = frameSize; framesLeft > 0; )
+    {
+        int framesToProcess = (framesLeft > 512 ? 512 : framesLeft);
+        
+        kmVec3 eulerAngles = [MVPanoCameraController globalCurrentEulerAngles];
+        ///eulerAngles = {0, 0, 0};
+        int floatOffset = format.mChannelsPerFrame * framesToProcess;
+        
+        float maxMagI, maxMagO, minMagI, minMagO;
+        if (inputAudioChannels >= 4)
+        {
+            audioProcess(twirlingAudioPtr, eulerAngles.x, -eulerAngles.y, -eulerAngles.z, input, binauralOutput, NULL, framesToProcess);
+        }
+        else
+        {
+            memcpy(binauralOutput, input, floatOffset * sizeof(float));
+        }
+        vDSP_maxmgv(input, 1, &maxMagI, floatOffset);
+        vDSP_minmgv(input, 1, &minMagI, floatOffset);
+        vDSP_maxmgv(binauralOutput, 1, &maxMagO, floatOffset);
+        vDSP_minmgv(binauralOutput, 1, &minMagO, floatOffset);
+//        ALOGE("#VRAudio# audioProcess() with {yaw, pitch, bank} = {%.5f, %.5f, %.5f}, framesToProcess=%d, maxMagI=%.5f, minMagI=%.5f, maxMagO=%.5f, minMagO=%.5f\n", -kmRadiansToDegrees(eulerAngles.x), kmRadiansToDegrees(eulerAngles.y), kmRadiansToDegrees(eulerAngles.z), framesToProcess, maxMagI, minMagI, maxMagO, minMagO);
+        
+        input += floatOffset;
+        binauralOutput += floatOffset;
+        
+        framesLeft -= framesToProcess;
+    }
+}
+
+#endif
+
+
 //#define USE_KXGLVIEW
 #define checkStatus(...) assert(0 == __VA_ARGS__)
 NSString * const KxMovieParameterMinBufferedDuration = @"KxMovieParameterMinBufferedDuration";
@@ -24,6 +67,19 @@ NSString * const KxMovieParameterMaxBufferedDuration = @"KxMovieParameterMaxBuff
 NSString * const KxMovieParameterDisableDeinterlacing = @"KxMovieParameterDisableDeinterlacing";
 
 ////////////////////////////////////////////////////////////////////////////////
+//cwq tcp 2018.03.05
+BOOL gUseUDPPro = TRUE;
+void SetGlobalUDPPro(BOOL UseUDPPro)
+{
+    gUseUDPPro = UseUDPPro;
+}
+BOOL GetGlobalUDPPro()
+{
+    return gUseUDPPro;
+}
+////
+
+//FILE * pAACFile = NULL;
 
 NSString* formatTimeInterval(CGFloat seconds, BOOL isLeft)
 {
@@ -75,6 +131,7 @@ NSString* formatTimeInterval(CGFloat seconds, BOOL isLeft)
     NSMutableArray      *_audioFrames;
     NSMutableArray      *_subtitles;
     NSData              *_currentAudioFrame;
+        int                 _inputAudioChannels;
     NSUInteger          _currentAudioFramePos;
     CGFloat             _moviePosition;
     NSTimeInterval      _tickCorrectionTime;
@@ -104,6 +161,10 @@ NSString* formatTimeInterval(CGFloat seconds, BOOL isLeft)
     ExtAudioFileRef _audioFileRef;
     AudioStreamBasicDescription _audioFormat;
 
+#ifdef USE_TWIRLING_VR_AUDIO
+        void* _twirlingAudioPtr;
+#endif
+        
 #ifdef DEBUG
     UILabel             *_messageLabel;
     NSTimeInterval      _debugStartTime;
@@ -455,7 +516,7 @@ static __weak id s_retainer = nil;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(self) pSelf = weakSelf;
-        [pSelf showWaitView];
+        [pSelf showWaitViewInView:pSelf.glView];
     });
     
 }
@@ -566,6 +627,9 @@ static __weak id s_retainer = nil;
             if(!self.isStopPlay)
             {
                 [self restorePlay];
+            }else
+            {
+                self.isStopPlay = NO;
             }
         }
         else {
@@ -574,6 +638,7 @@ static __weak id s_retainer = nil;
         }
         DoctorLog(@"#GLRenderLoopState# MVKxMovieViewController $ viewDidAppear will call startRendering @%lx MVGLView@%lx MVKxMovieViewController@%lx", (long)self.glView.glRenderLoop.hash, (long)self.glView.hash, (long)self.hash);
 //        [self.glView.glRenderLoop stopOtherRenderLoopIfAny];
+        [MVPanoRenderer lutPathOfSourceURI:_contentPath forceLUTStitching:NO pMadvEXIFExtension:NULL];
         [self.glView.glRenderLoop startRendering];
     }
 }
@@ -728,7 +793,41 @@ static __weak id s_retainer = nil;
     [self freeBufferedFrames];
     //[_decoder closeFile];
 }
+    
+//cwq 2016/03/16
+- (void) changePlaySpeed:(EnumChangePlaySpeed)eChangePlaySpeed
+{
+    if(_decoder)
+    {
+        [_decoder changePlaySpeed:eChangePlaySpeed];
+        //[self freeBufferedFrames];
+        
+ 
+        if (_decoder.validAudio)
+        {
+            @synchronized(_audioFrames)
+            {
+                    NSLog(@"CWQSPE dropAudioFrame = %ld", _audioFrames.count);
+                [_audioFrames removeAllObjects];
+                //_currentAudioFrame = nil;
+            }
+        }
+  
+        
 
+    }
+    
+}
+- (BOOL) isCanDoublePlaySpeed
+{
+    BOOL bCanDouble = FALSE;
+    if(_decoder)
+    {
+        bCanDouble = [_decoder isCanDoublePlaySpeed];
+    }
+    return bCanDouble;
+}
+////
 - (void) cancelEncoding {
     [self pause];
     NSLog(@"EAGLContext : ShotController viewWillDisappear freeBufferedFrames, glRenderLoop = %lx", self.glView.glRenderLoop.hash);
@@ -750,7 +849,10 @@ static __weak id s_retainer = nil;
 
 - (void) restartEncoding:(QualityLevel)encoderQuaLevel{
     self.encoderQualityLevel = encoderQuaLevel;
+    NSLog(@"#BUG4875#TimeStamp# MVkxMovieViewController(0x%lx) $ restartEncoding # setContentPath, _decoder=0x%lx", (long)self.hash, (long)_decoder.hash);
+    _decoder = nil;
     [self setContentPath:_contentPath parameters:_parameters];
+    NSLog(@"#BUG4875#TimeStamp# MVkxMovieViewController(0x%lx) $ restartEncoding # play, _decoder=0x%lx", (long)self.hash, (long)_decoder.hash);
     [self play];
 }
 
@@ -782,7 +884,7 @@ static __weak id s_retainer = nil;
                withError: (NSError *) error
 {
     
-    NSLog(@"#Codec# MVKxMovieViewController setMovieDecoder # decoder = %@, error = %@, @ %@", decoder, error, self);
+    NSLog(@"#BUG4875#TimeStamp# MVKxMovieViewController@0x%lx $ setMovieDecoder # decoder=0x%lx, prevDecoder=0x%lx, error=%@", (long)self.hash, (long)decoder.hash, (long)_decoder.hash, error);
     LoggerStream(2, @"setMovieDecoder");
             
     if (!error && decoder) {
@@ -801,6 +903,7 @@ static __weak id s_retainer = nil;
             NSLog(@"_dispatchQueueReadPackets created _dispatchQueueReadPackets %@", _dispatchQueueReadPackets);
         }
         //dispatch_set_target_queue(_dispatchQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0));
+        _bufferedDuration = 0;
         _videoFrames    = [NSMutableArray array];
 #ifdef DEBUG_VIDEOFRAME_LEAKING
 //        [self addObserver:self forKeyPath:@"videoFrames.count" options:0 context:nil];
@@ -995,7 +1098,7 @@ static __weak id s_retainer = nil;
         presentView = [[KxMovieGLView alloc] initWithFrame:bounds decoder:_decoder];
 #else
         NSString* outputVideoBaseName = nil;
-        if (self.isUsedAsVideoEditor || self.isUsedAsCapturer)
+        if (self.isUsedAsVideoEditor)
         {
             outputVideoBaseName = [self.class editorOutputVideoFileBaseName:_contentPath];
         }
@@ -1070,45 +1173,56 @@ static __weak id s_retainer = nil;
             //*/
             _audioOutputPath = [NSString stringWithFormat:@"%@/%@", [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"], outputVideoBaseName] ;
             
-            // Describe format
-            int kChannels = 2;
-            unsigned int bytesPerSample = sizeof(float) * kChannels;
-
-            memset(&_audioFormat, 0, sizeof(_audioFormat));
-            _audioFormat.mFormatID = kAudioFormatMPEG4AAC;
-            _audioFormat.mFormatFlags = kMPEG4Object_AAC_LC;
-            //_audioFormat.mFormatID = kAudioFormatLinearPCM;
-            //_audioFormat.mFormatFlags = kLinearPCMFormatFlagIsFloat;
-            _audioFormat.mSampleRate = 48000.00;
-            _audioFormat.mFramesPerPacket = 1024;
-            _audioFormat.mChannelsPerFrame = kChannels;
-            //_audioFormat.mFramesPerPacket  = 1;
-            //_audioFormat.mBytesPerFrame    = bytesPerSample;
-            //_audioFormat.mBytesPerPacket   = bytesPerSample * _audioFormat.mFramesPerPacket;
-            //_audioFormat.mBitsPerChannel    = 8 * sizeof(float);
+            if([_decoder getOriAudioChannel] == 4)
+            {
+                if([_decoder getAACFilePointer] == NULL)
+                {
+                    [_decoder createAACFilePointer:_audioOutputPath];
+                }
+            }
+            else
+            {
+                // Describe format
+                int kChannels = 2;
+                unsigned int bytesPerSample = sizeof(float) * kChannels;
+                
+                memset(&_audioFormat, 0, sizeof(_audioFormat));
+                _audioFormat.mFormatID = kAudioFormatMPEG4AAC;
+                _audioFormat.mFormatFlags = kMPEG4Object_AAC_LC;
+                //_audioFormat.mFormatID = kAudioFormatLinearPCM;
+                //_audioFormat.mFormatFlags = kLinearPCMFormatFlagIsFloat;
+                _audioFormat.mSampleRate = 48000.00;
+                _audioFormat.mFramesPerPacket = 1024;
+                _audioFormat.mChannelsPerFrame = kChannels;
+                //_audioFormat.mFramesPerPacket  = 1;
+                //_audioFormat.mBytesPerFrame    = bytesPerSample;
+                //_audioFormat.mBytesPerPacket   = bytesPerSample * _audioFormat.mFramesPerPacket;
+                //_audioFormat.mBitsPerChannel    = 8 * sizeof(float);
+                
+                
+                CFURLRef destinationURL = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, (CFStringRef)_audioOutputPath, kCFURLPOSIXPathStyle, false);
+                OSStatus status = ExtAudioFileCreateWithURL(destinationURL, kAudioFileAAC_ADTSType, &_audioFormat, NULL, kAudioFileFlags_EraseFile, &_audioFileRef); //kAudioFileCAFType //write by spy aac file
+                //OSStatus status = ExtAudioFileCreateWithURL(destinationURL, kAudioFileCAFType, &_audioFormat, NULL, kAudioFileFlags_EraseFile, &_audioFileRef); //kAudioFileCAFType //write by spy aac file
+                
+                checkStatus(status);
+                CFRelease(destinationURL);
+                
+                UInt32 size;
+                AudioStreamBasicDescription clientFormat;
+                clientFormat.mFormatID          = kAudioFormatLinearPCM;
+                clientFormat.mFormatFlags       = kAudioFormatFlagIsFloat;
+                clientFormat.mFramesPerPacket   = 1;
+                clientFormat.mBytesPerFrame     = bytesPerSample;
+                clientFormat.mBytesPerPacket    = clientFormat.mBytesPerFrame * clientFormat.mFramesPerPacket;
+                clientFormat.mChannelsPerFrame  = kChannels;  // 1 indicates mono
+                clientFormat.mBitsPerChannel    = 8 * sizeof(float);
+                clientFormat.mSampleRate        = 48000.00;
+                
+                size = sizeof( clientFormat );
+                status = ExtAudioFileSetProperty( _audioFileRef, kExtAudioFileProperty_ClientDataFormat, size, &clientFormat ); //write by spy setting input format
+                checkStatus(status);
+            }
             
-
-            CFURLRef destinationURL = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, (CFStringRef)_audioOutputPath, kCFURLPOSIXPathStyle, false);
-            OSStatus status = ExtAudioFileCreateWithURL(destinationURL, kAudioFileAAC_ADTSType, &_audioFormat, NULL, kAudioFileFlags_EraseFile, &_audioFileRef); //kAudioFileCAFType //write by spy aac file
-            //OSStatus status = ExtAudioFileCreateWithURL(destinationURL, kAudioFileCAFType, &_audioFormat, NULL, kAudioFileFlags_EraseFile, &_audioFileRef); //kAudioFileCAFType //write by spy aac file
-    
-            checkStatus(status);
-            CFRelease(destinationURL);
-            
-            UInt32 size;
-            AudioStreamBasicDescription clientFormat;
-            clientFormat.mFormatID          = kAudioFormatLinearPCM;
-            clientFormat.mFormatFlags       = kAudioFormatFlagIsFloat;
-            clientFormat.mFramesPerPacket   = 1;
-            clientFormat.mBytesPerFrame     = bytesPerSample;
-            clientFormat.mBytesPerPacket    = clientFormat.mBytesPerFrame * clientFormat.mFramesPerPacket;
-            clientFormat.mChannelsPerFrame  = kChannels;  // 1 indicates mono
-            clientFormat.mBitsPerChannel    = 8 * sizeof(float);
-            clientFormat.mSampleRate        = 48000.00;
-            
-            size = sizeof( clientFormat );
-            status = ExtAudioFileSetProperty( _audioFileRef, kExtAudioFileProperty_ClientDataFormat, size, &clientFormat ); //write by spy setting input format
-            checkStatus(status);
         }
 #ifdef ENCODING_WITHOUT_MYGLVIEW
         if (self.isUsedAsEncoder)
@@ -1207,7 +1321,7 @@ static __weak id s_retainer = nil;
         //_imageView.contentMode = UIViewContentModeCenter;
     }
     
-    self.view.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor blackColor];
     
     if (_glView != presentView)
     {
@@ -1257,22 +1371,30 @@ static __weak id s_retainer = nil;
     
 }
 
-- (void) audioCallbackFillData: (float *) outData
-                     numFrames: (UInt32) numFrames
-                   numChannels: (UInt32) numChannels
+- (void) audioCallbackFillData:(float *) outData
+                     numFrames:(UInt32) numFrames
+//                   numChannels:(UInt32) numChannels
+                        format:(AudioStreamBasicDescription)format
 {
-    
+    UInt32 numChannels = format.mChannelsPerFrame;
     //NSLog(@"audioCallbackFillData numFrames:%d numChannels:%d", numFrames, numChannels);
     //fillSignalF(outData,numFrames,numChannels);
     //return;
-
     if (_bufferring) {
         memset(outData, 0, numFrames * numChannels * sizeof(float));
         return;
     }
 
     @autoreleasepool {
-        
+#ifdef USE_TWIRLING_VR_AUDIO
+        if (NULL == _twirlingAudioPtr)
+        {
+//            ALOGE("#VRAudio# Will audioInit with (profileID, frameLength, channels, sampleRate) = (%d, %d, %d, %f)\n", 13, 512, numChannels, format.mSampleRate);
+            _twirlingAudioPtr = audioInit(13, 512, numChannels, format.mSampleRate, false, false);
+            audioSet(_twirlingAudioPtr, false, 0, false, true, 1.0);
+        }
+#endif
+        KxAudioFrame* frame = nil;
         while (numFrames > 0) {
             
             if (!_currentAudioFrame) {
@@ -1283,7 +1405,7 @@ static __weak id s_retainer = nil;
                     
                     if (count > 0) {
                         
-                        KxAudioFrame *frame = _audioFrames[0];
+                        frame = _audioFrames[0];
                        
 #ifdef DUMP_AUDIO_DATA
                         LoggerAudio(2, @"Audio frame position: %f", frame.position);
@@ -1304,9 +1426,8 @@ static __weak id s_retainer = nil;
                             }
                             
                             [_audioFrames removeObjectAtIndex:0];
-                            
-                            if (delta > 0.1 && count > 1) {
-                                
+                            if (delta > 0.1 && count > 1)
+                            {
 #ifdef DEBUG
 //                                LoggerStream(0, @"desync audio (lags) skip %.4f %.4f", _moviePosition, frame.position);
                                 _debugAudioStatus = 2;
@@ -1314,29 +1435,33 @@ static __weak id s_retainer = nil;
 #endif
                                 continue;
                             }
-                            
-                        } else {
-                            
+                        }
+                        else
+                        {
                             [_audioFrames removeObjectAtIndex:0];
                             _moviePosition = frame.position;
                             _bufferedDuration -= frame.duration;
                         }
 
                         _currentAudioFramePos = 0;
-                        _currentAudioFrame = frame.samples;                        
+                        _currentAudioFrame = frame.samples;
+                        _inputAudioChannels = frame.channels;
                     }
                 }
             }
             
             if (_currentAudioFrame) {
-                
                 const void *bytes = (Byte *)_currentAudioFrame.bytes + _currentAudioFramePos;
                 const NSUInteger bytesLeft = (_currentAudioFrame.length - _currentAudioFramePos);
                 const NSUInteger frameSizeOf = numChannels * sizeof(float);
-                const NSUInteger bytesToCopy = MIN(numFrames * frameSizeOf, bytesLeft);
-                const NSUInteger framesToCopy = bytesToCopy / frameSizeOf;
-                
+                const NSUInteger framesToCopy = MIN(numFrames * frameSizeOf, bytesLeft) / frameSizeOf;
+                const NSUInteger bytesToCopy = framesToCopy * frameSizeOf;
+#ifdef USE_TWIRLING_VR_AUDIO
+                processAudioFrameWithTwirling(outData, (const float*)bytes, _twirlingAudioPtr, format, (int)framesToCopy, _inputAudioChannels);
+                //memcpy(outData, bytes, bytesToCopy);
+#else
                 memcpy(outData, bytes, bytesToCopy);
+#endif
                 numFrames -= framesToCopy;
                 outData += framesToCopy * numChannels;
                 
@@ -1367,6 +1492,7 @@ static __weak id s_retainer = nil;
         //return;
         UInt32 numFrames = 0;
         UInt32 numChannels = 2;
+        //UInt32 numChannels = 4;
         
         if (_bufferring) {
             return;
@@ -1394,13 +1520,11 @@ static __weak id s_retainer = nil;
                                 
                                 [_audioFrames removeObjectAtIndex:0];
                                 //NSLog(@"audioFrames--: %lu", _audioFrames.count);
-                                
                             } else {
                                 
                                 [_audioFrames removeObjectAtIndex:0];
                                 _moviePosition = frame.position;
                                 _bufferedDuration -= frame.duration;
-                                
                             }
                             frame.timestamp = frame.position;
                             if (self.isUsedAsVideoEditor && (_editEndTime - _editStartTime) > 0) {
@@ -1455,8 +1579,8 @@ static __weak id s_retainer = nil;
                 
         if (on && _decoder.validAudio) {
             __weak typeof(self) wSelf = self;
-            audioManager.outputBlock = ^(float *outData, UInt32 numFrames, UInt32 numChannels) {
-                [wSelf audioCallbackFillData: outData numFrames:numFrames numChannels:numChannels];
+            audioManager.outputBlock = ^(float *outData, UInt32 numFrames, /*UInt32 numChannels, */AudioStreamBasicDescription format) {
+                [wSelf audioCallbackFillData: outData numFrames:numFrames /*numChannels:numChannels */format:format];
             };
                     
             [audioManager play];
@@ -1468,6 +1592,11 @@ static __weak id s_retainer = nil;
         } else {
             [audioManager pause];
             audioManager.outputBlock = nil;
+#ifdef USE_TWIRLING_VR_AUDIO
+            audioRelease(_twirlingAudioPtr);
+            _twirlingAudioPtr = NULL;
+//            ALOGE("#VRAudio# Did audioRelease()\n");
+#endif
         }
     } else {
         
@@ -1536,7 +1665,9 @@ static __weak id s_retainer = nil;
                         //NSLog(@"_decodedAudioFrames: %d", ++_decodedAudioFrames);
                     //}
                     if (!_decoder.validVideo)
+                    {
                         _bufferedDuration += frame.duration;
+                    }
                 }
         }
         
@@ -1744,7 +1875,7 @@ static __weak id s_retainer = nil;
             if (_minBufferedDuration > 0 && !_bufferring) {
                 _bufferring = YES;
                 NSLog(@"tick showWaitView");
-                [self showWaitView];
+                [self showWaitViewInView:self.glView];
             }
         }
         
@@ -1846,15 +1977,15 @@ static __weak id s_retainer = nil;
     [self dismissActivityIndicatorView];
 }
 
-- (void) showWaitView {
+- (void) showWaitViewInView:(UIView *)view {
     if (!self.isLoadingViewVisible)
     {
         NSLog(@"showWaitView bypassed!");
         return;
     }
     NSLog(@"showWaitView");
-    if (!self.isUsedAsEncoder) {
-        [self showActivityIndicatorView];
+    if (!self.isUsedAsEncoder || self.isShare) {
+        [self showActivityIndicatorViewInView:view];
     }
     
     //[_activityIndicatorView startAnimating];
@@ -1903,12 +2034,15 @@ static __weak id s_retainer = nil;
         
         KxVideoFrame *frame;
         //NSLog(@"isUsedAsEncoder %d isUsedAsCapturer %d", self.isUsedAsEncoder, self.isUsedAsCapturer);
-        if (self.isUsedAsEncoder && !self.isUsedAsCapturer && self.encoderRenderLoop && !self.encoderRenderLoop.readyToRenderNextFrame) {
+        if (self.isUsedAsEncoder && !self.isUsedAsCapturer && self.encoderRenderLoop && !self.encoderRenderLoop.readyToRenderNextFrame)
+        {
             NSLog(@"rendering loop busy, skip to wait");
-        } else {
+        }
+        else
+        {
             @synchronized(_videoFrames) {
-            
-                if (_videoFrames.count > 0) {
+                if (_videoFrames.count > 0)
+                {
                 
                     frame = _videoFrames[0];
                     if (self.isUsedAsVideoEditor && (_editEndTime - _editStartTime) > 0)
@@ -1922,7 +2056,7 @@ static __weak id s_retainer = nil;
                     //NSLog(@"VideoLeak : _videoFrames removeObject, count = %d", (int)_videoFrames.count);
 #endif
                     _bufferedDuration -= frame.duration;
-                    }
+                }
             }
         
             if (frame)
@@ -2026,7 +2160,6 @@ static int frameCount = 0;
     if (self.isUsedAsEncoder)
     {
         if (self.encoderRenderLoop) {
-            NSLog(@"#FrameLoss#1 video present timestamp: %f, frameNumber:%d", frame.timestamp, (int)frame.frameNumber);
             [self.encoderRenderLoop render:frame];///!!!For Debug #VideoLeak# by QD 20170124
             if(_outputVideoFrameCount == 0) {
                 _firstVideoTimestamp = frame.position * 1000;
@@ -2138,11 +2271,14 @@ static int frameCount = 0;
 
     
     //OSStatus status = ExtAudioFileWriteAsync(_audioFileRef, inNumberFrames, &bufferList);
-    OSStatus status = ExtAudioFileWrite(_audioFileRef, inNumberFrames, &bufferList);
-    if(status != 0)
-        NSLog(@"Audio write fail ret=%d",status);
-    //NSLog(@"record audio frame samples:%d channel:%d", numSamples, channels);
-    ///!!!#Bug2880# It crashes after back to foreground! checkStatus(status);
+    if([_decoder getOriAudioChannel] != 4)
+    {
+        OSStatus status = ExtAudioFileWrite(_audioFileRef, inNumberFrames, &bufferList);
+        if(status != 0)
+            NSLog(@"Audio write fail ret=%d",status);
+        //NSLog(@"record audio frame samples:%d channel:%d", numSamples, channels);
+        ///!!!#Bug2880# It crashes after back to foreground! checkStatus(status);
+    }
 }
 
 - (void) showSubtitleText:(NSString*)text {
@@ -2369,6 +2505,10 @@ static int frameCount = 0;
     //    return NO;
     NSLog(@"interruptDecoder %d", _interrupted);
     return _interrupted;
+}
+- (void)setUDPPro:(BOOL)UseUDPPro
+{
+    SetGlobalUDPPro(UseUDPPro);
 }
 
 -(BOOL) getGyroMatrix:(float*)pMatrix frameNumber:(NSInteger)frameNumber {

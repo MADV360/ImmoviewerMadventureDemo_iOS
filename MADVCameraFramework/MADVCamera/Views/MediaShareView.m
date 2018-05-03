@@ -79,9 +79,9 @@
         if ([self.delegate respondsToSelector:@selector(mediaShareViewDidClick:andIndex:)]) {
             [self.delegate mediaShareViewDidClick:self andIndex:btn.tag];
         }
-        if ([self.delegate respondsToSelector:@selector(mediaShareViewQuit:)]) {
-            [self.delegate mediaShareViewQuit:self];
-        }
+//        if ([self.delegate respondsToSelector:@selector(mediaShareViewQuit:)]) {
+//            [self.delegate mediaShareViewQuit:self];
+//        }//解决4896bug
         [UIView animateWithDuration:0.3 animations:^{
             self.backgroundColor = [UIColor colorWithHexString:@"#000000" alpha:0.5];
         } completion:^(BOOL finished) {

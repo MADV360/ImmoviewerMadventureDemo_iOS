@@ -62,10 +62,21 @@
                     break;
                 case 1920:
                     bitrate = 15;
+                    if(height == 1920)
+                    {
+                        bitrate *= 1.5;
+                    }
                     break;
                 default:
+                {
                     bitrate = 6;
+                    if(width == 1080 && height == 1920)
+                    {
+                        bitrate = 15;
+                    }
                     break;
+                }
+                    
             }
             break;
         case 1: //share

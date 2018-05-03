@@ -90,11 +90,16 @@
     titleLabe.font=[UIFont systemFontOfSize:20];
     titleLabe.textColor=[UIColor colorWithHexString:@"#F6F6F6"];
     titleLabe.text=FGGetStringWithKeyFromTable(OPENWIFI, nil);
-    
+    helper * helperInstance = [helper sharedInstance];
+    CGFloat statusHeight = helperInstance.statusHeight;
+    CGFloat bottomSafearea = 20;
+    if (statusHeight > 20) {
+        bottomSafearea = 34;
+    }
     UIButton * startBtn=[[UIButton alloc] init];
     [self addSubview:startBtn];
     [startBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(@-20);
+        make.bottom.equalTo(@(-bottomSafearea));
         make.left.equalTo(@15);
         make.right.equalTo(@-15);
         make.height.equalTo(@44);

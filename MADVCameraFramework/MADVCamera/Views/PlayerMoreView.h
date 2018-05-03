@@ -11,7 +11,7 @@
 @class PlayerMoreView;
 @protocol PlayerMoreViewDelegate <NSObject>
 
-- (void)playerMoreView:(PlayerMoreView *)playerMoreView moreType:(MoreType)moreType switchOn:(BOOL)on;
+- (void)playerMoreView:(PlayerMoreView *)playerMoreView playerMoreModel:(PlayerMoreModel *)playerMoreModel switchOn:(BOOL)on index:(NSInteger)index;
 
 @end
 

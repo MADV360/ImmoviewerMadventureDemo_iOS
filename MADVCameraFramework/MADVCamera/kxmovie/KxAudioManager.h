@@ -11,8 +11,9 @@
 
 
 #import <CoreFoundation/CoreFoundation.h>
+#import <CoreAudio/CoreAudioTypes.h>
 
-typedef void (^KxAudioManagerOutputBlock)(float *data, UInt32 numFrames, UInt32 numChannels);
+typedef void (^KxAudioManagerOutputBlock)(float *data, UInt32 numFrames, /*UInt32 numChannels, */AudioStreamBasicDescription format);
 
 @protocol KxAudioManager <NSObject>
 

@@ -742,4 +742,19 @@
     return [infoDic objectForKey:@"CFBundleShortVersionString"];
 }
 
++ (id)sharedInstance
+{
+    static dispatch_once_t once;
+    static helper * instance = nil;
+    dispatch_once(&once, ^{
+        /*
+         if ([MRDIAMABAGER_ENVIRONMENT isEqualToString:ENVIRONMENT_DEVELOPMENT])
+         instance = [[MVMediaManagerCase alloc] init];
+         else
+         //*/
+        instance = [[helper alloc] init];
+    });
+    return instance;
+}
+
 @end

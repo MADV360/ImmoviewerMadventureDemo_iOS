@@ -20,6 +20,7 @@
 #import "GLFilterCache.h"
 #import "MVPanoCameraController.h"
 #import "CycordVideoRecorder.h"
+#import "MadvUtils.h"
 
 #else //#ifdef MADVPANO_BY_SOURCE
 
@@ -31,6 +32,7 @@
 #import <MADVPano/GLFilterCache.h>
 #import <MADVPano/MVPanoCameraController.h>
 #import <MADVPano/CycordVideoRecorder.h>
+#import <MADVPano/MadvUtils.h>
 
 #endif //#ifdef MADVPANO_BY_SOURCE
 
@@ -84,6 +86,8 @@
 
 #define LOGO_REFERENCE_BOTTOMMARGIN_LANDSCAPE 29
 #define LOGO_REFERENCE_BOTTOMMARGIN 20
+
+#define LOGO_REFERENCE_WIDTH 270
 
 static const int MaxBufferBytes = 32 * 1048576;
 
@@ -167,6 +171,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
     BOOL _recording;
     BOOL _capturing;
     BOOL _inCapturing;
+    CGSize _videoCapturingSize;
     long _startTimeMills;
     long _currentFrameTimestamp;
     CGFloat _inputVideoFrameTimeStamp;
@@ -233,33 +238,40 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
             return @"GLRenderLoopTerminating";
         case GLRenderLoopRunning:
             return @"GLRenderLoopRunning";
+        case GLRenderLoopPreparing:
+            return @"GLRenderLoopPreparing";
         default:
             return @"N/A";
     }
 }
 
-- (void) setInCapturing:(BOOL)inCapturing {
+-(void) startCapturing:(CGSize)videoSize {
     @synchronized (self)
     {
-        if (_inCapturing == inCapturing)
+        if (_inCapturing)
             return;
+        _inCapturing = YES;
+        NSLog(@"#FreeCap# startCapturing with size = (%d, %d)", (int)videoSize.width, (int)videoSize.height);
+        _videoCapturingSize = videoSize;
         
-        if (inCapturing)
+        _startTimeMills = getCurrentTimeMills();
+        if (-1 == _currentFrameTimestamp)
         {
-            _startTimeMills = getCurrentTimeMills();
-            if (-1 == _currentFrameTimestamp)
-            {
-                _currentFrameTimestamp = 0;
-            }
+            _currentFrameTimestamp = 0;
         }
-        else
-        {
-            long tmp = _startTimeMills;
-            _startTimeMills = -1;
-            _currentFrameTimestamp += (getCurrentTimeMills() - tmp);
-        }
+    }
+}
+
+-(void) stopCapturing {
+    @synchronized (self)
+    {
+        if (!_inCapturing)
+            return;
+        _inCapturing = NO;
         
-        _inCapturing = inCapturing;
+        long tmp = _startTimeMills;
+        _startTimeMills = -1;
+        _currentFrameTimestamp += (getCurrentTimeMills() - tmp);
     }
 }
 
@@ -348,10 +360,10 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
 }
 
 - (void) releaseGL {
-    NSLog(@"EAGLContext : GLRenderLoop Begin releaseGL %lx",  self.hash);
+    NSLog(@"#GLRenderLoopState# Begin releaseGL %lx",  self.hash);
     [EAGLContext setCurrentContext:_eaglContext];
     
-    NSLog(@"EAGLContext : GLRenderLoop renderLoop # glClear, _eaglContext = %lx @ %lx",  _eaglContext.hash, self.hash);
+    NSLog(@"#GLRenderLoopState# renderLoop # glClear, _eaglContext = %lx @ %lx",  _eaglContext.hash, self.hash);
     glBindRenderbuffer(GL_RENDERBUFFER, _renderbuffer);
     glViewport(0, 0, _width, _height);
     glClearColor(0, 0, 0, 1);
@@ -437,7 +449,15 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
 #endif
     glFinish();
     [EAGLContext setCurrentContext:nil];
-    NSLog(@"EAGLContext : GLRenderLoop End releaseGL %lx",  self.hash);
+    
+    @synchronized (self)
+    {
+        if (_prevLutPath)
+        {
+            deleteIfTempLUTDirectory(_prevLutPath.UTF8String);
+        }
+    }
+    NSLog(@"#GLRenderLoopState# End releaseGL %lx",  self.hash);
 }
 
 - (instancetype) initWithDelegate:(id<GLRenderLoopDelegate>)delegate lutPath:(NSString*)lutPath lutSrcSizeL:(CGSize)lutSrcSizeL lutSrcSizeR:(CGSize)lutSrcSizeR inputFrameSize:(CGSize)inputFrameSize outputVideoBaseName:(NSString*)outputVideoBaseName encoderQualityLevel:(MVQualityLevel)qualityLevel forCapturing:(BOOL)forCapturing {
@@ -467,7 +487,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
         _minFOV = -1;
         
         _state = GLRenderLoopNotReady;
-        DoctorLog(@"#GLRenderLoopState# initWithDelegate : _state = GLRenderLoopNotReady @%lx", (long)self.hash);
+        DoctorLog(@"#GLRenderLoopState# initWithDelegate : state = GLRenderLoopNotReady @%lx", (long)self.hash);
         
         _readyToRenderNextFrame = YES;
         
@@ -503,7 +523,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
 }
 
 - (void) invalidateRenderbuffer {
-    NSLog(@"EAGLContext : invalidateRenderbuffer");
+    NSLog(@"#GLRenderLoopState# invalidateRenderbuffer");
     _willRebindGLCanvas = YES;
 }
 
@@ -638,7 +658,12 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
 }
 
 - (void) setLUTPath:(NSString*)lutPath lutSrcSizeL:(CGSize)lutSrcSizeL lutSrcSizeR:(CGSize)lutSrcSizeR {
-    _lutPath = lutPath;
+    @synchronized (self)
+    {
+        _prevLutPath = _lutPath;
+        _lutPath = lutPath;
+        NSLog(@"#GLRenderLoopState#TempLUT# AFTER setLUTPath : _prevLutPath='%@', _lutPath='%@'", _prevLutPath, _lutPath);
+    }
     _lutSrcSizeL = lutSrcSizeL;
     _lutSrcSizeR = lutSrcSizeR;
 }
@@ -698,22 +723,14 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
 }
 
 - (void) resizeVideoRecorder:(CGSize)outputVideoSize {
-    _inputWidth = outputVideoSize.width;
-    _inputHeight = outputVideoSize.height;
-    
     if (!_recording && !_capturing)
         return;
     
     if (_capturing)
-    {//*
+    {
         if (self.isFullScreenCapturing)
         {
             outputVideoSize = CGSizeMake(_width, _height);
-        }
-        else
-      //*/
-        {
-            outputVideoSize = CGSizeMake(1920, 1080);
         }
     }
     else if (_recording)
@@ -726,7 +743,6 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
                 outputVideoSize = CGSizeMake(2304, 1152);
                 break;
             default:
-                outputVideoSize = CGSizeMake(outputVideoSize.width, outputVideoSize.height);
                 break;
         }
     }
@@ -753,7 +769,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
                 {
                     CVOpenGLESTextureRef cvTexture = _videoRecorder.renderTexture;
                     _recorderRenderTexture = new GLRenderTexture(CVOpenGLESTextureGetName(cvTexture), CVOpenGLESTextureGetTarget(cvTexture), outputVideoSize.width, outputVideoSize.height);
-                    NSLog(@"_recorderRenderTexture = %d", _recorderRenderTexture->getTexture());
+                    //NSLog(@"#FreeCap# _recorderRenderTexture = %d, (width,height)=(%d, %d)", _recorderRenderTexture->getTexture(), (int)outputVideoSize.width, (int)outputVideoSize.height);
                 }
             }
         }
@@ -773,8 +789,8 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
 
 - (void) cycordVideoRecorderFailedWhileRecording:(NSError *)error {
     self.encodingError = error;
-    [self stopRendering];
-    //[self stopEncoding:nil];
+    [self stopRendering:NO];
+    [self stopEncoding];
 }
 
 - (void) onApplicationWillResignActive:(id)object {
@@ -803,7 +819,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
     // Init GL and GL objects:
     _eaglContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
     [EAGLContext setCurrentContext:_eaglContext];
-    NSLog(@"EAGLContext : GLRenderLoop renderLoop begin, _eaglContext = %lx @ %lx",  _eaglContext.hash, (long)self.hash);
+    NSLog(@"#GLRenderLoopState# renderLoop begin, _eaglContext = %lx @ %lx",  _eaglContext.hash, (long)self.hash);
     
     //    NSLog(@"EAGLContext : GLRenderLoop renderLoop # glClear, _eaglContext = %lx @ %lx",  _eaglContext.hash, self.hash);
     //    glViewport(0, 0, _width, _height);
@@ -842,11 +858,18 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
     //                                kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
     CHECK_GL_ERROR();
     [self rebindGLCanvas];
-    
+    NSLog(@"#GLRenderLoopState#TempLUT# BEFORE [[MVPanoRenderer alloc] initWithLUTPath, _prevLutPath='%@', _lutPath='%@'", _prevLutPath, _lutPath);
+    @synchronized (self)
+    {
+        if (_prevLutPath && ![_prevLutPath isEqualToString:_lutPath])
+        {
+            deleteIfTempLUTDirectory(_prevLutPath.UTF8String);
+        }
+        _prevLutPath = _lutPath;
+    }
     _renderer = [[MVPanoRenderer alloc] initWithLUTPath:_lutPath leftSrcSize:_lutSrcSizeL rightSrcSize:_lutSrcSizeR];
     _panoController = [[MVPanoCameraController alloc] initWithPanoRenderer:_renderer];
-    
-    _prevLutPath = _lutPath;
+    NSLog(@"#GLRenderLoopState#TempLUT# AFTER [[MVPanoRenderer alloc] initWithLUTPath, _prevLutPath='%@', _lutPath='%@'", _prevLutPath, _lutPath);
 #ifdef ENABLE_OPENGL_DEBUG
     _renderer->setEnableDebug(true);
 #endif
@@ -891,10 +914,10 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
     
     [_renderCond lock];
     {
-        if (GLRenderLoopNotReady == _state || GLRenderLoopTerminated == _state)
+        if (GLRenderLoopPreparing == _state || GLRenderLoopTerminated == _state)
         {
             _state = GLRenderLoopRunning;
-            DoctorLog(@"#GLRenderLoopState# renderLoop : _state = GLRenderLoopRunning #0 @renderLoop: @%lx", (long)self.hash);
+            DoctorLog(@"#GLRenderLoopState# renderLoop : state = GLRenderLoopRunning #0 @renderLoop: @%lx", (long)self.hash);
             [_renderCond broadcast];
         }
     }
@@ -907,31 +930,31 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
         {
             [_renderCond lock];
             {
-                //BOOL waited = NO;
+                BOOL waited = NO;///!!!For Debug
                 while (GLRenderLoopPausing == _state || GLRenderLoopPaused == _state)
                 {
-                    //waited = YES;
+                    waited = YES;
                     if (GLRenderLoopPausing == _state)
                     {
                         glFinish();
                         _state = GLRenderLoopPaused;
-                        DoctorLog(@"#GLRenderLoopState# renderLoop : _state = GLRenderLoopPaused @%lx", (long)self.hash);
+                        DoctorLog(@"#GLRenderLoopState# renderLoop : state = GLRenderLoopPaused @%lx", (long)self.hash);
                         [_renderCond broadcast];
                     }
                     
                     [_renderCond wait];
                 }
-                //if (waited)
-                //{
-                //    NSLog(@"EAGLContext : GLRenderLoop renderLoop wakeup @ %x", (int)self.hash);
-                //}
+                if (waited)
+                {
+                    NSLog(@"#GLRenderLoopState# renderLoop wakeup @ %x", (int)self.hash);
+                }
             }
             [_renderCond unlock];
             if (GLRenderLoopTerminating == _state)
-            {NSLog(@"EAGLContext : GLRenderLoop renderLoop !_isRendererRunning @ %x", (int)self.hash);
+            {NSLog(@"#GLRenderLoopState#  renderLoop !_isRendererRunning @ %x", (int)self.hash);
                 break;
             }
-            
+            //NSLog(@"#GLRenderLoopState#  Deadlock #0");
             long loopStart = [[NSDate date] timeIntervalSince1970] * 1000.f;
             // Rendering one frame:
             if (_willRebindGLCanvas)
@@ -939,13 +962,24 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
                 _willRebindGLCanvas = NO;
                 [self rebindGLCanvas];
             }
-            
-            if (_lutPath && ![_lutPath isEqualToString:_prevLutPath])
+            //NSLog(@"#GLRenderLoopState#  Deadlock #1");
+            BOOL shouldUpdateLUT = NO;
+            @synchronized (self)
+            {
+                if (_lutPath && ![_lutPath isEqualToString:_prevLutPath])
+                {NSLog(@"#GLRenderLoopState#TempLUT# _lutPath='%@', _prevLutPath='%@'", _lutPath, _prevLutPath);
+                    shouldUpdateLUT = YES;
+                    if (_prevLutPath)
+                    {
+                        deleteIfTempLUTDirectory(_prevLutPath.UTF8String);
+                    }
+                    _prevLutPath = _lutPath;
+                }
+            }
+            if (shouldUpdateLUT)
             {
                 [_renderer prepareLUT:_lutPath leftSrcSize:_lutSrcSizeL rightSrcSize:_lutSrcSizeR];
-                _prevLutPath = _lutPath;
             }
-            
             //        id renderSource = [self readRenderSource];
             id renderSource = nil;
             @synchronized (self)
@@ -964,7 +998,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
             }
             //        renderSource = nil;
             ///!!!For Debug #VideoLeak#
-            
+            //NSLog(@"#GLRenderLoopState#  Deadlock #2");
             if (renderSource && renderSource != prevRenderSource)
             {//NSLog(@"VideoLeak : new renderSource coming : %@", renderSource);
                 prevRenderSource = renderSource;
@@ -1031,7 +1065,12 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
                     static NSUInteger (*heightFunc)(id, SEL) = (NSUInteger(*)(id,SEL)) heightImp;
                     NSUInteger frameHeight = heightFunc(renderSource, heightSelector);
                     
-                    [self resizeVideoRecorder:CGSizeMake(frameWidth, frameHeight)];
+                    _inputWidth = (int)frameWidth;
+                    _inputHeight = (int)frameHeight;
+                    if (!_capturing && _recording)
+                    {
+                        [self resizeVideoRecorder:CGSizeMake(frameWidth, frameHeight)];
+                    }
                     /*
                     static SEL frameNumberSelector = NSSelectorFromString(@"frameNumber");
                     static IMP frameNumberImp = [renderSource methodForSelector:frameNumberSelector];
@@ -1088,12 +1127,12 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
                 _inputHeight = sourceSize.height;
                 _inputWidth = sourceSize.width;
             }
-            
+            //NSLog(@"#GLRenderLoopState#  Deadlock #3");
             if (self.inCapturing)
             {//Bug#3763
-                [self resizeVideoRecorder:CGSizeMake(1600, 900)];
+                [self resizeVideoRecorder:_videoCapturingSize];
             }
-            
+
             if (_hasSetRenderSource)
             {
                 [self draw];
@@ -1108,7 +1147,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
                 }
             }
             renderSource = nil;
-            
+
             @synchronized (self)
             {
                 //NSLog(@"_readyToRenderNextFrame:YES");
@@ -1129,9 +1168,10 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
             {
                 [NSThread sleepForTimeInterval:waitDelta/1000.f];
             }
+            //NSLog(@"#GLRenderLoopState#  Deadlock #6");
         }
     }
-    NSLog(@"EAGLContext : GLRenderLoop renderLoop Begin Finishing @ %lx",  self.hash);
+    NSLog(@"#GLRenderLoopState# renderLoop Begin Finishing @ %lx",  self.hash);
     
     _nextRenderSource = nil;
     _previewRenderSource = nil;
@@ -1149,7 +1189,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
     [_renderCond lock];
     {
         _state = GLRenderLoopTerminated;
-        DoctorLog(@"#GLRenderLoopState# renderLoop : _state = GLRenderLoopTerminated @%lx", (long)self.hash);
+        DoctorLog(@"#GLRenderLoopState# renderLoop : state = GLRenderLoopTerminated @%lx", (long)self.hash);
         [_renderCond broadcast];
     }
     [_renderCond unlock];
@@ -1161,14 +1201,14 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
 
 - (BOOL) pauseRendering {
     [_renderCond lock];
-    {DoctorLog(@"#GLRenderLoopState# pauseRendering#0 : _state = %@ @%lx", [GLRenderLoop stringOfGLRenderLoopState:_state], (long)self.hash);
+    {DoctorLog(@"#GLRenderLoopState# pauseRendering#0 : state = %@ @%lx", [GLRenderLoop stringOfGLRenderLoopState:_state], (long)self.hash);
         if (GLRenderLoopRunning != _state)
         {
             [_renderCond unlock];
             return NO;
         }
         _state = GLRenderLoopPausing;
-        DoctorLog(@"#GLRenderLoopState# pauseRendering#1 : _state = GLRenderLoopPausing @%lx", (long)self.hash);
+        DoctorLog(@"#GLRenderLoopState# pauseRendering#1 : state = GLRenderLoopPausing @%lx", (long)self.hash);
         //[_renderCond broadcast];///!!!
         
         while (GLRenderLoopPausing == _state)
@@ -1182,14 +1222,14 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
 
 - (BOOL) resumeRendering {
     [_renderCond lock];
-    {DoctorLog(@"#GLRenderLoopState# resumeRendering#0 : _state = %@ @%lx", [GLRenderLoop stringOfGLRenderLoopState:_state], (long)self.hash);
+    {DoctorLog(@"#GLRenderLoopState# resumeRendering#0 : state = %@ @%lx", [GLRenderLoop stringOfGLRenderLoopState:_state], (long)self.hash);
         if (GLRenderLoopPaused != _state)
         {
             [_renderCond unlock];
             return NO;
         }
         _state = GLRenderLoopRunning;
-        DoctorLog(@"#GLRenderLoopState# resumeRendering#1 : _state = GLRenderLoopRunning @%lx", (long)self.hash);
+        DoctorLog(@"#GLRenderLoopState# resumeRendering#1 : state = GLRenderLoopRunning @%lx", (long)self.hash);
         [_renderCond broadcast];
     }
     [_renderCond unlock];
@@ -1197,24 +1237,31 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
 }
 
 - (BOOL) stopRendering {
-    DoctorLog(@"#GLRenderLoopState# stopRendering#0 _state = %@ @%lx", [GLRenderLoop stringOfGLRenderLoopState:_state], (long)self.hash);
+    return [self stopRendering:YES];
+}
+
+- (BOOL) stopRendering:(BOOL)waitForDone {
+    DoctorLog(@"#GLRenderLoopState# stopRendering#0 state = %@ @%lx", [GLRenderLoop stringOfGLRenderLoopState:_state], (long)self.hash);
 //    _isScrolling = NO;
 //    _isFlinging = NO;
 //    _isUsingGyro = NO;
     [_renderCond lock];
     {
-        if (GLRenderLoopRunning != _state && GLRenderLoopPausing != _state && GLRenderLoopPaused != _state && GLRenderLoopNotReady != _state)
+        if (GLRenderLoopRunning != _state && GLRenderLoopPausing != _state && GLRenderLoopPaused != _state && GLRenderLoopNotReady != _state && GLRenderLoopPreparing != _state)
         {
             [_renderCond unlock];
             return NO;
         }
         _state = GLRenderLoopTerminating;
-        DoctorLog(@"#GLRenderLoopState# stopRendering#1 _state = GLRenderLoopTerminating @%lx", (long)self.hash);
+        DoctorLog(@"#GLRenderLoopState# stopRendering#1 state = GLRenderLoopTerminating @%lx", (long)self.hash);
         [_renderCond broadcast];
         
-        while (GLRenderLoopTerminating == _state)
+        if (waitForDone)
         {
-            [_renderCond wait];
+            while (GLRenderLoopTerminating == _state)
+            {
+                [_renderCond wait];
+            }
         }
     }
     [_renderCond unlock];
@@ -1222,6 +1269,10 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
 }
 
 - (BOOL) startRendering {
+    return [self startRendering:YES];
+}
+
+- (BOOL) startRendering:(BOOL)waitForPrepared {
     @synchronized (self)
     {
         if (!_renderCond)
@@ -1232,7 +1283,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
     
     [_renderCond lock];
     {
-        DoctorLog(@"#GLRenderLoopState# startRendering : _state=%@ @%lx", [GLRenderLoop stringOfGLRenderLoopState:_state], (long)self.hash);
+        DoctorLog(@"#GLRenderLoopState# startRendering : state=%@ @%lx", [GLRenderLoop stringOfGLRenderLoopState:_state], (long)self.hash);
         if (GLRenderLoopNotReady != _state && GLRenderLoopTerminated != _state && GLRenderLoopPaused != _state)
         {
             if (GLRenderLoopTerminating == _state)
@@ -1247,13 +1298,13 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
         if (GLRenderLoopPaused == _state)
         {
             _state = GLRenderLoopRunning;
-            DoctorLog(@"#GLRenderLoopState# startRendering#1 : _state = GLRenderLoopRunning @%lx", (long)self.hash);
+            DoctorLog(@"#GLRenderLoopState# startRendering#1 : state = GLRenderLoopRunning @%lx", (long)self.hash);
             [_renderCond broadcast];
             [_renderCond unlock];
             return YES;
         }
         
-        _state = GLRenderLoopNotReady;
+        _state = GLRenderLoopPreparing;
     }
     [_renderCond unlock];
     
@@ -1269,18 +1320,22 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
 #endif
     dispatch_async([self.class sharedRenderingQueue], ^{
 //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        DoctorLog(@"#GLRenderLoopState# startRendering#1 : _state=%@ @%lx", [GLRenderLoop stringOfGLRenderLoopState:_state], (long)self.hash);
+        DoctorLog(@"#GLRenderLoopState# startRendering#2 : state=%@ @%lx", [GLRenderLoop stringOfGLRenderLoopState:_state], (long)self.hash);
         [self renderLoop:nil];
     });
-    DoctorLog(@"#GLRenderLoopState# startRendering#N : _state=%@ @%lx", [GLRenderLoop stringOfGLRenderLoopState:_state], (long)self.hash);
-    [_renderCond lock];
+    DoctorLog(@"#GLRenderLoopState# startRendering#3 : state=%@ @%lx", [GLRenderLoop stringOfGLRenderLoopState:_state], (long)self.hash);
+    if (waitForPrepared)
     {
-        while (GLRenderLoopNotReady == _state)
+        [_renderCond lock];
         {
-            [_renderCond wait];
+            while (GLRenderLoopPreparing == _state)
+            {
+                [_renderCond wait];
+            }
         }
+        [_renderCond unlock];
     }
-    [_renderCond unlock];
+    DoctorLog(@"#GLRenderLoopState# startRendering#N : state=%@ @%lx", [GLRenderLoop stringOfGLRenderLoopState:_state], (long)self.hash);
     return YES;
 }
 
@@ -1598,13 +1653,13 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
     {
         [self setGyroMatrix:(float*)gyroMatrix.bytes rank:3];
     }
-    NSLog(@"#MVGLView# draw:image");
+    NSLog(@"#GLRenderLoopState#MVGLView# draw:image @%lx", (long)self.hash);
 }
 
 - (void) drawJPEG:(NSString*)filePath {
     MadvEXIFExtension madvExt = readMadvEXIFExtensionFromJPEG(filePath.UTF8String);
     [self setGyroMatrix:madvExt.cameraParams.gyroMatrix rank:(madvExt.gyroMatrixBytes > 0 ? 3 : 0)];
-    NSLog(@"#MVGLView# drawJPEG");
+    NSLog(@"#GLRenderLoopState#MVGLView# drawJPEG @%lx", (long)self.hash);
     _lutPath = [MVPanoRenderer lutPathOfSourceURI:filePath forceLUTStitching:NO pMadvEXIFExtension:&madvExt];
     _withLUTStitching = (nil != _lutPath);
     
@@ -1626,7 +1681,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
     if (self.isRendererReady)
     {
         //printf("\n#Gyro#     setGyroMatrix:                                                     {%0.3f, %0.3f, %0.3f, %0.3f, %0.3f, %0.3f, %0.3f, %0.3f, %0.3f}\n", _gyroMatrix[0], _gyroMatrix[1], _gyroMatrix[2], _gyroMatrix[3], _gyroMatrix[4], _gyroMatrix[5], _gyroMatrix[6], _gyroMatrix[7], _gyroMatrix[8]);
-        [_renderer setGyroMatrix:matrix rank:rank];
+        [_panoController setGyroMatrix:matrix rank:rank];
     }
     [_renderCond unlock];
 }
@@ -1635,7 +1690,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
     [_renderCond lock];
     if (self.isRendererReady)
     {
-        [_renderer setModelPostRotationFrom:fromVector to:toVector];
+        [_panoController setModelPostRotationFrom:fromVector to:toVector];
     }
     [_renderCond unlock];
 }
@@ -1649,6 +1704,9 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
 - (void) renderImmediately: (KxVideoFrame *) frame
 {
     [EAGLContext setCurrentContext:_eaglContext];
+    
+    _inputWidth = (int)frame.width;
+    _inputHeight = (int)frame.height;
     [self resizeVideoRecorder:CGSizeMake(frame.width, frame.height)];
     
     [_renderer setRenderSource:(__bridge_retained void*)frame];
@@ -1657,6 +1715,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
 
 - (void) draw {
     if (!_eaglContext) return;
+    //NSLog(@"#GLRenderLoopState#BUG4837#  #0");
     [EAGLContext setCurrentContext:_eaglContext];
     glEnable(GL_BLEND);
     CHECK_GL_ERROR();
@@ -1690,6 +1749,11 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
     {
         currentLUTStitchingMode = PanoramaDisplayModeLUTInMesh;
     }
+    //NSLog(@"#GLRenderLoopState#BUG4837#  #1");
+    
+    [_panoController setAsteroidMode:(PanoramaDisplayModeLittlePlanet == (currentPanoramaMode & PanoramaDisplayModeExclusiveMask))];
+    kmVec3 eulerAngles = [_panoController currentRotationEulerAngles];
+    [MVPanoCameraController setGlobalCurrentEulerAngles:eulerAngles];
     
     int currentRenderMode = currentLUTStitchingMode | currentPanoramaMode;
 #ifdef DEBUG_CUBEMAP
@@ -1754,6 +1818,11 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
     }
     _prevFaceppDetectFrameNumber = (_prevFaceppDetectFrameNumber + 1) % FaceppDetectFramePeriod;
 #endif
+    
+    [_panoController setFOVDegree:_FOV];
+    [MVPanoCameraController setGlobalFOVDegrees:_FOV];
+    //NSLog(@"#GLRenderLoopState#BUG4837#  #2");
+    
     if (_recording && NULL != _recorderRenderTexture)
     {
         int cubemapFaceSize = roundf(inputHeight * 0.57735);
@@ -1910,7 +1979,6 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
         }
         int outBoundWidth = outputWidth;
         int outBoundHeight = outputHeight;
-        
         if (currentIsGlassMode)
         {
             if (outputWidth > outputHeight)
@@ -1931,6 +1999,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
                 inputWidth = outputWidth;
                 inputHeight = outputHeight;
             }
+
             if (destRectHeight * inputWidth / inputHeight > destRectWidth)
             {
                 destRectHeight = destRectWidth * inputHeight / inputWidth;
@@ -1939,6 +2008,22 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
             {
                 destRectWidth = destRectHeight * inputWidth / inputHeight;
             }
+        }
+        //NSLog(@"#GLRenderLoopState#BUG4837#  #3");
+        //NSLog(@"#FreeCap# (outputWidth, outputHeight) = (%d, %d)", (int)outputWidth, outputHeight);
+        if (outputHeight < outputWidth && currentPanoramaMode == PanoramaDisplayModeCrystalBall)
+        {
+            // tan(FOVy / 2) * W / H = tan(FOVx / 2)
+            // tan(FOVx' / 2) = tan(FOVy' / 2) * W / H = tan(FOVx / 2) * W / H;
+            double t = tan(kmDegreesToRadians(_FOV) / 2);
+            t = t * (float)outputWidth / (float)outputHeight;
+            int scaledFOV = (int)roundf(kmRadiansToDegrees(atan(t)) * 2.0);
+            [_panoController setFOVDegree:scaledFOV];
+            //            Log.e(TAG, "#Bug4779# (outputWidth, outputHeight) = (" + outputWidth + ", " + outputHeight + "), (renderWidth, renderHeight) = (" + renderWidth + ", " + renderHeight + "), fov = " + fov + ", scaledFOV = " + scaledFOV);
+        }
+        else
+        {
+            [_panoController setFOVDegree:_FOV];
         }
         //#ifdef DEBUGGING_FILTERS
         //        if (true || currentIsGlassMode)
@@ -1985,7 +2070,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
             _recorderRenderTexture->blit();
             renderOrientation = OrientationRotate180DegreeMirror;
         }
-        
+        //NSLog(@"#GLRenderLoopState#BUG4837#  #4");
         glViewport(0, 0, outputWidth, outputHeight);
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         //        glClearColor((rand() % 256)/255.f, (rand() % 256)/255.f, (rand() % 256)/255.f, 1);///!!!
@@ -2094,7 +2179,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
                 [_renderer setFlipY:NO];
             }
         }
-        
+        //NSLog(@"#GLRenderLoopState#BUG4837#  #5");
         if (_capturing && self.enableWatermark2D && _recorderLogoTexture > 0)
         {
             //NSLog(@"#Logo# _capturing=%d, _recorderLogoTexture=%d, _outputVideoSize.height=%f, outputHeight=%f", _capturing, _recorderLogoTexture, _outputVideoSize.height, outputHeight);
@@ -2111,19 +2196,10 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
             }
             
             int logoX, logoY, logoW, logoH;
-            if (logoContainerHeight > logoContainerWidth)
-            {
-                logoX = logoContainerWidth * LOGO_REFERENCE_LEFTMARGIN_LANDSCAPE / LOGO_CONTAINER_REFERENCE_WIDTH_LANDSCAPE;
-                logoY = logoContainerHeight * LOGO_REFERENCE_BOTTOMMARGIN_LANDSCAPE / LOGO_CONTAINER_REFERENCE_HEIGHT_LANDSCAPE;
-                logoH = LOGO_REFERENCE_HEIGHT_LANDSCAPE * logoContainerHeight / LOGO_CONTAINER_REFERENCE_HEIGHT_LANDSCAPE;
-            }
-            else
-            {
-                logoX = logoContainerWidth * LOGO_REFERENCE_LEFTMARGIN / LOGO_CONTAINER_REFERENCE_WIDTH;
-                logoY = logoContainerHeight * LOGO_REFERENCE_BOTTOMMARGIN / LOGO_CONTAINER_REFERENCE_HEIGHT;
-                logoH = LOGO_REFERENCE_HEIGHT * logoContainerHeight / LOGO_CONTAINER_REFERENCE_HEIGHT;
-            }
-            logoW = logoH * _recorderLogoAspect;
+            logoX = logoContainerWidth * LOGO_REFERENCE_LEFTMARGIN / LOGO_CONTAINER_REFERENCE_WIDTH;
+            logoY = logoContainerHeight * LOGO_REFERENCE_BOTTOMMARGIN / LOGO_CONTAINER_REFERENCE_HEIGHT;
+            logoW = LOGO_REFERENCE_WIDTH * logoContainerWidth / LOGO_CONTAINER_REFERENCE_WIDTH;
+            logoH = logoW / _recorderLogoAspect;
             
             if (isInCapturing)
             {
@@ -2135,7 +2211,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
                 _filterCache->render(0, logoX, logoY, logoW, logoH, _recorderLogoTexture, GL_TEXTURE_2D, OrientationRotate180DegreeMirror, Vec2f{0.f,0.f}, Vec2f{1.f,1.f});
             }
         }
-        
+        //NSLog(@"#GLRenderLoopState#BUG4837#  #6");
         if (currentSnapshotDestPath)
         {
             int blockLines = MaxBufferBytes / 4 / outputWidth;
@@ -2205,7 +2281,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
                     self.encodingFrameBlock((float)timeMills / 1000.f);
                 }
             }
-            
+            //NSLog(@"#FreeCap# (displayWidth, displayHeight)=(%d, %d), (destRectWidth, destRectHeight)=(%d, %d), (outBoundWidth, outBoundHeight)=(%d, %d), _recorderRenderTexture.size=(%d, %d)", (int)displayWidth, (int)displayHeight, (int)destRectWidth, (int)destRectHeight, (int)outBoundWidth, (int)outBoundHeight, (int)_recorderRenderTexture->getWidth(), (int)_recorderRenderTexture->getHeight());
             glViewport(0, 0, displayWidth, displayHeight);
             _filterCache->render(0, 0,0,displayWidth,displayHeight, _recorderRenderTexture->getTexture(), _recorderRenderTexture->getTextureTarget(), renderOrientation, Vec2f{0.f, 0.f}, Vec2f{1.0f, 1.0f});
         }
@@ -2227,6 +2303,7 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
     glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, (GLenum[]){GL_COLOR_ATTACHMENT0});
     CHECK_GL_ERROR();
 #endif
+    //NSLog(@"#GLRenderLoopState#BUG4837#  #N");
     glBindRenderbuffer(GL_RENDERBUFFER, _renderbuffer);
     //Ref: https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/ImplementingaMultitasking-awareOpenGLESApplication/ImplementingaMultitasking-awareOpenGLESApplication.html#//apple_ref/doc/uid/TP40008793-CH5-SW1
     [[EAGLContext currentContext] presentRenderbuffer:GL_RENDERBUFFER];
@@ -2404,6 +2481,7 @@ void runAsynchronouslyOnGLQueue(void(^block)()) {
     {
         if (!self.motionManager)
         {
+            [self.glRenderLoop setIsGyroEnabled:NO];
             return;
         }
         [self.motionManager stopDeviceMotionUpdates];
@@ -2418,6 +2496,7 @@ void runAsynchronouslyOnGLQueue(void(^block)()) {
     {
         if (self.motionManager)
         {
+            [self.glRenderLoop setIsGyroEnabled:YES];
             return;
         }
         self.motionManager = [[CMMotionManager alloc] init];
@@ -2437,9 +2516,8 @@ void runAsynchronouslyOnGLQueue(void(^block)()) {
                 CMAttitude* attitude = motion.attitude;
                 [pSelf.glRenderLoop onGyroQuaternionChanged:attitude orientation:pSelf.interfaceOrientation startOrientation:startOrientation];
             }];
-            
-            [self.glRenderLoop setIsGyroEnabled:YES];
         }
+        [self.glRenderLoop setIsGyroEnabled:YES];
     }
 }
 /*

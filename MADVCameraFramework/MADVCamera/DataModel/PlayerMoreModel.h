@@ -19,6 +19,9 @@ typedef enum : NSInteger {
     Quality = 7,
     VR_Patter = 8,
     CONTENT_INFO = 9,
+    Phone_Gyroscope_NoImage = 10,
+    Watermark = 11,
+    Screen_Size = 12,
 } MoreType;
 @interface PlayerMoreModel : NSObject
 @property(nonatomic,copy)NSString * title;
@@ -27,5 +30,5 @@ typedef enum : NSInteger {
 @property(nonatomic,assign)MoreType moreType;
 @property(nonatomic,assign)BOOL isCorrecting;//是否校正
 @property(nonatomic,assign)BOOL isGyroscope;
-
+@property(nonatomic,strong)NSArray * dataSource;
 @end

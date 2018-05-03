@@ -46,7 +46,7 @@
     ImageTitleView * imageTitleView = [[ImageTitleView alloc] init];
     [mainView addSubview:imageTitleView];
     imageTitleView.title = FGGetStringWithKeyFromTable(WEICHAT, nil);
-    imageTitleView.imageName = @"wechat.png";
+    imageTitleView.imageName = @"login_wechat.png";
     imageTitleView.loginIndex = Wechat_Login;
     imageTitleView.delegate = self;
     [imageTitleView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -60,7 +60,7 @@
     ImageTitleView * qqView = [[ImageTitleView alloc] init];
     [mainView addSubview:qqView];
     qqView.title = @"QQ";
-    qqView.imageName = @"new_qq.png";
+    qqView.imageName = @"login_qq.png";
     qqView.loginIndex = QQ_Login;
     qqView.delegate = self;
     [qqView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -88,7 +88,7 @@
     ImageTitleView * wbView = [[ImageTitleView alloc] init];
     [mainView addSubview:wbView];
     wbView.title = FGGetStringWithKeyFromTable(WEIBO, nil);
-    wbView.imageName = @"new_webo.png";
+    wbView.imageName = @"login_webo.png";
     wbView.loginIndex = Webo_Login;
     wbView.delegate = self;
     [wbView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -129,7 +129,7 @@
     ImageTitleView * facebookView = [[ImageTitleView alloc] init];
     [outView addSubview:facebookView];
     facebookView.title = @"Facebook";
-    facebookView.imageName = @"facebook.png";
+    facebookView.imageName = @"login_facebook.png";
     facebookView.loginIndex = Facebook_Login;
     facebookView.delegate = self;
     [facebookView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -143,7 +143,7 @@
     ImageTitleView * twitterView = [[ImageTitleView alloc] init];
     [outView addSubview:twitterView];
     twitterView.title = @"Twitter";
-    twitterView.imageName = @"new_Twitter.png";
+    twitterView.imageName = @"login_Twitter.png";
     twitterView.loginIndex = Twitter_Login;
     twitterView.delegate = self;
     [twitterView mas_makeConstraints:^(MASConstraintMaker *make) {

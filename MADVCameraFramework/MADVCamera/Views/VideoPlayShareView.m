@@ -93,12 +93,13 @@
     shareLabel.textAlignment = NSTextAlignmentCenter;
     shareLabel.textColor = [UIColor whiteColor];
     shareLabel.text = FGGetStringWithKeyFromTable(SHARE, nil);
-    
+    helper * helperInstance = [helper sharedInstance];
+    CGFloat statusHeight = helperInstance.statusHeight;
     UIButton * closeBtn = [[UIButton alloc] init];
     [self addSubview:closeBtn];
     [closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(@-30);
-        make.top.equalTo(@30);
+        make.top.equalTo(@(30 + statusHeight - 20));
         make.width.equalTo(@20);
         make.height.equalTo(@20);
     }];

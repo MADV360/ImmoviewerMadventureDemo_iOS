@@ -133,11 +133,16 @@
     [buyTapGes addTarget:self action:@selector(buyTapGes:)];
     [buyView addGestureRecognizer:buyTapGes];
     
-    
+    helper * helperInstance = [helper sharedInstance];
+    CGFloat statusHeight = helperInstance.statusHeight;
+    CGFloat bottomSafearea = 20;
+    if (statusHeight > 20) {
+        bottomSafearea = 34;
+    }
     UIButton * startBtn=[[UIButton alloc] init];
     [self addSubview:startBtn];
     [startBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(@-20);
+        make.bottom.equalTo(@(-bottomSafearea));
         make.left.equalTo(@15);
         make.right.equalTo(@-15);
         make.height.equalTo(@44);

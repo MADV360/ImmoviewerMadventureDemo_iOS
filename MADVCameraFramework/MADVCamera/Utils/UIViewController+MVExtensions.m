@@ -130,14 +130,17 @@ static char * screencap = "screencap";
     }
 }
 
-- (void) showActivityIndicatorView {
+- (void) showActivityIndicatorViewInView:(UIView *)view {
+    if (view == nil) {
+        view = self.view;
+    }
     dispatch_async(dispatch_get_main_queue(), ^{
         UIActivityIndicatorView* indicatorView = nil;
         UIView* bgView = objc_getAssociatedObject(self, kKeyIndicatorView);
         NSLog(@"showActivityIndicatorView : %@, bgView = %@", self, bgView);
         if (!bgView)
         {
-            bgView = [[UIView alloc] init];///!!!WithFrame:self.view.bounds];
+            bgView = [[UIView alloc] init];///!!!WithFrame:view.bounds];
             bgView.backgroundColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.5];
             bgView.opaque = NO;
             bgView.userInteractionEnabled = YES;
@@ -147,16 +150,17 @@ static char * screencap = "screencap";
             [bgView addSubview:indicatorView];
             bgView.translatesAutoresizingMaskIntoConstraints = NO;
             
-            [self.view addSubview:bgView];
+            [view addSubview:bgView];
             if ([self.isScreencap isEqualToString:@"1"]) {
-                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:bgView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0.f]];
-                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:bgView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.f constant:((ScreenWidth*9)/16)*0.5+64-9]];
+//                [view addConstraint:[NSLayoutConstraint constraintWithItem:bgView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0.f]];
+//                [view addConstraint:[NSLayoutConstraint constraintWithItem:bgView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterY multiplier:1.f constant:0.f]];
 //                [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
 //                    make.centerX.equalTo(self.view.mas_centerX);
 //                    make.top.equalTo(@(((ScreenWidth*9)/16)*0.5+64-9));
 //                    //                make.height.equalTo(@18);
 //                    //                make.width.equalTo(@18);
 //                }];
+                bgView.center = view.center;
             }else
             {
 //                [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -165,8 +169,9 @@ static char * screencap = "screencap";
 //                    //                make.height.equalTo(@18);
 //                    //                make.width.equalTo(@18);
 //                }];
-                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:bgView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0.f]];
-                [self.view addConstraint:[NSLayoutConstraint constraintWithItem:bgView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.f constant:0.f]];
+//                [view addConstraint:[NSLayoutConstraint constraintWithItem:bgView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0.f]];
+//                [view addConstraint:[NSLayoutConstraint constraintWithItem:bgView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterY multiplier:1.f constant:0.f]];
+                bgView.center = view.center;
             }
             
             
@@ -176,7 +181,7 @@ static char * screencap = "screencap";
         {
             indicatorView = [bgView subviews][0];
         }
-        [self.view bringSubviewToFront:bgView];
+        [view bringSubviewToFront:bgView];
         [indicatorView startAnimating];
     });
 }

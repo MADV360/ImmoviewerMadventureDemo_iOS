@@ -32,7 +32,9 @@
 {
     UIImageView * imageView=[[UIImageView alloc] init];
     [self addSubview:imageView];
-    imageView.frame=CGRectMake(0, 0, ScreenWidth, 211);
+    helper * helperInstance = [helper sharedInstance];
+    CGFloat statusHeight = helperInstance.statusHeight;
+    imageView.frame=CGRectMake(0, 0, ScreenWidth, 211 + (statusHeight - 20));
     imageView.backgroundColor=[UIColor colorWithHexString:@"#46a4ea"];
     imageView.userInteractionEnabled=YES;
     self.imageView=imageView;
@@ -88,7 +90,7 @@
 //        make.width.equalTo(@34);
 //        make.height.equalTo(@34);
 //    }];
-    backBtn.frame=CGRectMake(15, 31, 34, 34);
+    backBtn.frame=CGRectMake(15, statusHeight + 5, 34, 34);
     [backBtn setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
     [backBtn addTarget:self action:@selector(backClick) forControlEvents:UIControlEventTouchUpInside];
     backBtn.imageEdgeInsets=UIEdgeInsetsMake(0, 0, 0, 0);
@@ -143,7 +145,7 @@
     
     LXInfoView * infoView=[[LXInfoView alloc] init];
     [self addSubview:infoView];
-    infoView.frame=CGRectMake(0, 211, [UIScreen mainScreen].bounds.size.width, 60);
+    infoView.frame=CGRectMake(0, 211 + (statusHeight - 20), [UIScreen mainScreen].bounds.size.width, 60);
     [infoView loadInfoView];
     infoView.delegate=self;
     infoView.backgroundColor=[UIColor whiteColor];
@@ -227,8 +229,10 @@
 }
 - (void)updateFrameWithOffsety:(CGFloat)y
 {
-    self.imageView.frame=CGRectMake(y*0.5, y, ScreenWidth-y, 211-y);
-    self.backBtn.y=30+y;
+    helper * helperInstance = [helper sharedInstance];
+    CGFloat statusHeight = helperInstance.statusHeight;
+    self.imageView.frame=CGRectMake(y*0.5, y, ScreenWidth-y, 211 + (statusHeight - 20)-y);
+    self.backBtn.y=statusHeight + 5 + y;
     self.quitBtn.y=30+y;
     
 }

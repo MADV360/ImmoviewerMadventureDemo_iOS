@@ -9,6 +9,7 @@
 #import "VideoExportView.h"
 #import "KDGoalBar.h"
 #import "UIColor+MVExtensions.h"
+#import "helper.h"
 
 @interface VideoExportView()
 @property(nonatomic,weak)UILabel * decLabel;
@@ -26,7 +27,7 @@
 {
     self.backgroundColor = [UIColor colorWithRed:0.96f green:0.96f blue:0.97f alpha:1.00f];
     
-    KDGoalBar * progressView = [[KDGoalBar alloc] initWithFrame:CGRectMake((ScreenWidth-187)*0.5, (ScreenHeight-187)*0.5-64, 187, 187)];
+    KDGoalBar * progressView = [[KDGoalBar alloc] initWithFrame:CGRectMake((ScreenWidth-187)*0.5, (ScreenHeight-187)*0.5-CGRectGetMinY(self.frame), 187, 187)];
     progressView.textFont = [UIFont systemFontOfSize:25];
     progressView.textColor = [UIColor colorWithRed:0.33f green:0.64f blue:0.62f alpha:1.00f];
     progressView.isRateShow=YES;
@@ -41,7 +42,7 @@
     resultImageView.translatesAutoresizingMaskIntoConstraints = NO;
     [self addSubview:resultImageView];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:resultImageView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0.f]];
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:resultImageView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1.f constant:-32.f]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:resultImageView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1.f constant:-CGRectGetMinY(self.frame) * 0.5]];
     [resultImageView addConstraint:[NSLayoutConstraint constraintWithItem:resultImageView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.f constant:35.f]];
     [resultImageView addConstraint:[NSLayoutConstraint constraintWithItem:resultImageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.f constant:30.f]];
     resultImageView.hidden = YES;
@@ -94,13 +95,18 @@
     [bottomBtn addTarget:self action:@selector(bottomBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [bottomBtn setTitle:FGGetStringWithKeyFromTable(CANCELNOSPACE, nil) forState:UIControlStateNormal];
     self.bottomBtn = bottomBtn;
+    helper * helperInstance = [helper sharedInstance];
+    CGFloat bottomEdge = 30;
+    if (helperInstance.statusHeight > 20) {
+        bottomEdge = 34;
+    }
     if (self.isEdit || self.isSystemShare) {
         if (self.isEdit) {
             bottomBtn.hidden = YES;
         }
         UIView * editBottomView = [[UIView alloc] init];
         [self addSubview:editBottomView];
-        editBottomView.frame = CGRectMake(25, ScreenHeight-64-70, ScreenWidth-50, 40);
+        editBottomView.frame = CGRectMake(25, CGRectGetHeight(self.frame)-40 - bottomEdge, ScreenWidth-50, 40);
         
         editBottomView.layer.masksToBounds = YES;
         editBottomView.layer.borderColor = [UIColor colorWithHexString:@"#000000" alpha:0.2].CGColor;

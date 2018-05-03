@@ -704,19 +704,24 @@ NSString* NotificationStringOfNotification(int notification) {
     }
     
     int count1 = [response.param intValue];
-    if (count1 > -1)
+    if (count1 == -1)
+    {
+        //空闲时停止间隔拍照直接结束
+        self.isShooting = NO;
+        self.cameraWorkState = CameraWorkStateIdle;
+        self.connectingCamera.capIntervalNum = 0;
+        [self sendMessageToHandler:MSG_STOP_SHOOTING arg1:0 arg2:0 object:nil];
+    }
+    else if (count1 > -1)
     {
         self.isShooting = YES;
         self.cameraWorkState = CameraWorkStatePhotoingInterval;
         self.connectingCamera.capIntervalNum = count1;
         [self sendMessageToHandler:MSG_BEGIN_SHOOTING arg1:0 arg2:count1 object:nil];
-    }
-    else
+    }else
     {
-        self.isShooting = NO;
-        self.cameraWorkState = CameraWorkStateIdle;
-        self.connectingCamera.capIntervalNum = 0;
-        [self sendMessageToHandler:MSG_STOP_SHOOTING arg1:0 arg2:0 object:nil];
+        //忙的时候停止间隔拍照需要等到此时拍照结束才可以（文件存储成功）
+        self.connectingCamera.capIntervalNum = count1;
     }
 }
 
@@ -769,7 +774,7 @@ NSString* NotificationStringOfNotification(int notification) {
 /** 启动摄像或拍照 */
 -(void) startShootingWithTimeoutMills:(int)timeoutMills withAudio:(BOOL)withAudio
 {NSLog(@"#Douin# startShooting begin");
-    if (!self.connectingCamera)
+    if (!self.connectingCamera || _isShooting)
     {
         return;
     }
@@ -925,16 +930,38 @@ NSString* NotificationStringOfNotification(int notification) {
     {
         case CameraModePhoto:
         {
-            if (self.connectingCamera.cameraSubMode != CameraSubmodePhotoInterval) {
-                return;
-            }
             
+            int msgID = -1;
+            Class responseClass = nil;
+            switch (self.connectingCamera.cameraSubMode)
+            {
+                case CameraSubmodePhotoTiming:
+                    msgID = AMBA_MSGID_SHOOT_PHOTO_TIMING;
+                    break;
+                case CameraSubmodePhotoInterval:
+                    msgID = AMBA_MSGID_SHOOT_PHOTO_INTERVAL;
+                    responseClass = AMBAShootPhotoIntervalResponse.class;
+                    break;
+                case CameraSubmodePhotoContinuous:
+                    msgID = AMBA_MSGID_SHOOT_PHOTO_CONTINUOUS;
+                    break;
+                case CameraSubmodePhotoSurroundExp:
+                    msgID = AMBA_MSGID_START_PHOTO_SURROUNDEXP;
+                    responseClass = AMBAShootPhotoSurroundexpResponse.class;
+                    break;
+                default:
+                    msgID = AMBA_MSGID_SHOOT_PHOTO_NORMAL;
+                    break;
+            }
             AMBARequest* takePhotoRequest = [[AMBARequest alloc] initWithReceiveBlock:^(AMBAResponse *response) {
                 if (response.isRvalOK)
                 {NSLog(@"#Callback# MSG_BEGIN_SHOOTING on startShooting takePhotoRequest OK");
                     if (self.connectingCamera.cameraSubMode == CameraSubmodePhotoInterval)
                     {
                         [self handleIntervalPhotoResponse:response];
+                    }else
+                    {
+                        [self sendMessageToHandler:MSG_BEGIN_SHOOTING arg1:0 arg2:0 object:nil];
                     }
                 }
                 else
@@ -944,9 +971,9 @@ NSString* NotificationStringOfNotification(int notification) {
             } errorBlock:^(AMBARequest *response, int error, NSString *msg) {
                 self.isShooting = YES;
                 NSLog(@"#Callback# MSG_BEGIN_SHOOTING on startShooting takePhotoRequest error");
-            } responseClass:AMBAShootPhotoIntervalResponse.class];
+            } responseClass:responseClass];
             takePhotoRequest.token = self.sessionToken;
-            takePhotoRequest.msgID = AMBA_MSGID_SHOOT_PHOTO_INTERVAL;
+            takePhotoRequest.msgID = msgID;
             [[CMDConnectManager sharedInstance] sendRequest:takePhotoRequest];
         }
             break;
@@ -1096,6 +1123,17 @@ NSString* NotificationStringOfNotification(int notification) {
                     [connectingCamera save];
                 }
                 [self sendMessageToHandler:MSG_SETTING_CHANGED arg1:optionUID arg2:paramUID object:nil];
+            }else if (SettingNodeIDCameraGPS == optionNode.uid)
+            {
+                [optionNode setSelectedSubOptionUID:paramUID];
+                [helper writeProfileString:GPSPARAM value:[NSString stringWithFormat:@"%d",paramNode.msgID]];
+                [self sendMessageToHandler:MSG_SETTING_CHANGED arg1:optionUID arg2:paramUID object:nil];
+            }
+            else if (SettingNodeIDCameraTransportProtocol == optionNode.uid)
+            {
+                [optionNode setSelectedSubOptionUID:paramUID];
+                [helper writeProfileString:TRANSPORTPROTOCOL value:[NSString stringWithFormat:@"%d",paramNode.msgID]];
+                [self sendMessageToHandler:MSG_SETTING_CHANGED arg1:optionUID arg2:paramUID object:nil];
             }
             else
             {
@@ -1155,6 +1193,15 @@ NSString* NotificationStringOfNotification(int notification) {
         return PanoramaDisplayModeStereoGraphic;
 }
 
+- (int) cameraGPSParam {
+    NSString * gpsParam = [helper readProfileString:GPSPARAM];
+    return [gpsParam intValue];
+}
+- (int)cameraTransportProtocol
+{
+    NSString * TransportProtocol = [helper readProfileString:TRANSPORTPROTOCOL];
+    return [TransportProtocol intValue];
+}
 - (NSArray<ImageFilterBean *>*) imageFilters
 {
     return [ImageFilterBean allImageFilters];
@@ -1243,7 +1290,7 @@ NSString* NotificationStringOfNotification(int notification) {
     __block AMBARequest * getSerialIDRequest = [[AMBARequest alloc] initWithReceiveBlock:^(AMBAResponse *response) {
         //*
         if (response.isRvalOK) {
-            NSString* UUID = (NSString*) response.param;
+            NSString* UUID = [self.class formattedCameraUUID:(NSString*) response.param];
             NSString* SSID = [WiFiConnectManager wifiSSID];
             __block MVCameraDevice* device = [MVCameraDevice selectWithUUID:UUID];
             //*///!!!TO BE OPTIMIZED:
@@ -1507,7 +1554,21 @@ NSString* NotificationStringOfNotification(int notification) {
                             break;
                         case SettingNodeIDCameraPreviewMode:
                         {
-                            int previewMode = [self connectingCameraPreviewMode];
+                            int previewMode = [self cameraPreviewMode];
+                            paramNode = [optionNode findSubOptionByMsgID:previewMode];
+                            [optionNode setSelectedSubOptionUID:paramNode.uid];
+                        }
+                            break;
+                        case SettingNodeIDCameraGPS:
+                        {
+                            int previewMode = [self cameraGPSParam];//0 关闭 1=1s 3=3s 5=5s 10= 10s
+                            paramNode = [optionNode findSubOptionByMsgID:previewMode];
+                            [optionNode setSelectedSubOptionUID:paramNode.uid];
+                        }
+                            break;
+                        case SettingNodeIDCameraTransportProtocol:
+                        {
+                            int previewMode = [self cameraTransportProtocol];//0 UDP 1tcp
                             paramNode = [optionNode findSubOptionByMsgID:previewMode];
                             [optionNode setSelectedSubOptionUID:paramNode.uid];
                         }
@@ -1563,10 +1624,6 @@ NSString* NotificationStringOfNotification(int notification) {
     getAllSettingRequest.token = self.sessionToken;
     getAllSettingRequest.msgID = AMBA_MSGID_GET_CAMERA_ALL_SETTING_PARAM;
     [[CMDConnectManager sharedInstance] sendRequest:getAllSettingRequest];
-}
-
-- (int) connectingCameraPreviewMode {
-    return connectingCamera ? connectingCamera.cameraPreviewMode : PanoramaDisplayModeStereoGraphic;
 }
 
 - (void)synchronizeCameraTime
@@ -2007,23 +2064,39 @@ NSString* formatSDStorage(int total, int free) {
     [[CMDConnectManager sharedInstance] sendRequest:storageAllStateRequest];
 }
 
-- (void) startGPSInfoSynchronization {
+- (void) startGPSInfoSynchronization:(BOOL)isGPSParamChange {
     if (_gpsSyncTimer)
     {
-        return;
+        if (isGPSParamChange) {
+            [_gpsSyncTimer invalidate];
+            _gpsSyncTimer = nil;
+            [self notifyGPS];
+            if ([NSTimer.class respondsToSelector:@selector(scheduledTimerWithTimeInterval:target:selector:userInfo:repeats:)])
+            {
+                NSString * gpsParam = [helper readProfileString:GPSPARAM];
+                _gpsSyncTimer = [NSTimer scheduledTimerWithTimeInterval:[gpsParam doubleValue] target:self selector:@selector(notifyGPS) userInfo:nil repeats:YES];
+            }
+            [[NSRunLoop currentRunLoop] addTimer:_gpsSyncTimer forMode:NSRunLoopCommonModes];
+            return;
+        }else
+        {
+            return;
+        }
+        
     }
     
     [self notifyGPS];
     
     if ([NSTimer.class respondsToSelector:@selector(scheduledTimerWithTimeInterval:target:selector:userInfo:repeats:)])
     {
-        _gpsSyncTimer = [NSTimer scheduledTimerWithTimeInterval:10.f target:self selector:@selector(notifyGPS) userInfo:nil repeats:YES];
+        NSString * gpsParam = [helper readProfileString:GPSPARAM];
+        _gpsSyncTimer = [NSTimer scheduledTimerWithTimeInterval:[gpsParam doubleValue] target:self selector:@selector(notifyGPS) userInfo:nil repeats:YES];
     }
     [[NSRunLoop currentRunLoop] addTimer:_gpsSyncTimer forMode:NSRunLoopCommonModes];
 }
 
 - (void) notifyGPS {
-    NSString* openGps = [helper readProfileString:OPENGPS];
+    NSString* openGps = [helper readProfileString:GPSPARAM];
     if ([openGps isEqualToString:@"0"])
         return;
     
@@ -2968,6 +3041,12 @@ NSString* formatSDStorage(int total, int free) {
             AMBASaveMediaFileDoneResponse* saveDoneResponse = (AMBASaveMediaFileDoneResponse*) response;
             NSString* remoteFilePath = [self remoteFilePathOfRTOSPath:((NSString*) saveDoneResponse.param)];
             [self sendMessageToHandler:MSG_END_SHOOTING arg1:0 arg2:saveDoneResponse.mp4_time object:remoteFilePath];
+            if (self.connectingCamera.capIntervalNum == -2) {
+                self.isShooting = NO;
+                self.cameraWorkState = CameraWorkStateIdle;
+                self.connectingCamera.capIntervalNum = 0;
+                [self sendMessageToHandler:MSG_STOP_SHOOTING arg1:0 arg2:0 object:nil];
+            }
             //self.isVideoCapturing = NO;
             
             //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 0.5L), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

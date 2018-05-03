@@ -49,12 +49,15 @@ static NSMutableArray<SettingTreeNode *> * deviceSettingsList;
     __block MVCameraDevice* ret = nil;
     [[RealmSerialQueue shareRealmQueue] sync:^{
         ret = [[MVCameraDevice alloc] init];
+        ret.cameraPreviewMode = PanoramaDisplayModeStereoGraphic;
     }];
     return ret;
 }
 
 - (void) initImpersistentMembers {
-    self.cameraPreviewMode = PanoramaDisplayModeStereoGraphic;
+//    [self transactionWithBlock:^{
+//        self.cameraPreviewMode = PanoramaDisplayModeStereoGraphic;
+//    }];
 }
 
 - (instancetype) init {
@@ -282,11 +285,11 @@ static NSMutableArray<SettingTreeNode *> * deviceSettingsList;
         self.recentMedia = device.recentMedia;
         self.videoSegmentSeconds = device.videoSegmentSeconds;
         self.videoCaptureResolution = device.videoCaptureResolution;
-//        self.cameraPreviewMode = device.cameraPreviewMode;
+        self.cameraPreviewMode = device.cameraPreviewMode;
 //        self.isCharging = device.isCharging;
     }];
     self.firmwareUpdateState = device.firmwareUpdateState;
-    self.cameraPreviewMode = device.cameraPreviewMode;
+//    self.cameraPreviewMode = device.cameraPreviewMode;
     self.isCharging = device.isCharging;
 }
 
@@ -341,7 +344,7 @@ static NSMutableArray<SettingTreeNode *> * deviceSettingsList;
 
 //数据库忽略该属性 不操作该属性
 + (NSArray *)ignoredProperties {
-    return @[@"SSID",@"password",@"uuid",@"fwVer",@"rcFwVer",@"serialID",@"lastSyncTime",@"isConnect",@"voltagePercent",@"isWifiConnect",@"thumbnailImage",@"isConnecting",@"connectionState",@"cameraMode",@"cameraSubMode",@"cameraSubModeParam",@"recentMedia",@"isCharging",@"cameraPreviewMode", @"firmwareUpdateState", @"jpgCaptured", @"mp4Captured", @"videoSegmentSeconds", @"capIntervalNum", @"videoCaptureResolution"];
+    return @[@"SSID",@"password",@"uuid",@"fwVer",@"rcFwVer",@"serialID",@"lastSyncTime",@"isConnect",@"voltagePercent",@"isWifiConnect",@"thumbnailImage",@"isConnecting",@"connectionState",@"cameraMode",@"cameraSubMode",@"cameraSubModeParam",@"recentMedia",@"isCharging", @"firmwareUpdateState", @"jpgCaptured", @"mp4Captured", @"videoSegmentSeconds", @"capIntervalNum", @"videoCaptureResolution"];
 }
 
 //属性的默认值

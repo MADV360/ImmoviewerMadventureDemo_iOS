@@ -10,4 +10,5 @@
 
 @interface CenterButton : UIButton
 @property(nonatomic,assign)BOOL isTop;
+@property(nonatomic,assign)BOOL isAlignment;
 @end

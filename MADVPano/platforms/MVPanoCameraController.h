@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreMotion/CoreMotion.h>
+#import "kazmath.h"
 
 //@class MVPanoRenderer;
 
@@ -58,6 +59,22 @@
 - (void) setFOVDegree:(int)fovDegree;
 
 - (void) resetViewPosition;
+
+- (void) setGyroMatrix:(float*)matrix rank:(int)rank;
+
+- (void) setModelPostRotationFrom:(kmVec3)fromVector to:(kmVec3)toVector;
+
+-(void) setAsteroidMode:(BOOL)toSetOrUnset;
+
+-(kmVec3) currentRotationEulerAngles;
++(void) setGlobalCurrentEulerAngles:(kmVec3)eulerAngles;
++(kmVec3) globalCurrentEulerAngles;
+
++(void) setGlobalFOVDegrees:(float)fov;
+
++(float) globalFOVDegrees;
+
++(kmVec3) globalCurrentEulerAnglesForU2VR;
 
 @end
 

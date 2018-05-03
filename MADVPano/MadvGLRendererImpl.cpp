@@ -52,398 +52,308 @@ typedef AutoRef<GLVAO> GLVAORef;
 
 static const char* TrivalVertexShaderSource = STRINGIZE2
 (
- attribute vec4 a_position;
- attribute vec4 a_color;
- attribute vec2 a_texCoord;
- varying vec4 v_color;
- varying mediump vec2 v_texCoord;
- void main(void) {
-     gl_Position = a_position;
-     v_color = a_color;
-     v_texCoord = a_texCoord;
- }
- );
+attribute vec4 a_position;
+attribute vec4 a_color;
+attribute vec2 a_texCoord;
+varying vec4 v_color;
+varying mediump vec2 v_texCoord;
+void main(void) {
+ gl_Position = a_position;
+ v_color = a_color;
+ v_texCoord = a_texCoord;
+}
+);
 
 static const char* TrivalFragmentShaderSource = STRINGIZE2
 (
- varying highp vec4 v_color;
- varying highp vec2 v_texCoord;
- 
- void main()
- {
-     gl_FragColor = v_color;
- }
- );
+varying highp vec4 v_color;
+varying highp vec2 v_texCoord;
+
+void main()
+{
+ gl_FragColor = v_color;
+}
+);
 
 /*
- * Beta = Longitude = 2*M_PI * s;
- * Alpha = Latitude = M_PI - M_PI * t;
- *
- * x = -sinA * sinB;
- * y = cosA;
- * z = sinA * cosB;
- *
- * Alpha = arccos(y);
- * float x1, z1;
- * if (abs(x) <= abs(z))
- *     x1 = x;
- *     z1 = z;
- * else
- *     x1 = z;
- *     z1 = x;
- *
- * Beta = arctan(-x1 / z1);
- * if (z1 < 0)
- *     Beta += M_PI;
- * else if (x1 > 0)
- *     Beta += 2*M_PI;
- *
- * if (abs(x) > abs(z))
- *     Beta = 5*M_PI/2 - Beta;
- *     if (Beta > 2*M_PI)
- *         Beta -= 2*M_PI;
- */
+* Beta = Longitude = 2*M_PI * s;
+* Alpha = Latitude = M_PI - M_PI * t;
+*
+* x = -sinA * sinB;
+* y = cosA;
+* z = sinA * cosB;
+*
+* Alpha = arccos(y);
+* float x1, z1;
+* if (abs(x) <= abs(z))
+*     x1 = x;
+*     z1 = z;
+* else
+*     x1 = z;
+*     z1 = x;
+*
+* Beta = arctan(-x1 / z1);
+* if (z1 < 0)
+*     Beta += M_PI;
+* else if (x1 > 0)
+*     Beta += 2*M_PI;
+*
+* if (abs(x) > abs(z))
+*     Beta = 5*M_PI/2 - Beta;
+*     if (Beta > 2*M_PI)
+*         Beta -= 2*M_PI;
+*/
 
 /*
 ToCubeMap:
- const float q1div3 = 1.0 / 3.0, q2div3 = 2.0 / 3.0, q1div2 = 0.5;
- const float sqrt1div3 = sqrt(q1div3);
- 
+const float q1div3 = 1.0 / 3.0, q2div3 = 2.0 / 3.0, q1div2 = 0.5;
+const float sqrt1div3 = sqrt(q1div3);
+
 if (0.0 <= dest.s && dest.s < q1div3 && 0 <= dest.t && dest.t < q1div2)
 {// Left (-X):
- src.y = dest.t * 4.0 - 1.0;
- src.z = 1.0 - dest.s * 6.0;
- src.x = -sqrt(1 - (src.y ^ 2 + src.z ^ 2) * q1div3);
- src.yz *= sqrt1div3;
+src.y = dest.t * 4.0 - 1.0;
+src.z = 1.0 - dest.s * 6.0;
+src.x = -sqrt(1 - (src.y ^ 2 + src.z ^ 2) * q1div3);
+src.yz *= sqrt1div3;
 }
 if (q1div3 <= dest.s && dest.s < q2div3 && 0 <= dest.t && dest.t < q1div2)
 {// Front (-Z)
- src.y = dest.t * 4.0 - 1.0;
- src.x = dest.s * 6.0 - 3.0;
- src.z = -sqrt(1 - (src.y ^ 2 + src.x ^ 2) * q1div3);
- src.yx *= sqrt1div3;
+src.y = dest.t * 4.0 - 1.0;
+src.x = dest.s * 6.0 - 3.0;
+src.z = -sqrt(1 - (src.y ^ 2 + src.x ^ 2) * q1div3);
+src.yx *= sqrt1div3;
 }
 if (q2div3 <= dest.s && dest.s <= 1.0 && 0 <= dest.t && dest.t < q1div2)
 {// Right (+X)
- src.y = dest.t * 4.0 - 1.0;
- src.z = dest.s * 6.0 - 5.0;
- src.x = sqrt(1 - (src.y ^ 2 + src.z ^ 2) * q1div3);
- src.yz *= sqrt1div3;
+src.y = dest.t * 4.0 - 1.0;
+src.z = dest.s * 6.0 - 5.0;
+src.x = sqrt(1 - (src.y ^ 2 + src.z ^ 2) * q1div3);
+src.yz *= sqrt1div3;
 }
 if (0 <= dest.s && dest.s < q1div3 && q1div2 <= dest.t && dest.t <= 1.0)
 {// Top (+Y):
- src.z = dest.t * 4.0 - 3.0;
- src.x = dest.s * 6.0 - 1.0;
- src.y = sqrt(1 - (src.x ^ 2 + src.z ^ 2) * q1div3);
- src.xz *= sqrt1div3;
+src.z = dest.t * 4.0 - 3.0;
+src.x = dest.s * 6.0 - 1.0;
+src.y = sqrt(1 - (src.x ^ 2 + src.z ^ 2) * q1div3);
+src.xz *= sqrt1div3;
 }
 if (q1div3 <= dest.s && dest.s < q2div3 && q1div2 <= dest.t && dest.t <= 1.0)
 {// Back (+Z):
- src.y = dest.t * 4.0 - 3.0;
- src.x = 3.0 - dest.s * 6.0;
- src.z = sqrt(1 - (src.y ^ 2 + src.x ^ 2) * q1div3);
- src.xy *= sqrt1div3;
+src.y = dest.t * 4.0 - 3.0;
+src.x = 3.0 - dest.s * 6.0;
+src.z = sqrt(1 - (src.y ^ 2 + src.x ^ 2) * q1div3);
+src.xy *= sqrt1div3;
 }
 if (q2div3 <= dest.s && dest.s <= 1.0 && q1div2 <= dest.t && dest.t <= 1.0)
 {// Bottom (-Y):
- src.z = 3.0 - dest.t * 4.0;
- src.x = dest.s * 6.0 - 5.0;
- src.y = sqrt(1 - (src.x ^ 2 + src.z ^ 2) * q1div3);
- src.xz *= sqrt1div3;
+src.z = 3.0 - dest.t * 4.0;
+src.x = dest.s * 6.0 - 5.0;
+src.y = sqrt(1 - (src.x ^ 2 + src.z ^ 2) * q1div3);
+src.xz *= sqrt1div3;
 }
- */
+*/
 static const char* CubeMapToRemappedVertexShader = STRINGIZE2
 (
- attribute vec4 a_position; \n
- attribute vec2 a_vertexIndex; \n
- uniform mat4 u_screenMatrix; \n
- \n
- varying highp vec2 v_texcoord; \n
- void main(void) { \n
-     gl_Position = u_screenMatrix * (a_position / a_position.w); \n ///!!!a_position; \n ///!!!
-     v_texcoord = a_vertexIndex; \n
- } \n
+attribute vec4 a_position; \n
+attribute vec2 a_vertexIndex; \n
+uniform mat4 u_screenMatrix; \n
+\n
+varying highp vec2 v_texcoord; \n
+void main(void) { \n
+ gl_Position = u_screenMatrix * (a_position / a_position.w); \n ///!!!a_position; \n ///!!!
+ v_texcoord = a_vertexIndex; \n
+} \n
 );
 
 static const char* CubeMapToRemappedFragmentShader = STRINGIZE2
 (
- varying vec2 v_texcoord; \n
- uniform samplerCube u_sourceTexture; \n
- ///!!!uniform sampler2D u_sourceTexture; \n
- uniform highp mat4 u_invCMMatrix; \n
- \n
- highp vec2 sphereCoordFromTexCoord(highp vec2 texCoord) { \n
-     return vec2(2.0 * M_PI * texCoord.s, M_PI * (1.0 - texCoord.t)); \n
- } \n
- highp vec3 normalizedVec3FromSphereCoord(highp vec2 sphereCoord) { \n
-     highp float sinA = sin(sphereCoord.y); \n
-     highp float sinB = sin(sphereCoord.x); \n
-     highp float cosA = cos(sphereCoord.y); \n
-     highp float cosB = cos(sphereCoord.x); \n
-     return vec3(-sinA * sinB, cosA, sinA * cosB); \n
- } \n
- void main(void) { \n
-     highp vec4 viewVector = vec4(normalizedVec3FromSphereCoord(sphereCoordFromTexCoord(v_texcoord)), 1.0); \n;
-     gl_FragColor = textureCube(u_sourceTexture, (u_invCMMatrix * viewVector).xyz); \n
-		 ///!!!gl_FragColor = texture2D(u_sourceTexture, viewVector.xy); \n
+varying vec2 v_texcoord; \n
+uniform samplerCube u_sourceTexture; \n
+///!!!uniform sampler2D u_sourceTexture; \n
+uniform highp mat4 u_invCMMatrix; \n
+\n
+highp vec2 sphereCoordFromTexCoord(highp vec2 texCoord) { \n
+ return vec2(2.0 * M_PI * texCoord.s, M_PI * (1.0 - texCoord.t)); \n
+} \n
+highp vec3 normalizedVec3FromSphereCoord(highp vec2 sphereCoord) { \n
+ highp float sinA = sin(sphereCoord.y); \n
+ highp float sinB = sin(sphereCoord.x); \n
+ highp float cosA = cos(sphereCoord.y); \n
+ highp float cosB = cos(sphereCoord.x); \n
+ return vec3(-sinA * sinB, cosA, sinA * cosB); \n
+} \n
+void main(void) { \n
+ highp vec4 viewVector = vec4(normalizedVec3FromSphereCoord(sphereCoordFromTexCoord(v_texcoord)), 1.0); \n;
+ gl_FragColor = textureCube(u_sourceTexture, (u_invCMMatrix * viewVector).xyz); \n
+	 ///!!!gl_FragColor = texture2D(u_sourceTexture, viewVector.xy); \n
 ///gl_FragColor = vec4(viewVector.xyz, 1.0); \n
- } \n
+} \n
 );
 
 static const char* VertexShaderSource = STRINGIZE2
 (
- attribute vec4 a_position; \n
- attribute vec2 a_vertexIndex; \n
- //attribute vec2 a_texCoord; \n
+attribute vec4 a_position; \n
+attribute vec2 a_vertexIndex; \n
+//attribute vec2 a_texCoord; \n
 // uniform int u_columns; \n
 // uniform int u_rows; \n
- uniform mat4 u_SPCMMatrix; \n
- /// Samsum S8 issue is fixed by changing highp v_texCoord to mediump
- varying highp vec2 v_texCoord; \n
- \n
- highp vec2 wrappedTexcoord(highp vec2 texcoord) { \n
-     highp vec2 ret = texcoord; \n
-     if (ret.s < 0.0) \n
-         ret.s += 1.0; \n
-     else if (ret.s > 1.0) \n
-         ret.s -= 1.0; \n
-     if (ret.t < 0.0) \n
-         ret.t += 1.0; \n
-     else if (ret.t > 1.0) \n
-         ret.t -= 1.0; \n
-     return ret; \n
- } \n
- STRINGIZE0(#if defined(FLAG_STITCH_WITH_LUT_IN_SHADER)) \n
+uniform mat4 u_SPCMMatrix; \n
+/// Samsum S8 issue is fixed by changing highp v_texCoord to mediump
+varying highp vec2 v_texCoord; \n
+\n
+highp vec2 wrappedTexcoord(highp vec2 texcoord) { \n
+ highp vec2 ret = texcoord; \n
+STRINGIZE0(#if defined(DEBUG_FLAG2)) \n
+ if (ret.s < 0.0) \n
+	 ret.s += 1.0; \n
+ else if (ret.s > 1.0) \n
+	 ret.s -= 1.0; \n
+ if (ret.t < 0.0) \n
+	 ret.t += 1.0; \n
+ else if (ret.t > 1.0) \n
+	 ret.t -= 1.0; \n
+STRINGIZE0(#else) \n
+	if (ret.s < 0.0) \n
+		ret.s += 1.0; \n
+	if (ret.s > 1.0) \n
+		ret.s -= 1.0; \n
+	if (ret.t < 0.0) \n
+		ret.t += 1.0; \n
+	if (ret.t > 1.0) \n
+		ret.t -= 1.0; \n
+STRINGIZE0(#endif) \n
+ return ret; \n
+} \n
+STRINGIZE0(#if defined(FLAG_STITCH_WITH_LUT_IN_SHADER)) \n
 // uniform sampler2D u_lutTextureLS; \n
 // uniform sampler2D u_lutTextureLT; \n
 // uniform sampler2D u_lutTextureRS; \n
 // uniform sampler2D u_lutTextureRT; \n
 // uniform highp vec2 u_lutSrcSize; \n
- uniform sampler2D u_lutTexture; \n
- uniform highp vec2 u_dstSize; \n
- varying highp vec2 v_texcoordL; \n
- varying highp vec2 v_texcoordR; \n
- varying mediump vec2 v_lutWeights; \n
- \n
- highp float lutTexcoordComponentOfTexel(highp vec4 texel, float denom) { \n
-     highp float I = texel.r * 255.0 * 256.0 + texel.g * 255.0; \n
-     highp float M = texel.b * 255.0 / 256.0; \n
-     return (I + M) / (4.0 * denom); \n
- } \n
- highp vec4 lutTexcoordOfTexcoord(highp vec2 texcoord, highp vec2 lutSrcSize, sampler2D lutTextureLS, sampler2D lutTextureLT, sampler2D lutTextureRS, sampler2D lutTextureRT) { \n
-     if (texcoord.s < 0.0) \n
-         texcoord.s += 1.0; \n
-     else if (texcoord.s > 1.0) \n
-         texcoord.s -= 1.0; \n
-     if (texcoord.t < 0.0) \n
-         texcoord.t += 1.0; \n
-     else if (texcoord.t > 1.0) \n
-         texcoord.t -= 1.0; \n
-     \n
-     highp vec4 ret; \n
-     highp vec4 lsTexel = texture2D(lutTextureLS, texcoord); \n
-     ret.r = lutTexcoordComponentOfTexel(lsTexel, lutSrcSize.x); \n
-     highp vec4 ltTexel = texture2D(lutTextureLT, texcoord); \n
-     ret.g = lutTexcoordComponentOfTexel(ltTexel, lutSrcSize.y); \n
-     highp vec4 rsTexel = texture2D(lutTextureRS, texcoord); \n
-     ret.b = lutTexcoordComponentOfTexel(rsTexel, lutSrcSize.x); \n
-     highp vec4 rtTexel = texture2D(lutTextureRT, texcoord); \n
-     ret.a = lutTexcoordComponentOfTexel(rtTexel, lutSrcSize.y); \n
-     return ret; \n
- } \n
- STRINGIZE0(#endif) \n
- \n
- STRINGIZE0(#if defined(FLAG_STITCH_WITH_LUT_IN_MESH)) \n
- attribute highp vec2 a_texcoordL; \n
- attribute highp vec2 a_texcoordR; \n
- varying highp vec2 v_texcoordL; \n
- varying highp vec2 v_texcoordR; \n
- varying mediump vec2 v_lutWeights; \n
- STRINGIZE0(#endif) \n
- \n
- highp vec2 texcoordFromVertexIndex(highp vec2 vertexIndex) {  \n ///, int columns, int rows) { \n
-     return vertexIndex; \n /// / vec2(float(columns), float(rows)); \n
- } \n
- \n
- attribute float a_vertexRole; \n
- uniform highp mat4 u_CMMatrix; \n
- uniform highp vec2 u_diffTexcoord; \n
- \n
- highp vec2 sphereCoordFromVector3(highp vec3 point) { \n
-     ///!!!BUG HERE: highp vec3 normalized = normalize(point);
-     highp vec3 normalized = point; \n
-     highp float alpha = acos(normalized.y); \n
-     highp float beta = atan(-point.x, point.z); \n
-     ///if (beta < 0.0) beta = 2.0 * M_PI + beta; \n ///!!!
-     return vec2(beta, alpha); \n
- } \n
- \n
- highp vec3 normalizedVec3FromSphereCoord(highp vec2 sphereCoord) { \n
-     highp float sinA = sin(sphereCoord.y); \n
-     highp float sinB = sin(sphereCoord.x); \n
-     highp float cosA = cos(sphereCoord.y); \n
-     highp float cosB = cos(sphereCoord.x); \n
-     return vec3(-sinA * sinB, cosA, sinA * cosB); \n
- } \n
- \n
- highp vec2 sphereCoordFromTexCoord(highp vec2 texCoord) { \n
-     return vec2(2.0 * M_PI * texCoord.s, M_PI * (1.0 - texCoord.t)); \n
- } \n
- \n
- highp vec2 texCoordFromSphereCoord(highp vec2 sphereCoord) { \n
-     return vec2(sphereCoord.s / 2.0 / M_PI, 1.0 - sphereCoord.t / M_PI); \n
- } \n
+uniform sampler2D u_lutTexture; \n
+uniform highp vec2 u_dstSize; \n
+varying highp vec2 v_texcoordL; \n
+varying highp vec2 v_texcoordR; \n
+varying mediump vec2 v_lutWeights; \n
+\n
+STRINGIZE0(#endif) \n
+\n
+STRINGIZE0(#if defined(FLAG_STITCH_WITH_LUT_IN_MESH)) \n
+attribute highp vec2 a_texcoordL; \n
+attribute highp vec2 a_texcoordR; \n
+varying highp vec2 v_texcoordL; \n
+varying highp vec2 v_texcoordR; \n
+varying mediump vec2 v_lutWeights; \n
+STRINGIZE0(#endif) \n
+\n
+// attribute float a_vertexRole; \n
+uniform highp mat4 u_CMMatrix; \n
+// uniform highp vec2 u_diffTexcoord; \n
+\n
+highp vec2 sphereCoordFromTexCoord(highp vec2 texCoord) { \n
+ return vec2(2.0 * M_PI * texCoord.s, M_PI * (1.0 - texCoord.t)); \n
+} \n
+\n
+highp vec2 texCoordFromSphereCoord(highp vec2 sphereCoord) { \n
+ return vec2(sphereCoord.s / 2.0 / M_PI, 1.0 - sphereCoord.t / M_PI); \n
+} \n
 STRINGIZE0(#if defined(FLAG_STITCH_WITH_LUT_IN_SHADER) || defined(FLAG_STITCH_WITH_LUT_IN_MESH)) \n
-        //highp vec2 sphereCoordOfXZPlane(float Rxz, float Y, )
+	//highp vec2 sphereCoordOfXZPlane(float Rxz, float Y, )
 mediump vec2 lutWeights(highp vec2 dstTexcoord) { \n
-    mediump float weight = 1.0; \n
-    mediump float weight1 = 0.0; \n
-    const highp float theta0 = M_PI / 2.0 - 2.0 * M_PI / 180.0; \n
-    const highp float theta1 = M_PI / 2.0 + 2.0 * M_PI / 180.0; \n
+mediump float weight = 1.0; \n
+mediump float weight1 = 0.0; \n
+const highp float theta0 = M_PI / 2.0 - 2.0 * M_PI / 180.0; \n
+const highp float theta1 = M_PI / 2.0 + 2.0 * M_PI / 180.0; \n
+\n
+highp vec2 dstSphereCoord = sphereCoordFromTexCoord(dstTexcoord); \n
  \n
-    highp vec2 dstSphereCoord = sphereCoordFromTexCoord(dstTexcoord); \n
-     \n
-    highp float Rxz = abs(sin(dstSphereCoord.t)); \n
-    highp float z0 = cos(theta0); \n
-    highp float z1 = cos(theta1); \n
-    highp float boundTheta0, boundTheta1, boundTheta2, boundTheta3; \n
-    if (abs(z0) > Rxz) \n
-    { \n
-        boundTheta0 = 0.0; \n
-    } \n
-    else \n
-    { \n
-        boundTheta0 = acos(z0 / Rxz); \n
-    } \n
-    if (abs(z1) > Rxz) \n
-    { \n
-        boundTheta1 = M_PI; \n
-    } \n
-    else \n
-    { \n
-        boundTheta1 = acos(z1 / Rxz); \n
-    } \n
-    boundTheta2 = 2.0 * M_PI - boundTheta1; \n
-    boundTheta3 = 2.0 * M_PI - boundTheta0; \n
-    \n
-    if (dstSphereCoord.s < boundTheta0) \n
-    { \n
-        weight = 1.0; \n
-        weight1 = 0.0; \n
-    } \n
-    else if (dstSphereCoord.s < boundTheta1) \n
-    { \n
-        if (boundTheta1 > boundTheta0) \n
-        { \n
-           weight1 = (dstSphereCoord.s - boundTheta0) / (boundTheta1 - boundTheta0); \n
-        } \n
-        else \n
-        { \n
-            weight1 = 0.0; \n
-        } \n
-        weight = 1.0 - weight1; \n
-    } \n
-    else if (dstSphereCoord.s < boundTheta2) \n
-    { \n
-        weight1 = 1.0; \n
-        weight = 0.0; \n
-    } \n
-    else if (dstSphereCoord.s < boundTheta3) \n
-    { \n
-        if (boundTheta3 > boundTheta2) \n
-        { \n
-            weight = (dstSphereCoord.s - boundTheta2) / (boundTheta3 - boundTheta2); \n
-        } \n
-        else \n
-        { \n
-            weight = 0.0; \n
-        } \n
-        weight1 = 1.0 - weight; \n
-    } \n
-    else \n
-    { \n
-        weight = 1.0; \n
-        weight1 = 0.0; \n
-    } \n
- \n
-    return vec2(weight, weight1); \n
-    //return vec2(0.0, 1.0); \n
+highp float Rxz = abs(sin(dstSphereCoord.t)); \n
+highp float z0 = cos(theta0); \n
+highp float z1 = cos(theta1); \n
+highp float boundTheta0, boundTheta1, boundTheta2, boundTheta3; \n
+if (abs(z0) > Rxz) \n
+{ \n
+	boundTheta0 = 0.0; \n
+} \n
+else \n
+{ \n
+	boundTheta0 = acos(z0 / Rxz); \n
+} \n
+if (abs(z1) > Rxz) \n
+{ \n
+	boundTheta1 = M_PI; \n
+} \n
+else \n
+{ \n
+	boundTheta1 = acos(z1 / Rxz); \n
+} \n
+boundTheta2 = 2.0 * M_PI - boundTheta1; \n
+boundTheta3 = 2.0 * M_PI - boundTheta0; \n
+\n
+if (dstSphereCoord.s < boundTheta0) \n
+{ \n
+	weight = 1.0; \n
+	weight1 = 0.0; \n
+} \n
+else if (dstSphereCoord.s < boundTheta1) \n
+{ \n
+	if (boundTheta1 > boundTheta0) \n
+	{ \n
+	   weight1 = (dstSphereCoord.s - boundTheta0) / (boundTheta1 - boundTheta0); \n
+	} \n
+	else \n
+	{ \n
+		weight1 = 0.0; \n
+	} \n
+	weight = 1.0 - weight1; \n
+} \n
+else if (dstSphereCoord.s < boundTheta2) \n
+{ \n
+	weight1 = 1.0; \n
+	weight = 0.0; \n
+} \n
+else if (dstSphereCoord.s < boundTheta3) \n
+{ \n
+	if (boundTheta3 > boundTheta2) \n
+	{ \n
+		weight = (dstSphereCoord.s - boundTheta2) / (boundTheta3 - boundTheta2); \n
+	} \n
+	else \n
+	{ \n
+		weight = 0.0; \n
+	} \n
+	weight1 = 1.0 - weight; \n
+} \n
+else \n
+{ \n
+	weight = 1.0; \n
+	weight1 = 0.0; \n
+} \n
+\n
+return vec2(weight, weight1); \n
+//return vec2(0.0, 1.0); \n
 } \n
 STRINGIZE0(#endif) \n
+\n
+void main(void) { \n
+ highp vec4 position = u_SPCMMatrix * a_position; \n
+ gl_Position = vec4(position.xy, -position.z, position.w); \n
  \n
- /*
-STRINGIZE0(#ifdef FLAG_TO_CUBEMAP) \n
- highp vec2 toCubeMapTexcoord(highp vec2 dest) { \n
-     highp vec3 src; \n
-     const float q1div3 = 1.0 / 3.0, q2div3 = 2.0 / 3.0, q1div2 = 0.5; \n
-     const float sqrt1div3 = sqrt(q1div3); \n
-     \n
-     if (0.0 <= dest.s && dest.s < q1div3 && 0.0 <= dest.t && dest.t < q1div2) \n
-     { \n // Left (-X):
-         src.y = dest.t * 4.0 - 1.0; \n
-         src.z = 1.0 - dest.s * 6.0; \n
-         src.x = -sqrt(1.0 - (pow(src.y, 2.0) + pow(src.z, 2.0)) * q1div3); \n
-         src.yz *= sqrt1div3; \n
-     } \n
-     if (q1div3 <= dest.s && dest.s < q2div3 && 0.0 <= dest.t && dest.t < q1div2) \n
-     { \n// Front (-Z)
-         src.y = dest.t * 4.0 - 1.0; \n
-         src.x = dest.s * 6.0 - 3.0; \n
-         src.z = -sqrt(1.0 - (pow(src.y, 2.0) + pow(src.x, 2.0)) * q1div3); \n
-         src.yx *= sqrt1div3; \n
-     } \n
-     if (q2div3 <= dest.s && dest.s <= 1.0 && 0.0 <= dest.t && dest.t < q1div2) \n
-     { \n// Right (+X)
-         src.y = dest.t * 4.0 - 1.0; \n
-         src.z = dest.s * 6.0 - 5.0; \n
-         src.x = sqrt(1.0 - (pow(src.y, 2.0) + pow(src.z, 2.0)) * q1div3); \n
-         src.yz *= sqrt1div3; \n
-     } \n
-     if (0.0 <= dest.s && dest.s < q1div3 && q1div2 <= dest.t && dest.t <= 1.0) \n
-     { \n// Top (+Y):
-         src.z = dest.t * 4.0 - 3.0; \n
-         src.x = dest.s * 6.0 - 1.0; \n
-         src.y = sqrt(1.0 - (pow(src.x, 2.0) + pow(src.z, 2.0)) * q1div3); \n
-         src.xz *= sqrt1div3; \n
-     } \n
-     if (q1div3 <= dest.s && dest.s < q2div3 && q1div2 <= dest.t && dest.t <= 1.0) \n
-     { \n// Back (+Z):
-         src.y = dest.t * 4.0 - 3.0; \n
-         src.x = 3.0 - dest.s * 6.0; \n
-         src.z = sqrt(1.0 - (pow(src.y, 2.0) + pow(src.x, 2.0)) * q1div3); \n
-         src.xy *= sqrt1div3; \n
-     } \n
-     if (q2div3 <= dest.s && dest.s <= 1.0 && q1div2 <= dest.t && dest.t <= 1.0) \n
-     { \n// Bottom (-Y):
-         src.z = 3.0 - dest.t * 4.0; \n
-         src.x = dest.s * 6.0 - 5.0; \n
-         src.y = -sqrt(1.0 - (pow(src.x, 2.0) + pow(src.z, 2.0)) * q1div3); \n
-         src.xz *= sqrt1div3; \n
-     } \n
-     return texCoordFromSphereCoord(sphereCoordFromVector3(src)); \n;
- } \n
- STRINGIZE0(#endif) \n //#ifdef FLAG_TO_CUBEMAP
-//*/
- void main(void) { \n
-     highp vec4 position = u_SPCMMatrix * a_position; \n
-     gl_Position = vec4(position.xy, -position.z, position.w); \n
-     \n
-     highp vec2 srcTexcoord = a_vertexIndex; \n
-     //STRINGIZE0(#ifdef FLAG_TO_CUBEMAP) \n
-     //srcTexcoord = toCubeMapTexcoord(srcTexcoord); \n ///!!!For Debug
-     //STRINGIZE0(#endif) \n
-     highp vec2 dstTexcoord = texcoordFromVertexIndex(srcTexcoord); \n ///, u_columns, u_rows); \n
-     //highp vec2 dstTexcoord = a_texCoord; \n
+     highp vec2 dstTexcoord = a_vertexIndex; \n
+STRINGIZE0(#if defined(DEBUG_FLAG1)) \n
      highp vec2 wrappedDstTexcoord = (dstTexcoord); \n
-     STRINGIZE0(#if defined(FLAG_STITCH_WITH_LUT_IN_SHADER)) \n
-     highp vec2 texcoordInLUT = 0.5 / u_dstSize + (u_dstSize - vec2(1.0, 1.0)) / u_dstSize * (dstTexcoord); \n
+STRINGIZE0(#else) \n
+        highp vec2 wrappedDstTexcoord = (dstTexcoord); \n
+STRINGIZE0(#endif) \n
+        STRINGIZE0(#if defined(FLAG_STITCH_WITH_LUT_IN_SHADER)) \n
+     highp vec2 texcoordInLUT = 0.5 / u_dstSize + (u_dstSize - vec2(1.0, 1.0)) / u_dstSize * wrappedDstTexcoord; \n
+STRINGIZE0(#if defined(DEBUG_FLAG0)) \n
      texcoordInLUT = wrappedTexcoord(texcoordInLUT); \n
-     //highp vec4 lutTexel = lutTexcoordOfTexcoord(texcoordInLUT, u_lutSrcSize, u_lutTextureLS, u_lutTextureLT, u_lutTextureRS, u_lutTextureRT); \n
+STRINGIZE0(#endif) \n
      highp vec4 lutTexel = texture2D(u_lutTexture, texcoordInLUT); \n
      v_texcoordL = vec2(lutTexel.r, lutTexel.g); \n
      v_texcoordR = vec2(lutTexel.b, lutTexel.a); \n
      \n
-        //dstTexcoord = wrappedTexcoord(dstTexcoord); \n
      v_lutWeights = lutWeights(wrappedDstTexcoord); \n
      \n
     STRINGIZE0(#elif defined(FLAG_STITCH_WITH_LUT_IN_MESH)) \n
@@ -451,7 +361,6 @@ STRINGIZE0(#ifdef FLAG_TO_CUBEMAP) \n
      v_texcoordL = vec2(a_texcoordL.s, a_texcoordL.t); \n
      v_texcoordR = vec2(a_texcoordR.s, a_texcoordR.t); \n
      \n
-        //dstTexcoord = wrappedTexcoord(dstTexcoord); \n
      v_lutWeights = lutWeights(wrappedDstTexcoord); \n
      STRINGIZE0(#else) \n
        // dstTexcoord = wrappedDstTexcoord; \n
@@ -515,22 +424,6 @@ static const char* FragmentShaderSource = STRINGIZE2
  const float PI = 3.141592653589793238463; \n
  \n
  STRINGIZE0(#if defined(FLAG_STITCH_WITH_LUT_IN_SHADER)) \n
- highp vec2 sphereCoordFromVector3(highp vec3 point) { \n
-     ///!!!BUG HERE: highp vec3 normalized = normalize(point);
-     highp vec3 normalized = point; \n
-     highp float alpha = acos(normalized.y); \n
-     highp float beta = atan(-point.x, point.z); \n
-     //if (beta < 0.0) beta = 2.0 * PI + beta; \n
-     return vec2(beta, alpha); \n
- } \n
- \n
- highp vec3 normalizedVec3FromSphereCoord(highp vec2 sphereCoord) { \n
-     highp float sinA = sin(sphereCoord.y); \n
-     highp float sinB = sin(sphereCoord.x); \n
-     highp float cosA = cos(sphereCoord.y); \n
-     highp float cosB = cos(sphereCoord.x); \n
-     return vec3(-sinA * sinB, cosA, sinA * cosB); \n
- } \n
  \n
  highp vec2 sphereCoordFromTexCoord(highp vec2 texCoord) { \n
      return vec2(2.0 * PI * texCoord.s, PI * (1.0 - texCoord.t)); \n
@@ -540,28 +433,6 @@ static const char* FragmentShaderSource = STRINGIZE2
      return vec2(sphereCoord.s / 2.0 / PI, 1.0 - sphereCoord.t / PI); \n
  } \n
  \n
- bool transformTexcoordInSphere(inout highp vec2 texcoord, highp mat4 transformMatrix) { \n
-     const highp float EPSILON = 0.000001; \n
-     highp vec3 texcoordVector3 = normalizedVec3FromSphereCoord(sphereCoordFromTexCoord(texcoord)); \n
-     highp vec4 texcoordVector = transformMatrix * vec4(texcoordVector3, 1.0); \n
-     //   highp vec4 texcoordVector = vec4(texcoordVector3, 1.0); \n
-     highp vec2 retA = texCoordFromSphereCoord(sphereCoordFromVector3(texcoordVector.xyz)); \n
-     /*
-      if (abs(texcoordVector.x) <= EPSILON && abs(texcoordVector.z) <= EPSILON) \n
-      { \n
-      texcoord.t = retA.t; \n
-      return false;
-      } \n
-      else \n
-      { \n
-      texcoord = retA;
-      return true;
-      } \n
-      /*/
-     texcoord = retA;
-     return true;
-     //*/
- } \n
   mediump vec2 lutWeights(highp vec2 dstTexcoord) { \n
      dstTexcoord.s = mod(dstTexcoord.s, 1.0); \n
      dstTexcoord.t = mod(dstTexcoord.t, 1.0); \n
@@ -886,6 +757,8 @@ MadvGLProgram::MadvGLProgram(const GLchar* const* vertexSources, int vertexSourc
 
 static GLfloat* s_gridColors;
 
+GLuint MadvGLRendererImpl::_shaderFlags = GLShaderDebugFlag2;
+
 MadvGLRendererImpl::~MadvGLRendererImpl() {
     //    free(_gridColors);
     _trivialMesh = NULL;
@@ -973,9 +846,6 @@ MadvGLRendererImpl::MadvGLRendererImpl(const char* lutPath, Vec2f leftSrcSize, V
 , _flipY(false)
 , _renderSourceSize(Vec2f{0.f, 0.f})
 //, _isPrevDisplayModeLittlePlanet(false)
-, _gyroMatrixRank(0)
-, _modelPostRotationFromVector({0.f, 0.f, 0.f})
-, _modelPostRotationToVector({0.f, 0.f, 0.f})
 //, _glCamera(NULL)
 , _longitudeSegments(longitudeSegments)
 , _latitudeSegments(latitudeSegments)
@@ -1052,7 +922,10 @@ void MadvGLRendererImpl::prepareGLCanvas(GLint x, GLint y, GLint width, GLint he
         case PanoramaDisplayModeCrystalBall:
             glEnable(GL_CULL_FACE);
             glCullFace(GL_BACK);
-            glFrontFace(GL_CCW);
+            if (_flipX ^ _flipY)
+                glFrontFace(GL_CW);
+            else
+                glFrontFace(GL_CCW);
             break;
         default:
             glDisable(GL_CULL_FACE);
@@ -1081,24 +954,6 @@ void MadvGLRendererImpl::setRenderSource(void* renderSource) {
     pthread_mutex_unlock(&_mutex);
     
     updateSourceTextureIfNecessary();
-}
-
-void MadvGLRendererImpl::setGyroMatrix(float* matrix, int rank) {
-    pthread_mutex_lock(&_mutex);
-    {
-        memcpy(_gyroMatrix, matrix, sizeof(float) * rank * rank);
-        _gyroMatrixRank = rank;
-    }
-    pthread_mutex_unlock(&_mutex);
-}
-
-void MadvGLRendererImpl::setModelPostRotation(kmVec3 fromVector, kmVec3 toVector) {
-    pthread_mutex_lock(&_mutex);
-    {
-        kmVec3Assign(&_modelPostRotationFromVector, &fromVector);
-        kmVec3Assign(&_modelPostRotationToVector, &toVector);
-    }
-    pthread_mutex_unlock(&_mutex);
 }
 
 Vec4f gridCoord(Vec2f texcoord, Vec2f grids, Vec2f sampleCenter) {
@@ -1371,8 +1226,8 @@ void MadvGLRendererImpl::setLUTData(Vec2f lutDstSize, Vec2f leftSrcSize,Vec2f ri
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);//GL_CLAMP_TO_EDGE);//
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);//GL_CLAMP_TO_EDGE);//
         CHECK_GL_ERROR();
-        glPixelStorei(GL_PACK_ALIGNMENT, 4);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+        glPixelStorei(GL_PACK_ALIGNMENT, 1);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         CHECK_GL_ERROR();
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, lutDstSize.width, lutDstSize.height, 0, GL_RGB, GL_UNSIGNED_BYTE, pLUTTextureData);
         CHECK_GL_ERROR();
@@ -1389,8 +1244,8 @@ void MadvGLRendererImpl::setLUTData(Vec2f lutDstSize, Vec2f leftSrcSize,Vec2f ri
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);//GL_CLAMP_TO_EDGE);//
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);//GL_CLAMP_TO_EDGE);//
     CHECK_GL_ERROR();
-    glPixelStorei(GL_PACK_ALIGNMENT, 4);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     CHECK_GL_ERROR();
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F_EXT, lutDstSize.width, lutDstSize.height, 0, GL_RGBA, GL_FLOAT, lutTextureData);
     CHECK_GL_ERROR();
@@ -1569,6 +1424,19 @@ void MadvGLRendererImpl::setCapsTexture(GLint texture, GLenum textureTarget) {
     _capsTextureTarget = (0 >= textureTarget) ? GL_TEXTURE_2D : textureTarget;
 }
 
+void MadvGLRendererImpl::setGLShaderFlags(int flags) {
+	_shaderFlags = flags;
+
+	if (NULL != _glPrograms)
+	{
+		int maxProgramsCount = (1 << FLAG_BITS) + 1;//Last one for cubemap
+		for (int i=0; i<maxProgramsCount-1; ++i)
+		{
+			_glPrograms[i] = NULL;
+		}
+	}
+}
+
 void MadvGLRendererImpl::prepareGLPrograms() {
     int64_t flags = 0;
     ostringstream shaderPredefinations;
@@ -1653,8 +1521,21 @@ void MadvGLRendererImpl::prepareGLPrograms() {
         fragmentShaderMainSource = FragmentShaderSource;
         vertexShaderMainSource = VertexShaderSource;
     }
-    
-    _currentGLProgram = _glPrograms[shaderProgramIndex];
+
+	if (_shaderFlags & GLShaderDebugFlag0)
+	{
+		shaderPredefinations << "#define DEBUG_FLAG0\n";
+	}
+	if (_shaderFlags & GLShaderDebugFlag1)
+	{
+		shaderPredefinations << "#define DEBUG_FLAG1\n";
+	}
+	if (_shaderFlags & GLShaderDebugFlag2)
+	{
+		shaderPredefinations << "#define DEBUG_FLAG2\n";
+	}
+
+	_currentGLProgram = _glPrograms[shaderProgramIndex];
     if (NULL == _currentGLProgram)
     {
         shaderPredefinations.flush();
@@ -1751,7 +1632,6 @@ void MadvGLRendererImpl::setGLProgramVariables(AutoRef<GLCamera> panoCamera, GLi
     {
         glCamera = new GLCamera;
     }
-    glCamera->setViewSphereRadius(SPHERE_RADIUS);
     switch (_currentDisplayMode & PanoramaDisplayModeExclusiveMask)
     {
         case PanoramaDisplayModeSphere:
@@ -1810,60 +1690,6 @@ void MadvGLRendererImpl::setGLProgramVariables(AutoRef<GLCamera> panoCamera, GLi
     kmMat4 modelMatrix;
     kmMat4Identity(&modelMatrix);
     glUniformMatrix4fv(_currentGLProgram->getModelMatrixSlot(), 1, 0, modelMatrix.mat);
-    if (PanoramaDisplayModePlain != (_currentDisplayMode & PanoramaDisplayModeExclusiveMask))
-    {
-        if (_gyroMatrixRank > 0 && withGyroAdust)
-        {
-            kmMat4 gyroMatrix;
-            kmMat4Identity(&gyroMatrix);
-            for (int row=0; row<3; ++row)
-            {
-                for (int col=0; col<3; ++col)
-                {
-                    gyroMatrix.mat[row * 4 + col] = _gyroMatrix[row * _gyroMatrixRank + col];
-                }
-            }
-            /*
-             if (_gyroMatrixRank == 3)
-             {
-             for (int rc=0; rc<3; ++rc)
-             {
-             gyroMatrix.mat[4 * 3 + rc] = 0;
-             gyroMatrix.mat[4 * rc + 3] = 0;
-             }
-             gyroMatrix.mat[15] = 1;
-             }
-             if (!GLCamera::checkRotationMatrix(&gyroMatrix, false))
-             {
-             ALOGE("#Gyro# Check gyroMatrix failed");
-             GLCamera::normalizeRotationMatrix(&gyroMatrix);
-             }
-             //*/
-            //        ALOGV("MadvGLRenderer::setGyroMatrix Src : %f,  %f,  %f;  %f,  %f,  %f;  %f,  %f,  %f;",
-            //              _gyroMatrix[0],_gyroMatrix[1],_gyroMatrix[2],
-            //              _gyroMatrix[3],_gyroMatrix[4],_gyroMatrix[5],
-            //              _gyroMatrix[6],_gyroMatrix[7],_gyroMatrix[8]);
-            //
-            //        ALOGV("MadvGLRenderer::setGyroMatrix Dest: %f,  %f,  %f,  %f;  %f,  %f,  %f,  %f;  %f,  %f,  %f,  %f;  %f,  %f,  %f,  %f;",
-            //              gyroMatrix.mat[0],gyroMatrix.mat[1],gyroMatrix.mat[2],gyroMatrix.mat[3],
-            //              gyroMatrix.mat[4],gyroMatrix.mat[5],gyroMatrix.mat[6],gyroMatrix.mat[7],
-            //              gyroMatrix.mat[8],gyroMatrix.mat[9],gyroMatrix.mat[10],gyroMatrix.mat[11],
-            //              gyroMatrix.mat[12],gyroMatrix.mat[13],gyroMatrix.mat[14],gyroMatrix.mat[15]);
-            
-            kmMat4 T, P;
-            kmScalar dataT[] = {1,0,0,0, 0,0,1,0, 0,1,0,0, 0,0,0,1};//Column-major order
-            kmScalar dataP[] = {-1,0,0,0, 0,0,1,0, 0,-1,0,0, 0,0,0,1};//Column-major order
-            kmMat4Fill(&T, dataT);
-            kmMat4Fill(&P, dataP);
-            kmMat4Multiply(&gyroMatrix, &gyroMatrix, &P);
-            kmMat4Multiply(&gyroMatrix, &T, &gyroMatrix);
-            //ALOGV("#GyroVideo# CMatrix : %f,%f,%f,%f ; %f,%f,%f,%f ; %f,%f,%f,%f ; %f,%f,%f,%f ;", gyroMatrix.mat[0],gyroMatrix.mat[1],gyroMatrix.mat[2],gyroMatrix.mat[3],gyroMatrix.mat[4],gyroMatrix.mat[5],gyroMatrix.mat[6],gyroMatrix.mat[7],gyroMatrix.mat[8],gyroMatrix.mat[9],gyroMatrix.mat[10],gyroMatrix.mat[11],gyroMatrix.mat[12],gyroMatrix.mat[13],gyroMatrix.mat[14],gyroMatrix.mat[15]);
-            //kmMat4Inverse(&gyroMatrix, &gyroMatrix);
-            glCamera->setModelPreRotationMatrix(&gyroMatrix);
-        }
-        
-        glCamera->setModelPostRotation(&_modelPostRotationFromVector, &_modelPostRotationToVector);
-    }
     
     kmMat4 cameraMatrix;
     switch (_currentDisplayMode & PanoramaDisplayModeExclusiveMask)
@@ -1872,26 +1698,6 @@ void MadvGLRendererImpl::setGLProgramVariables(AutoRef<GLCamera> panoCamera, GLi
             kmMat4Identity(&cameraMatrix);
             break;
         default:
-            if (PanoramaDisplayModeLittlePlanet == (_currentDisplayMode & PanoramaDisplayModeExclusiveMask))
-            {
-                ///!!!if (!_isPrevDisplayModeLittlePlanet)
-                {
-                    ///_isPrevDisplayModeLittlePlanet = true;
-                    
-                    kmMat4 cameraPostRotationMatrix;
-                    kmMat4RotationX(&cameraPostRotationMatrix, -M_PI/2);
-                    glCamera->setCameraPostRotationMatrix(&cameraPostRotationMatrix);
-                }
-            }
-            else///!!! if (_isPrevDisplayModeLittlePlanet)
-            {
-                ///_isPrevDisplayModeLittlePlanet = false;
-                
-                kmMat4 cameraPostRotationMatrix;
-                kmMat4Identity(&cameraPostRotationMatrix);
-                glCamera->setCameraPostRotationMatrix(&cameraPostRotationMatrix);
-            }
-            
             //ALOGE("#GyroVideo# projection#0 = {%.3f, %.3f, %.3f, %.3f;  %.3f, %.3f, %.3f, %.3f;  %.3f, %.3f, %.3f, %.3f;  %.3f, %.3f, %.3f, %.3f;}", projection.mat[0],projection.mat[1],projection.mat[2],projection.mat[3],projection.mat[4],projection.mat[5],projection.mat[6],projection.mat[7],projection.mat[8],projection.mat[9],projection.mat[10],projection.mat[11],projection.mat[12],projection.mat[13],projection.mat[14],projection.mat[15]);
             glCamera->getViewMatrix(&cameraMatrix);//, &projection);
             //ALOGE("#GyroVideo# cameraMatrix#0 = {%.3f, %.3f, %.3f, %.3f;  %.3f, %.3f, %.3f, %.3f;  %.3f, %.3f, %.3f, %.3f;  %.3f, %.3f, %.3f, %.3f;}", cameraMatrix.mat[0],cameraMatrix.mat[1],cameraMatrix.mat[2],cameraMatrix.mat[3],cameraMatrix.mat[4],cameraMatrix.mat[5],cameraMatrix.mat[6],cameraMatrix.mat[7],cameraMatrix.mat[8],cameraMatrix.mat[9],cameraMatrix.mat[10],cameraMatrix.mat[11],cameraMatrix.mat[12],cameraMatrix.mat[13],cameraMatrix.mat[14],cameraMatrix.mat[15]);
@@ -2204,21 +2010,20 @@ void MadvGLRendererImpl::draw(AutoRef<GLCamera> panoCamera, GLint x, GLint y, GL
         (PanoramaDisplayModeFromCubeMap != (_currentDisplayMode & PanoramaDisplayModeExclusiveMask))
         )
     {
-        //bool prevSeparateSourceTexture = _separateSourceTexture;
         int prevSrcTextureL = _srcTextureL;
         int prevSrcTextureR = _srcTextureR;
         int prevSrcTextureTarget = _srcTextureTarget;
         bool prevIsYUVColorSpace = _isYUVColorSpace;
         int prevDisplayMode = _currentDisplayMode;
         
-        setSourceTextures(/*false, */_capsTexture, _capsTexture, _capsTextureTarget, false);
+        setSourceTextures(_capsTexture, _capsTexture, _capsTextureTarget, false);
         _currentDisplayMode = (_currentDisplayMode & (~PanoramaDisplayModeLUTInShader)) & (~PanoramaDisplayModeLUTInMesh);
         prepareGLPrograms();
         setGLProgramVariables(panoCamera, x,y, width,height, false);
         _capsVAO->drawMadvMesh(_currentGLProgram->getPositionSlot(), _currentGLProgram->getVertexRoleSlot(), _currentGLProgram->getGridCoordSlot());
         CHECK_GL_ERROR();
         
-        setSourceTextures(/*prevSeparateSourceTexture, */prevSrcTextureL, prevSrcTextureR, prevSrcTextureTarget, prevIsYUVColorSpace);
+        setSourceTextures(prevSrcTextureL, prevSrcTextureR, prevSrcTextureTarget, prevIsYUVColorSpace);
         _currentDisplayMode = prevDisplayMode;
     }
     
@@ -2368,21 +2173,22 @@ void MadvGLRendererImpl::resizeCubemap(GLuint cubemapTexture, int cubemapFaceSiz
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-    glPixelStorei(GL_PACK_ALIGNMENT, 4);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);//https://stackoverflow.com/questions/26647672/npot-support-in-opengl-for-r8g8b8-texture
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);//https://stackoverflow.com/questions/26647672/npot-support-in-opengl-for-r8g8b8-texture
+	CHECK_GL_ERROR();
     for (GLenum iTarget = 0; iTarget < 6; ++iTarget)
     {
         GLenum target = iTarget + GL_TEXTURE_CUBE_MAP_POSITIVE_X;
-        glTexImage2D(target, 0, GL_RGB, cubemapFaceSize, cubemapFaceSize, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+        glTexImage2D(target, 0, GL_RGBA, cubemapFaceSize, cubemapFaceSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
     }
-
+	CHECK_GL_ERROR();
     glBindTexture(GL_TEXTURE_CUBE_MAP, prevCubemapBinding);
 }
 
 GLint MadvGLRendererImpl::drawToRemappedCubemap(GLuint cubemapTexture, int cubemapFaceSize) {
     if (0 >= cubemapTexture)
     {
-        glEnable(GL_TEXTURE_CUBE_MAP);
+        ///glEnable(GL_TEXTURE_CUBE_MAP);
         CHECK_GL_ERROR();
         glGenTextures(1, &cubemapTexture);
         CHECK_GL_ERROR();
@@ -2390,7 +2196,6 @@ GLint MadvGLRendererImpl::drawToRemappedCubemap(GLuint cubemapTexture, int cubem
         CHECK_GL_ERROR();
     }
     CHECK_GL_ERROR();
-    int prevGyroMatrixRank = _gyroMatrixRank;
     bool prevFlipX = getFlipX();
     bool prevFlipY = getFlipY();
     //*///!!!
@@ -2406,7 +2211,8 @@ GLint MadvGLRendererImpl::drawToRemappedCubemap(GLuint cubemapTexture, int cubem
 #endif
 
 #endif
-    setGyroMatrix(_gyroMatrix, 0);
+    //int prevGyroMatrixRank = _gyroMatrixRank;
+    //setGyroMatrix(_gyroMatrix, 0);
     GLint prevFramebufferBinding = 0;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevFramebufferBinding);
     for (GLenum iTarget = 0; iTarget < 6; ++iTarget)
@@ -2473,7 +2279,7 @@ GLint MadvGLRendererImpl::drawToRemappedCubemap(GLuint cubemapTexture, int cubem
 
     setFlipY(prevFlipY);
     setFlipX(prevFlipX);
-    setGyroMatrix(_gyroMatrix, prevGyroMatrixRank);
+    //setGyroMatrix(_gyroMatrix, prevGyroMatrixRank);
     
     return cubemapTexture;
 }
@@ -2486,7 +2292,6 @@ AutoRef<GLRenderTexture> MadvGLRendererImpl::drawCubemapToBuffers(GLubyte* outPi
         CHECK_GL_ERROR();
     }
     
-    int prevGyroMatrixRank = _gyroMatrixRank;
     bool prevFlipX = getFlipX();
     bool prevFlipY = getFlipY();
     
@@ -2515,7 +2320,8 @@ AutoRef<GLRenderTexture> MadvGLRendererImpl::drawCubemapToBuffers(GLubyte* outPi
         glBindBuffer(GL_PIXEL_PACK_BUFFER, prevPixelPackBuffer);
     }
     
-    setGyroMatrix(_gyroMatrix, 0);
+    //int prevGyroMatrixRank = _gyroMatrixRank;
+    //setGyroMatrix(_gyroMatrix, 0);
     for (GLenum iTarget = 0; iTarget < 6; ++iTarget)
     {
         cubemapFaceTexture->blit();
@@ -2570,7 +2376,7 @@ AutoRef<GLRenderTexture> MadvGLRendererImpl::drawCubemapToBuffers(GLubyte* outPi
     
     setFlipY(prevFlipY);
     setFlipX(prevFlipX);
-    setGyroMatrix(_gyroMatrix, prevGyroMatrixRank);
+    //setGyroMatrix(_gyroMatrix, prevGyroMatrixRank);
     
     return cubemapFaceTexture;
 }

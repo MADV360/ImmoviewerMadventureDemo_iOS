@@ -12,6 +12,7 @@
 #include <string>
 #include <string.h>
 #include <setjmp.h>
+#include <math.h>
 
 //#define USE_MEM_IO
 
@@ -1151,8 +1152,8 @@ void onDecodeOneJPEGLineByCreateTextureWithJPEG(struct jpeg_decompress_struct* c
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);//GL_LINEAR//GL_NEAREST//GL_LINEAR_MIPMAP_LINEAR
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);//GL_CLAMP_TO_EDGE);//GL_REPEAT
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);//GL_CLAMP_TO_EDGE);//GL_REPEAT
-            glPixelStorei(GL_PACK_ALIGNMENT, 4);
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+            glPixelStorei(GL_PACK_ALIGNMENT, 1);
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
             CHECK_GL_ERROR();
 //            glTexStorage2DEXT(GL_TEXTURE_2D, 2, GL_RGBA, cinfo->output_width, cinfo->output_height);
@@ -1176,6 +1177,17 @@ void onDecodeOneJPEGLineByCreateTextureWithJPEG(struct jpeg_decompress_struct* c
     }
 }
 
+template <typename T>
+bool checkPointerOffset(T* ptr1, T* ptr0, int min, int max) {
+    int offset = (int)(ptr1 - ptr0);
+    if (offset < min || offset > max)
+    {
+        throw "chekPointerOffset: Offset invalid!";
+        return false;
+    }
+    return true;
+}
+
 class ConvolutionIterator {
 public:
     
@@ -1183,12 +1195,12 @@ public:
     
     virtual ~ConvolutionIterator();
     
-    ConvolutionIterator(int rowStep, int columnStep, int rowWidth);
+    ConvolutionIterator(int rowStep, int columnStep, int rowWidth, int columnHeight);
     
     void beginIteration(int startRow, int endRow, int startColumn, int endColumn,
                         int convolutionMatrixWidth, int convolutionMatrixHeight, int convolutionMatrixOffsetRow, int convolutionMatrixOffsetColumn,
                         const int* coefficientMatrixR, const int* coefficientMatrixG, const int* coefficientMatrixB, GLfloat coefficientMatrixScale,
-                        GLfloat* dstRGBDataOrigin, const GLushort* srcRawDataOrigin);
+                        GLubyte* dstRGBDataOrigin, const GLushort* srcRawDataOrigin);
     
     bool next();
     
@@ -1204,6 +1216,7 @@ private:
     
     // Dimension & Step & Counter of convolution region:
     int _rowWidth;
+    int _pixelCount;
     int _rowStep;
     int _columnStep;
     
@@ -1226,13 +1239,13 @@ private:
     GLfloat _coefficientMatrixScale;
     
     // Destination GLfloat RGB matrix pointer:
-    GLfloat* _pDstR;
-    GLfloat* _pDstG;
-    GLfloat* _pDstB;
+	GLubyte* _pDstR;
+	GLubyte* _pDstG;
+	GLubyte* _pDstB;
     
-    GLfloat* _pDstRowStartR;
-    GLfloat* _pDstRowStartG;
-    GLfloat* _pDstRowStartB;
+    GLubyte* _pDstRowStartR;
+	GLubyte* _pDstRowStartG;
+	GLubyte* _pDstRowStartB;
     
     int _dstRowStep;
     int _dstColumnStep;
@@ -1247,6 +1260,9 @@ private:
 	//For Debug:
 	GLushort _maxSrcValue;
 	GLushort _minSrcValue;
+    
+    GLubyte* _dstRGBDataOrigin;
+    const GLushort* _srcRawDataOrigin;
 };
 
 void ConvolutionIterator::releaseResources() {
@@ -1270,8 +1286,9 @@ ConvolutionIterator::~ConvolutionIterator() {
     releaseResources();
 }
 
-ConvolutionIterator::ConvolutionIterator(int rowStep, int columnStep, int rowWidth)
+ConvolutionIterator::ConvolutionIterator(int rowStep, int columnStep, int rowWidth, int columnHeight)
 : _rowWidth(rowWidth)
+, _pixelCount(rowWidth * columnHeight)
 , _rowStep(rowStep)
 , _columnStep(columnStep)
 , _coefficientMatrixR(NULL)
@@ -1288,8 +1305,11 @@ ConvolutionIterator::ConvolutionIterator(int rowStep, int columnStep, int rowWid
 void ConvolutionIterator::beginIteration(int startRow, int endRow, int startColumn, int endColumn,
                                          int convolutionMatrixWidth, int convolutionMatrixHeight, int convolutionMatrixOffsetRow, int convolutionMatrixOffsetColumn,
                     const int* coefficientMatrixR, const int* coefficientMatrixG, const int* coefficientMatrixB, GLfloat coefficientMatrixScale,
-                    GLfloat* dstRGBDataOrigin, const GLushort* srcRawDataOrigin) {
+                    GLubyte* dstRGBDataOrigin, const GLushort* srcRawDataOrigin) {
     releaseResources();
+    
+    _dstRGBDataOrigin = dstRGBDataOrigin;
+    _srcRawDataOrigin = srcRawDataOrigin;
     
     _rowL = startRow;
     _rowH = endRow;
@@ -1328,7 +1348,7 @@ void ConvolutionIterator::beginIteration(int startRow, int endRow, int startColu
     
     _dstRowStep = _rowStep * _rowWidth * DstRGBComponents;
     _dstColumnStep = _columnStep * DstRGBComponents;
-    GLfloat* dst0 = dstRGBDataOrigin + (startRow * _rowWidth + startColumn) * DstRGBComponents;
+    GLubyte* dst0 = dstRGBDataOrigin + (startRow * _rowWidth + startColumn) * DstRGBComponents;
     _pDstRowStartR = dst0;
     _pDstRowStartG = dst0 + 1;
     _pDstRowStartB = dst0 + 2;
@@ -1356,6 +1376,7 @@ bool ConvolutionIterator::next() {
             
             for (int iM = 0; iM < _convolutionMatrixSize; ++iM)
             {
+                checkPointerOffset(_pSrcMatrix[iM], _srcRawDataOrigin, 0, _pixelCount);///!!!For Debug
                 R += (*(_pSrcMatrix[iM])) * _coefficientMatrixR[iM];
                 G += (*(_pSrcMatrix[iM])) * _coefficientMatrixG[iM];
                 B += (*(_pSrcMatrix[iM])) * _coefficientMatrixB[iM];
@@ -1365,10 +1386,13 @@ bool ConvolutionIterator::next() {
 
                 _pSrcMatrix[iM] += _srcColumnStep;
             }
+            checkPointerOffset(_pDstR, _dstRGBDataOrigin, 0, _pixelCount * 3);///!!!For Debug
+            checkPointerOffset(_pDstG, _dstRGBDataOrigin, 0, _pixelCount * 3);///!!!For Debug
+            checkPointerOffset(_pDstB, _dstRGBDataOrigin, 0, _pixelCount * 3);///!!!For Debug
             
-            *_pDstR = (GLfloat)R * _coefficientMatrixScale;
-            *_pDstG = (GLfloat)G * _coefficientMatrixScale;
-            *_pDstB = (GLfloat)B * _coefficientMatrixScale;
+            *_pDstR = (int)roundf(255.f * ((GLfloat)R * _coefficientMatrixScale));
+			*_pDstG = (int)roundf(255.f * ((GLfloat)G * _coefficientMatrixScale));
+			*_pDstB = (int)roundf(255.f * ((GLfloat)B * _coefficientMatrixScale));
             
             // Next column:
             _pDstR += _dstColumnStep;
@@ -1412,11 +1436,11 @@ GLint createTextureWithDNG(FILE* fpStartsFromData, GLuint width, GLuint height, 
     GLsizei pixelCount = width * height;
     GLushort* srcData = (GLushort*) malloc(sizeof(GLushort) * pixelCount);
     fread(srcData, sizeof(GLushort) * pixelCount, 1, fpStartsFromData);
-    
+	CHECK_GL_ERROR();
     const float MaxValue = (float)(1 << rawBits);
-    GLfloat* textureData = (GLfloat*) malloc(sizeof(GLfloat) * pixelCount * 3);
+	GLubyte* textureData = (GLubyte*)malloc(sizeof(GLubyte) * pixelCount * 3);
     //*
-    ConvolutionIterator convIter(2, 2, width);
+    ConvolutionIterator convIter(2, 2, width, height);
     // Inner B(s) :
     int coefficientsR_innerB[] = {1, 0, 1, 0, 0, 0, 1, 0, 1};
     int coefficientsG_innerB[] = {0, 1, 0, 1, 0, 1, 0, 1, 0};
@@ -1488,10 +1512,12 @@ GLint createTextureWithDNG(FILE* fpStartsFromData, GLuint width, GLuint height, 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);//GL_LINEAR//GL_NEAREST//GL_LINEAR_MIPMAP_LINEAR
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);//GL_CLAMP_TO_EDGE);//GL_REPEAT
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);//GL_CLAMP_TO_EDGE);//GL_REPEAT
-    glPixelStorei(GL_PACK_ALIGNMENT, 4);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F_EXT, width, height, 0, GL_RGB, GL_FLOAT, textureData);
-    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);//https://stackoverflow.com/questions/26647672/npot-support-in-opengl-for-r8g8b8-texture
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	CHECK_GL_ERROR();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, textureData);
+	CHECK_GL_ERROR();
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     free(textureData);
     return (GLint)texture;
 }

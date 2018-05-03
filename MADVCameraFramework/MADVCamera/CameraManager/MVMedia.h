@@ -157,6 +157,9 @@ typedef enum : NSInteger {
 
 @property(nonatomic,copy)NSString * dbLocalIdentifier;
 
+@property(nonatomic,copy)NSString * shareLocalIdentifier;//低码率
+@property(nonatomic,copy)NSString * dbShareLocalIdentifier;
+
 @property(nonatomic,assign)NSInteger finishDownloadedSize;
 @property(nonatomic,assign)int error;
 
@@ -222,9 +225,9 @@ typedef enum : NSInteger {
 
 - (MVMedia *) obtainDownloadedOrThisMedia;
 
-- (NSString*) requestLocalFilePath:(void(^)(NSString* localPath))completionHandler;
+- (id) requestLocalFilePath:(BOOL)isGetImageData completion:(void(^)(id filePath))completionHandler;
 
-- (id) localFilePathSync;
+- (id) localFilePathSync:(BOOL)isGetImageData;
 
 - (void)saveCommonFields;
 - (void)copyCommonFields:(MVMedia *)media;

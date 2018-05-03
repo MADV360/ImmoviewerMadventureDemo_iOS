@@ -19,9 +19,10 @@
 #import <Accelerate/Accelerate.h>
 #import "KxLogger.h"
 
-#define MAX_FRAME_SIZE 4096
-#define MAX_CHAN       2
-
+//#define MAX_FRAME_SIZE 4096
+//#define MAX_CHAN       2
+#define MAX_FRAME_SIZE 8192
+#define MAX_CHAN       4
 #define MAX_SAMPLE_DUMPED 5
 
 static BOOL checkError(OSStatus error, const char *operation);
@@ -48,6 +49,8 @@ static OSStatus renderCallback (void *inRefCon, AudioUnitRenderActionFlags	*ioAc
 
 @property (readwrite, copy) KxAudioManagerOutputBlock outputBlock;
 @property (readwrite) BOOL playAfterSessionEndInterruption;
+
+@property (nonatomic, readonly) AudioStreamBasicDescription outputFormat;
 
 - (BOOL) activateAudioSession;
 - (void) deactivateAudioSession;
@@ -77,6 +80,8 @@ static OSStatus renderCallback (void *inRefCon, AudioUnitRenderActionFlags	*ioAc
 @end
 
 @implementation KxAudioManagerImpl
+
+@synthesize outputFormat = _outputFormat;
 
 - (id)init
 {    
@@ -231,7 +236,7 @@ static OSStatus renderCallback (void *inRefCon, AudioUnitRenderActionFlags	*ioAc
                                         &_outputFormat,
                                         size),
                    "Couldn't set the hardware output stream format")) {
-        
+        LoggerAudio(2, @"Set audio output format failed.");
         // just warning
     }
 
@@ -303,6 +308,7 @@ static OSStatus renderCallback (void *inRefCon, AudioUnitRenderActionFlags	*ioAc
 - (BOOL) renderFrames: (UInt32) numFrames
                ioData: (AudioBufferList *) ioData
 {
+    //*
     for (int iBuffer=0; iBuffer < ioData->mNumberBuffers; ++iBuffer) {
         memset(ioData->mBuffers[iBuffer].mData, 0, ioData->mBuffers[iBuffer].mDataByteSize);
     }
@@ -310,19 +316,21 @@ static OSStatus renderCallback (void *inRefCon, AudioUnitRenderActionFlags	*ioAc
     if (_playing && _outputBlock ) {
     
         // Collect data to render from the callbacks
-        _outputBlock(_outData, numFrames, _numOutputChannels);
-        
+        _outputBlock(_outData, numFrames, self.outputFormat);
+
         // Put the rendered data into the output buffer
         if (_numBytesPerSample == 4) // then we've already got floats
         {
-            float zero = 0.0;
-            
+            const float zero = 0.0;
+            int sourceChannel = 0;
             for (int iBuffer=0; iBuffer < ioData->mNumberBuffers; ++iBuffer) {
-                
                 int thisNumChannels = ioData->mBuffers[iBuffer].mNumberChannels;
-                
                 for (int iChannel = 0; iChannel < thisNumChannels; ++iChannel) {
-                    vDSP_vsadd(_outData+iChannel, _numOutputChannels, &zero, (float *)ioData->mBuffers[iBuffer].mData, thisNumChannels, numFrames);
+                    vDSP_vsadd(_outData+sourceChannel, _numOutputChannels, &zero, (float *)ioData->mBuffers[iBuffer].mData+iChannel, thisNumChannels, numFrames);
+                }
+                if (++sourceChannel >= _numOutputChannels)
+                {
+                    sourceChannel = 0;
                 }
             }
         }
@@ -338,13 +346,13 @@ static OSStatus renderCallback (void *inRefCon, AudioUnitRenderActionFlags	*ioAc
             LoggerAudio(2, @"Buffer %u - Output Channels %u - Samples %u",
                           (uint)ioData->mNumberBuffers, (uint)ioData->mBuffers[0].mNumberChannels, (uint)numFrames);
 #endif
-
+            int sourceChannel = 0;
             for (int iBuffer=0; iBuffer < ioData->mNumberBuffers; ++iBuffer) {
                 
                 int thisNumChannels = ioData->mBuffers[iBuffer].mNumberChannels;
                 
                 for (int iChannel = 0; iChannel < thisNumChannels; ++iChannel) {
-                    vDSP_vfix16(_outData+iChannel, _numOutputChannels, (SInt16 *)ioData->mBuffers[iBuffer].mData+iChannel, thisNumChannels, numFrames);
+                    vDSP_vfix16(_outData+sourceChannel, _numOutputChannels, (SInt16 *)ioData->mBuffers[iBuffer].mData+iChannel, thisNumChannels, numFrames);
                 }
 #ifdef DUMP_AUDIO_DATA
                 dumpAudioSamples(@"Audio frames decoded by FFmpeg and reformatted:\n",
@@ -352,10 +360,65 @@ static OSStatus renderCallback (void *inRefCon, AudioUnitRenderActionFlags	*ioAc
                                  @"% 8d ", numFrames, thisNumChannels);
 #endif
             }
-            
+            if (++sourceChannel >= _numOutputChannels)
+            {
+                sourceChannel = 0;
+            }
         }        
     }
-
+    /*/
+    const float lowFreq = 523, highFreq = 989;
+    static NSUInteger totalFrames = 0;
+    
+    totalFrames = totalFrames % (int)roundf(_samplingRate);
+    float* pDst = _outData;
+    for (int iFrame=0; iFrame<numFrames; ++iFrame)
+    {
+        float lowFreqAmp = sinf(totalFrames * lowFreq * 2 * M_PI / _samplingRate);
+        float highFreqAmp = sinf(totalFrames * highFreq * 2 * M_PI / _samplingRate);
+        *(pDst++) = lowFreqAmp;
+        *(pDst++) = highFreqAmp;
+        totalFrames++;
+    }
+    
+    if (_numBytesPerSample == 4) // then we've already got floats
+    {
+        float zero = 0.0;
+        
+        for (int iBuffer=0; iBuffer < ioData->mNumberBuffers; ++iBuffer) {
+            
+            int thisNumChannels = ioData->mBuffers[iBuffer].mNumberChannels;
+            
+            for (int iChannel = 0; iChannel < thisNumChannels; ++iChannel) {
+                vDSP_vsadd(_outData+iBuffer, _numOutputChannels, &zero, (float *)ioData->mBuffers[iBuffer].mData+iChannel, thisNumChannels, numFrames);
+            }
+        }
+    }
+    else if (_numBytesPerSample == 2) // then we need to convert SInt16 -> Float (and also scale)
+    {
+        float scale = (float)INT16_MAX;
+        vDSP_vsmul(_outData, 1, &scale, _outData, 1, numFrames*_numOutputChannels);
+        
+#ifdef DUMP_AUDIO_DATA
+        LoggerAudio(2, @"Buffer %u - Output Channels %u - Samples %u",
+                    (uint)ioData->mNumberBuffers, (uint)ioData->mBuffers[0].mNumberChannels, (uint)numFrames);
+#endif
+        
+        for (int iBuffer=0; iBuffer < ioData->mNumberBuffers; ++iBuffer) {
+            
+            int thisNumChannels = ioData->mBuffers[iBuffer].mNumberChannels;
+            
+            for (int iChannel = 0; iChannel < thisNumChannels; ++iChannel) {
+                vDSP_vfix16(_outData+iBuffer, _numOutputChannels, (SInt16 *)ioData->mBuffers[iBuffer].mData+iChannel, thisNumChannels, numFrames);
+            }
+#ifdef DUMP_AUDIO_DATA
+            dumpAudioSamples(@"Audio frames decoded by FFmpeg and reformatted:\n",
+                             ((SInt16 *)ioData->mBuffers[iBuffer].mData),
+                             @"% 8d ", numFrames, thisNumChannels);
+#endif
+        }
+    }
+    //*/
     return noErr;
 }
 

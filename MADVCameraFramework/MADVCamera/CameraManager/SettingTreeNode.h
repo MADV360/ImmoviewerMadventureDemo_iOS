@@ -39,8 +39,10 @@ typedef enum : NSInteger {
     SettingNodeIDCameraPreviewMode = 22,
     SettingNodeIDCameraPowerOffSetting = 23,
     SettingNodeIDCameraBuzzerSetting = 24,
+    SettingNodeIDCameraTransportProtocol = 25,
     SettingNodeIDCameraLedSetting = 26,
     SettingNodeIDCameraPowerOff = 27,
+    SettingNodeIDCameraGPS = 28,
     SettingNodeIDCameraProduceNameSetting = 30,
     SettingNodeIDSerialID = 31,
     SettingNodeIDFirmwareVersion = 32,
@@ -57,7 +59,7 @@ typedef enum : NSInteger {
 @property(nonatomic,copy) NSString * jsonParamKey;
 
 @property(nonatomic,assign) int selectedSubOptionUID;
-@property(nonatomic,strong) NSArray* subOptions;//这存放它的字节点
+@property(nonatomic,strong) NSMutableArray* subOptions;//这存放它的字节点
 
 - (SettingTreeNode *)findSubOptionByUID:(int)subOptionUID;
 

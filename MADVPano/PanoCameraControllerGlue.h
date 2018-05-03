@@ -37,6 +37,14 @@ JNIEXPORT void JNICALL Java_com_madv360_glrenderer_PanoCameraController_adjustDr
 
 JNIEXPORT void JNICALL Java_com_madv360_glrenderer_PanoCameraController_update(JNIEnv* env, jobject self, jfloat dtSeconds);
 
+JNIEXPORT void JNICALL Java_com_madv360_glrenderer_PanoCameraController_setModelPostRotation(JNIEnv* env, jobject self, jobject from, jobject to);
+
+JNIEXPORT void JNICALL Java_com_madv360_glrenderer_PanoCameraController_setGyroMatrix(JNIEnv* env, jobject self, jfloatArray gyroMatrix, jint rank);
+
+JNIEXPORT void JNICALL Java_com_madv360_glrenderer_PanoCameraController_setAsteroidMode(JNIEnv* env, jobject self, jboolean set);
+
+JNIEXPORT jobject JNICALL Java_com_madv360_glrenderer_PanoCameraController_getEulerAnglesFromViewMatrix(JNIEnv* env, jobject self);
+
 #ifdef __cplusplus
 }
 #endif

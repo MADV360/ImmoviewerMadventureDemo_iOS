@@ -15,6 +15,9 @@
 }
 @end
 
+static kmVec3 g_globalCurrentEulerAngles = {0.f, 0.f, 0.f};
+static float g_fov = 90.f;
+
 @implementation MVPanoCameraController
 
 - (void) dealloc {
@@ -102,6 +105,62 @@
         return;
     
     _impl->resetViewPosition();
+}
+
+- (void) setGyroMatrix:(float*)matrix rank:(int)rank {
+    if (!_impl)
+        return;
+    
+    _impl->setGyroMatrix(matrix, rank);
+}
+
+-(void) setAsteroidMode:(BOOL)toSetOrUnset {
+    if (!_impl)
+        return;
+    
+    _impl->setAsteroidMode(toSetOrUnset);
+}
+
+- (void) setModelPostRotationFrom:(kmVec3)fromVector to:(kmVec3)toVector {
+    if (!_impl)
+        return;
+    
+    _impl->setModelPostRotation(fromVector, toVector);
+}
+
+-(kmVec3) currentRotationEulerAngles {
+    if (!_impl)
+        return {0.f, 0.f, 0.f};
+    
+    return _impl->getEulerAnglesFromViewMatrix();
+}
+
++(void) setGlobalCurrentEulerAngles:(kmVec3)eulerAngles {
+    g_globalCurrentEulerAngles = eulerAngles;
+}
+
++(kmVec3) globalCurrentEulerAngles {
+    return g_globalCurrentEulerAngles;
+}
+
++(void) setGlobalFOVDegrees:(float)fov {
+    g_fov = fov;
+}
+
++(float) globalFOVDegrees {
+    return g_fov;
+}
+
++(kmVec3) globalCurrentEulerAnglesForU2VR {
+    float pan = 180.f - 180.f * g_globalCurrentEulerAngles.x / M_PI;
+    if (pan > 360.f)
+        pan -= 360.f;
+    else if (pan < 0.f)
+        pan += 360.f;
+    
+    float tilt = 180.f * g_globalCurrentEulerAngles.y / M_PI;
+    NSLog(@"#ViewAngles# globalCurrentEulerAnglesForU2VR(pan, tilt, fov) = (%f, %f, %f)", pan, tilt, g_fov);
+    return kmVec3{pan, tilt, g_fov};
 }
 
 @end

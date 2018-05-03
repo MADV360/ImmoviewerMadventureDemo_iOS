@@ -54,14 +54,15 @@ GLCamera::GLCamera()
 , _near(CLIP_Z_NEAR)
 , _far(CLIP_Z_FAR)
 , _fovDegree(80.f)
+, _gyroMatrixRank(0)
+, _modelPostRotationFromVector({0.f, 0.f, 0.f})
+, _modelPostRotationToVector({0.f, 0.f, 0.f})
 {
     kmMat4Identity(&_cameraPostRotationMatrix);
     kmMat4Identity(&_cameraPreRotationMatrix);
     kmMat4Identity(&_cameraRotationMatrix);
     kmMat4Identity(&_modelPreRotationMatrix);
     kmMat4Identity(&_modelRotationMatrix);
-    _modelPostRotationFromVector = {0.f, 0.f, 0.f};
-    _modelPostRotationToVector = _modelPostRotationFromVector;
 }
 
 void GLCamera::getProjectionMatrix(kmMat4* projectionMatrix, float zNear, float zFar, float fovDegreeX, float aspectRatio, float zEye, float cutRadius) {
@@ -288,6 +289,57 @@ void calculateCurrentCameraAxes(kmVec3* pBc, kmVec3* pRc, kmVec3* pUc, const kmM
  *  pitchAxis[k+1] = Fc cross Uc = Rc, when adustAxis on panning begin; --- F1.2.6B
  */
 void GLCamera::getViewMatrix(kmMat4* viewMatrix) {
+    if (_gyroMatrixRank > 0)
+    {
+        kmMat4 gyroMatrix;
+        kmMat4Identity(&gyroMatrix);
+        for (int row=0; row<3; ++row)
+        {
+            for (int col=0; col<3; ++col)
+            {
+                gyroMatrix.mat[row * 4 + col] = _gyroMatrix[row * _gyroMatrixRank + col];
+            }
+        }
+        /*
+         if (_gyroMatrixRank == 3)
+         {
+         for (int rc=0; rc<3; ++rc)
+         {
+         gyroMatrix.mat[4 * 3 + rc] = 0;
+         gyroMatrix.mat[4 * rc + 3] = 0;
+         }
+         gyroMatrix.mat[15] = 1;
+         }
+         if (!GLCamera::checkRotationMatrix(&gyroMatrix, false))
+         {
+         ALOGE("#Gyro# Check gyroMatrix failed");
+         GLCamera::normalizeRotationMatrix(&gyroMatrix);
+         }
+         //*/
+        //        ALOGV("MadvGLRenderer::setGyroMatrix Src : %f,  %f,  %f;  %f,  %f,  %f;  %f,  %f,  %f;",
+        //              _gyroMatrix[0],_gyroMatrix[1],_gyroMatrix[2],
+        //              _gyroMatrix[3],_gyroMatrix[4],_gyroMatrix[5],
+        //              _gyroMatrix[6],_gyroMatrix[7],_gyroMatrix[8]);
+        //
+        //        ALOGV("MadvGLRenderer::setGyroMatrix Dest: %f,  %f,  %f,  %f;  %f,  %f,  %f,  %f;  %f,  %f,  %f,  %f;  %f,  %f,  %f,  %f;",
+        //              gyroMatrix.mat[0],gyroMatrix.mat[1],gyroMatrix.mat[2],gyroMatrix.mat[3],
+        //              gyroMatrix.mat[4],gyroMatrix.mat[5],gyroMatrix.mat[6],gyroMatrix.mat[7],
+        //              gyroMatrix.mat[8],gyroMatrix.mat[9],gyroMatrix.mat[10],gyroMatrix.mat[11],
+        //              gyroMatrix.mat[12],gyroMatrix.mat[13],gyroMatrix.mat[14],gyroMatrix.mat[15]);
+        
+        kmMat4 T, P;
+        kmScalar dataT[] = {1,0,0,0, 0,0,1,0, 0,1,0,0, 0,0,0,1};//Column-major order
+        kmScalar dataP[] = {-1,0,0,0, 0,0,1,0, 0,-1,0,0, 0,0,0,1};//Column-major order
+        kmMat4Fill(&T, dataT);
+        kmMat4Fill(&P, dataP);
+        kmMat4Multiply(&gyroMatrix, &gyroMatrix, &P);
+        kmMat4Multiply(&gyroMatrix, &T, &gyroMatrix);
+        //ALOGV("#GyroVideo# CMatrix : %f,%f,%f,%f ; %f,%f,%f,%f ; %f,%f,%f,%f ; %f,%f,%f,%f ;", gyroMatrix.mat[0],gyroMatrix.mat[1],gyroMatrix.mat[2],gyroMatrix.mat[3],gyroMatrix.mat[4],gyroMatrix.mat[5],gyroMatrix.mat[6],gyroMatrix.mat[7],gyroMatrix.mat[8],gyroMatrix.mat[9],gyroMatrix.mat[10],gyroMatrix.mat[11],gyroMatrix.mat[12],gyroMatrix.mat[13],gyroMatrix.mat[14],gyroMatrix.mat[15]);
+        //kmMat4Inverse(&gyroMatrix, &gyroMatrix);
+        setModelPreRotationMatrix(&gyroMatrix);
+    }
+    setModelPostRotation(&_modelPostRotationFromVector, &_modelPostRotationToVector);
+    
     if (NULL == viewMatrix)
         return;
 #ifdef USE_DEBUG_MODEL_MATRIX
@@ -399,6 +451,15 @@ void GLCamera::setModelPreRotationMatrix(const kmMat4* modelPreRotation) {
 void GLCamera::setModelPostRotation(const kmVec3* fromVector, const kmVec3* toVector) {
     kmVec3Assign(&_modelPostRotationFromVector, fromVector);
     kmVec3Assign(&_modelPostRotationToVector, toVector);
+}
+
+void GLCamera::setGyroMatrix(float* matrix, int rank) {
+    //    pthread_mutex_lock(&_mutex);
+    {
+        memcpy(_gyroMatrix, matrix, sizeof(float) * rank * rank);
+        _gyroMatrixRank = rank;
+    }
+    //    pthread_mutex_unlock(&_mutex);
 }
 
 void GLCamera::setModelRotation(const kmQuaternion* modelRotationQuaternion) {
@@ -779,6 +840,93 @@ bool GLCamera::checkRotationMatrix(const kmMat4* matrix, bool completeCheck, con
     }
     
     return true;
+}
+
+/*
+ 7 def rotationMatrixToEulerAngles(R):
+ 8     Epsilon = 1e-16
+ 9     if abs(R[1,0]) < Epsilon and abs(R[1,1]) < Epsilon and abs(R[0,2]) < Epsilon and abs(R[2,2]) < Epsilon:
+ 10         if R[1,2] < 0:
+ 11             pitch = math.pi / 2.0
+ 12             yaw = math.atan2(R[0,1], R[0,0])
+ 13         else:
+ 14             pitch = -math.pi / 2.0
+ 15             yaw = math.atan2(-R[0,1], R[0,0])
+ 16         bank = 0
+ 17     else:
+ 18         pitch = math.atan2(-R[1,2], sqrt(R[1,0]*R[1,0] + R[1,1]*R[1,1]))
+ 19         bank = math.atan2(R[1,0], R[1,1])
+ 20         yaw = math.atan2(R[0,2], R[2,2])
+ 21     return [yaw, pitch, bank]
+ 22
+ 23 def eulerAnglesToRotationMatrix(yaw, pitch, bank):
+ 24     Cx = cos(pitch)
+ 25     Sx = sin(pitch)
+ 26     Cy = cos(yaw)
+ 27     Sy = sin(yaw)
+ 28     Cz = cos(bank)
+ 29     Sz = sin(bank)
+ 30     rotation = mat([[Sz * Sx * Sy + Cz * Cy, Cz * Sx * Sy - Sz * Cy, Cx * Sy] \
+ 31             , [Sz * Cx, Cz * Cx, -Sx] \
+ 32             , [Sz * Sx * Cy - Cz * Sy, Cz * Sx * Cy + Sz * Sy, Cx * Cy]])
+ 33     return rotation
+//*/
+
+kmVec3 eulerAnglesFromRotationMatrix(float a00, float a01, float a02, float a10, float a11, float a12, float a22) {
+    float yaw, pitch, bank;
+    const float Epsilon = 1e-16;
+    if (abs(a10) < Epsilon && abs(a11) < Epsilon && abs(a02) < Epsilon && abs(a22) < Epsilon)
+    {
+        if (a12 < 0.f)
+        {
+            pitch = M_PI_2;
+            yaw = atan2(a01, a00);
+        }
+        else
+        {
+            pitch = -M_PI_2;
+            yaw = atan2(-a01, a00);
+        }
+        bank = 0.f;
+    }
+    else
+    {
+        pitch = atan2(-a12, sqrt(a10 * a10 + a11 * a11));
+        bank = atan2(a10, a11);
+        yaw = atan2(a02, a22);
+        /* Constrain bank to -PI/2 ~ +PI/2. If do so, pitch will not be constrained to -PI/2 ~ +PI/2:
+        if (bank > M_PI / 2.f && bank < M_PI * 1.5f)
+        {
+            bank = bank - M_PI;
+            pitch = M_PI - pitch;
+            yaw = yaw + M_PI;
+        }
+        else if (bank < -M_PI / 2.f && bank > -M_PI * 1.5f)
+        {
+            bank = bank + M_PI;
+            pitch = M_PI - pitch;
+            yaw = yaw + M_PI;
+        }
+        //*/
+    }
+    return kmVec3{yaw, pitch, bank};
+}
+
+kmVec3 GLCamera::rotationMatrixToEulerAngles(kmMat3* mat3) {
+    // 0 3 6
+    // 1 4 7
+    // 2 5 8
+    float* a = mat3->mat;
+    return eulerAnglesFromRotationMatrix(a[0], a[3], a[6], a[1], a[4], a[7], a[8]);
+}
+
+kmVec3 GLCamera::rotationMatrixToEulerAngles(kmMat4* mat4) {
+    // 0 4 8  12
+    // 1 5 9  13
+    // 2 6 10 14
+    // 3 7 11 15
+    float* a = mat4->mat;
+    return eulerAnglesFromRotationMatrix(a[0], a[4], a[8], a[1], a[5], a[9], a[10]);
 }
 
 //kmVec2 GLCamera::sphereCoordinateOfProjectedPoint(kmVec2 projectedPoint) {

@@ -68,6 +68,7 @@ typedef struct _MADV_MP4_CAMERA_INFO_t_
 
 @interface KxAudioFrame : KxMovieFrame
 @property (readonly, nonatomic, strong) NSData *samples;
+@property (readonly, nonatomic, assign) int channels;
 @end
 
 @interface KxVideoFrame : KxMovieFrame
@@ -107,6 +108,18 @@ typedef struct _MADV_MP4_CAMERA_INFO_t_
 @property (readonly, nonatomic, strong) NSString *text;
 @end
 
+//cwq 2018/03/16
+typedef enum : NSInteger {
+    Speed_1x = 0,//4k,
+    Speed_1p2x = 1,
+    Speed_1p4x = 2,
+    Speed_1p8x = 3,
+    Speed_2x = 4,
+    Speed_4x = 5,
+    Speed_8x = 6,
+} EnumChangePlaySpeed;
+////
+
 @interface KxAVPacket : NSObject
 @end
 
@@ -141,6 +154,18 @@ typedef BOOL(^KxMovieDecoderInterruptCallback)();
 @property (readwrite, nonatomic) CGFloat minDuration;
 @property (readwrite, nonatomic) CGFloat maxDuration;
 
+//cwq 2018/03/16
+@property (readwrite, nonatomic) int64_t ori_duration;
+@property (readwrite, nonatomic) int ori_den;
+@property (readwrite, nonatomic) int ori_a_den;
+@property (readwrite, nonatomic) int ori_num;
+@property (readwrite, nonatomic) CGFloat ori_fps;
+@property (readwrite, nonatomic) CGFloat ori_cNum;
+@property (readwrite, nonatomic) BOOL isFirstChangeSpeed;
+@property (readwrite, nonatomic)FILE * pAACFile;
+////
+
+
 + (id) movieDecoderWithContentPath: (NSString *) path
                              error: (NSError **) perror;
 
@@ -150,6 +175,7 @@ typedef BOOL(^KxMovieDecoderInterruptCallback)();
             error: (NSError **) perror;
 
 -(void) closeFile;
+-(void) addADTStoPacket: (Byte[]) packet :(int) packetLen;
 
 - (BOOL) setupVideoFrameFormat: (KxVideoFrameFormat) format;
 - (KxVideoFrameFormat) getVideoFrameFormat;
@@ -180,6 +206,20 @@ typedef BOOL(^KxMovieDecoderInterruptCallback)();
 - (CGFloat) getBufferedPacketDuration;
 - (int) getBufferedPacketCount;
 
+- (UInt32) getOriAudioChannel;
+- (FILE *) getAACFilePointer;
+- (void) createAACFilePointer:(NSString *) path;
+//cwq 2018/03/16
+- (void) changePlaySpeed:(EnumChangePlaySpeed)eChangePlaySpeed;
+- (CGFloat) getChangeSpeedKeyNum;
+- (CGFloat) getOriDuration;
+- (CGFloat) getOriFPS;
+- (BOOL) getIsFirstChangeSpeed;
+- (void) setIsFirstChangeSpeedFalse;
+
+- (BOOL) isCanDoublePlaySpeed;
+- (int) getPlaybackSupportedMaxNum: (int)width : (int)height : (float)framerate;
+////
 @end
 
 @interface KxMovieSubtitleASSParser : NSObject

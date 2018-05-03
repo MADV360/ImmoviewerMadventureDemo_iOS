@@ -39,6 +39,7 @@ extern "C" {
 
 //#define DUMPH264
 //#define DUMPYUV
+//#define AACFileFlag
 
 #define USE_MY_H264_DECODER
 
@@ -49,7 +50,10 @@ extern AVCodec ff_mpeg4VTHD_decoder; //write by spy 2016.3.28
 #endif
 
 //#define USE_iOS8HW_DECODING
+extern BOOL GetGlobalUDPPro();
 
+
+//= fopen((const char*)[fullPath UTF8String], "wb");
 ////////////////////////////////////////////////////////////////////////////////
 NSString * kxmovieErrorDomain = @"ru.kolyvan.kxmovie";
 static void FFLog(void* context, int level, const char* format, va_list args);
@@ -351,6 +355,7 @@ static int interrupt_callback(void *ctx);
 
 @interface KxAudioFrame()
 @property (readwrite, nonatomic, strong) NSData *samples;
+@property (readwrite, nonatomic, assign) int channels;
 @end
 
 @implementation KxAudioFrame
@@ -550,6 +555,21 @@ static int interrupt_callback(void *ctx);
     int                 _minBufferedFrameCount;
     int                 _maxBufferedFrameCount;
     int                 _bufferedPacketCount;
+    //cwq 2018/03/16
+    int64_t ori_duration;
+    int ori_den;
+    int ori_a_den;
+    int ori_num;
+    CGFloat ori_fps;
+    CGFloat ori_cNum;
+    BOOL isFirstChangeSpeed;
+    FILE * pAACFile;
+    ////
+#ifdef AACFileFlag
+    //FILE * pAACFile;
+    FILE * pPCMFile;
+    FILE * pPCMFileB;
+#endif
 #ifdef DUMPH264
     FILE                *dumpH264File;
     int                 dumpCount, dumpedSize;
@@ -585,7 +605,16 @@ static int interrupt_callback(void *ctx);
 @dynamic info;
 @dynamic videoStreamFormatName;
 @dynamic startTime;
-
+//cwq 2018/03/16
+@dynamic ori_duration;
+@dynamic ori_den;
+@dynamic ori_a_den;
+@dynamic ori_num;
+@dynamic ori_fps;
+@dynamic ori_cNum;
+@dynamic isFirstChangeSpeed;
+@dynamic pAACFile;
+////
 - (CGFloat) duration
 {
     if (!_formatCtx)
@@ -992,6 +1021,33 @@ static int interrupt_callback(void *ctx);
 #endif
         
 
+#ifdef AACFileFlag
+//        NSString* fileOutputPath1 = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+//        NSString* baseFilename1 = @"aacfile.aac";
+//        NSString* filename1 = [fileOutputPath1 stringByAppendingPathComponent:baseFilename1];
+//        const char * a1 =[filename1 UTF8String];
+//        if (!pAACFile) {
+//            pAACFile = fopen(a1, "wb");
+//
+//        }
+        NSString* fileOutputPath2 = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+        NSString* baseFilename2 = @"pcmfileA.pcm";
+        NSString* filename2 = [fileOutputPath2 stringByAppendingPathComponent:baseFilename2];
+        const char * a2 =[filename2 UTF8String];
+        if (!pPCMFile) {
+            pPCMFile = fopen(a2, "wb");
+            
+        }
+        NSString* fileOutputPath3 = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+        NSString* baseFilename3 = @"pcmfileB.pcm";
+        NSString* filename3 = [fileOutputPath3 stringByAppendingPathComponent:baseFilename3];
+        const char * a3 =[filename3 UTF8String];
+        if (!pPCMFileB) {
+            pPCMFileB = fopen(a3, "wb");
+            
+        }
+#endif
+        
 #ifdef DUMPH264
         NSString* fileOutputPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
         NSString* baseFilename = @"dumpH264";
@@ -1040,7 +1096,20 @@ static int interrupt_callback(void *ctx);
 
     //有三种传输方式：tcp udp_multicast udp，强制采用tcp传输
     AVDictionary* options = NULL;
-    //av_dict_set(&options, "rtsp_transport", "tcp", 0);
+    //cwq tcp 2018.03.05
+    if(GetGlobalUDPPro()==FALSE)
+    {
+        av_dict_set(&options, "buffer_size", "160000", 0);
+        av_dict_set(&options, "max_delay", "3000000", 0);
+        av_dict_set(&options, "stimeout", "20000000", 0);
+        av_dict_set(&options, "rtsp_transport", "tcp", 0);
+        if (formatCtx!=NULL)
+        {
+            formatCtx->probesize = 300*1024;
+            formatCtx->max_analyze_duration = 400*AV_TIME_BASE;
+        }
+    }
+    ////
     
     //if (avformat_open_input(&formatCtx, [path cStringUsingEncoding: NSUTF8StringEncoding], NULL, &options) < 0) {
     int nerror = avformat_open_input(&formatCtx, [path UTF8String], NULL, &options);
@@ -1060,6 +1129,11 @@ static int interrupt_callback(void *ctx);
     av_dump_format(formatCtx, 0, [path.lastPathComponent cStringUsingEncoding: NSUTF8StringEncoding], false);///???
     
     _formatCtx = formatCtx;
+    
+    //cwq 2018/03/16
+    ori_duration = _formatCtx->duration;
+    ////
+    
     return kxMovieErrorNone;
 }
 
@@ -1108,11 +1182,19 @@ static int interrupt_callback(void *ctx);
         
         if (AV_CODEC_ID_H264 == codecCtx->codec_id) {
             if(_isRTSPLive) {
-                int resolution = [MVCameraClient sharedInstance].connectingCamera.videoCaptureResolution;
-                if (resolution == 6 || resolution == 7 || resolution == 9 || resolution == 11 )
-                    codec = avcodec_find_decoder(codecCtx->codec_id);
+                //cwq tcp 2018.03.05
+                if(GetGlobalUDPPro())
+                {
+                    int resolution = [MVCameraClient sharedInstance].connectingCamera.videoCaptureResolution;
+                    if (resolution == 6 || resolution == 7 || resolution == 9 || resolution == 11 )
+                        codec = avcodec_find_decoder(codecCtx->codec_id);
+                    else
+                        codec = &ff_h264VTHD_decoder;
+                }
                 else
-                    codec = &ff_h264VTHD_decoder;
+                {
+                    codec = avcodec_find_decoder(codecCtx->codec_id);
+                }
             }
             else
                 codec = &ff_h264VTHD_decoder;
@@ -1154,6 +1236,23 @@ static int interrupt_callback(void *ctx);
     
     AVStream *st = _formatCtx->streams[_videoStream];
     avStreamFPSTimeBase(st, 0.04, &_fps, &_videoTimeBase);
+    
+    //cwq 2018/03/16
+    CGFloat fps, timebase;
+    
+    if (st->time_base.den && st->time_base.num)
+        ori_den = st->time_base.den;
+    else if(st->codec->time_base.den && st->codec->time_base.num)
+        ori_den = st->codec->time_base.den;
+    
+    
+    if (st->avg_frame_rate.den && st->avg_frame_rate.num)
+        ori_num = st->avg_frame_rate.num;
+    else if (st->r_frame_rate.den && st->r_frame_rate.num)
+        ori_num = st->r_frame_rate.num;
+    
+    ori_fps = _fps;
+    ////
     
     float original_bitrate_pixel_ratio = 40000000.0 / (3456.0 * 1728.0);
     float content_bitrate_pixel_ration = _formatCtx->bit_rate / (self.frameWidth * self.frameHeight);
@@ -1251,6 +1350,19 @@ static int interrupt_callback(void *ctx);
     
     AVStream *st = _formatCtx->streams[_audioStream];
     avStreamFPSTimeBase(st, 0.025, 0, &_audioTimeBase);
+    //cwq 2018/03/16
+    if (st!=NULL)
+    {
+        if (st->time_base.den && st->time_base.num)
+        {
+            ori_a_den = st->time_base.den;
+        }
+        else if(st->codec->time_base.den && st->codec->time_base.num)
+        {
+            ori_a_den = st->codec->time_base.den;
+        }
+    }
+    ////
     
     LoggerAudio(1, @"audio codec smr: %.d fmt: %d chn: %d tb: %f %@",
                 _audioCodecCtx->sample_rate,
@@ -1528,7 +1640,7 @@ static int interrupt_callback(void *ctx);
     frame.timestamp = _videoFrame->best_effort_timestamp * _videoTimeBase * 1000;
     frame.width = _videoCodecCtx->width;
     frame.height = _videoCodecCtx->height;
-    frame.position = av_frame_get_best_effort_timestamp(_videoFrame) * _videoTimeBase;///???
+    frame.position = av_frame_get_best_effort_timestamp(_videoFrame) * _videoTimeBase;
     
     const int64_t frameDuration = av_frame_get_pkt_duration(_videoFrame);
     if (frameDuration) {
@@ -1557,6 +1669,22 @@ static int interrupt_callback(void *ctx);
     return frame;
 }
 
+- (void) addADTStoPacket: (Byte[]) packet :(int) packetLen;{
+    int profile = 2; // AAC LC
+    int freqIdx = 3; // 48KHz
+    int chanCfg = 4; // CPE
+    packetLen += 7;
+    
+    // fill in ADTS data
+    packet[0] = (Byte) 0xFF;
+    packet[1] = (Byte) 0xF9;
+    packet[2] = (Byte) (((profile - 1) << 6) + (freqIdx << 2) + (chanCfg >> 2));
+    packet[3] = (Byte) (((chanCfg & 3) << 6) + (packetLen >> 11));
+    packet[4] = (Byte) ((packetLen & 0x7FF) >> 3);
+    packet[5] = (Byte) (((packetLen & 7) << 5) + 0x1F);
+    packet[6] = (Byte) 0xFC;
+}
+
 - (KxAudioFrame *) handleAudioFrame
 {
     if (!_audioFrame->data[0])
@@ -1564,11 +1692,12 @@ static int interrupt_callback(void *ctx);
     
     id<KxAudioManager> audioManager = [KxAudioManager audioManager];
     
-    const NSUInteger numChannels = audioManager.numOutputChannels;
+    //const NSUInteger numChannels = audioManager.numOutputChannels;
+    NSUInteger numChannels = audioManager.numOutputChannels;
     NSInteger numFrames;
     
     void * audioData;
-    
+
     if (_swrContext) {
         
         const NSUInteger ratio = MAX(1, audioManager.samplingRate / _audioCodecCtx->sample_rate) *
@@ -1629,6 +1758,7 @@ static int interrupt_callback(void *ctx);
     frame.position = av_frame_get_best_effort_timestamp(_audioFrame) * _audioTimeBase;
     frame.duration = av_frame_get_pkt_duration(_audioFrame) * _audioTimeBase;
     frame.samples = data;
+    frame.channels = _audioFrame->channels;
     
     if (frame.duration == 0) {
         // sometimes ffmpeg can't determine the duration of audio frame
@@ -2145,15 +2275,64 @@ NSString * const naluTypesStrings[] = {
         return 0;
 }
 
+//cwq  2018/03/16
+- (CGFloat) getChangeSpeedKeyNum
+{
+    if(ori_cNum == 0)
+        ori_cNum = 1;
+    return ori_cNum;
+}
+- (CGFloat) getOriDuration
+{
+    if (ori_duration <= 0) {
+        ori_duration = 1;
+    }
+    return ori_duration/AV_TIME_BASE;
+}
+- (CGFloat) getOriFPS
+{
+    return ori_fps;
+}
+- (BOOL) getIsFirstChangeSpeed
+{
+    return isFirstChangeSpeed;
+}
+- (void) setIsFirstChangeSpeedFalse
+{
+    isFirstChangeSpeed = FALSE;
+}
+- (BOOL) isCanDoublePlaySpeed
+{
+    BOOL bCanDouble = FALSE;
+    if ([self getOriFPS]<=30.0 && (([self frameWidth]<3456 && [self frameHeight]<1728 ) ||
+                                   ([self frameWidth]<1728 && [self frameHeight]<3456 )))
+    {
+        bCanDouble = TRUE;
+    }
+    return bCanDouble;
+}
+- (int) getPlaybackSupportedMaxNum: (int)width : (int)height : (float)framerate
+{
+    int nMaxNum = 1;
+    if (framerate<=30.0 && ((width<3456 && height<1728 ) || (width<1728 && height<3456 )))
+    {
+        nMaxNum = 2;
+    }
+    return nMaxNum;
+}
+////
+
 - (int) getBufferedPacketCount
 {
     return _readPackets.count;
 }
 
+int g_audioWriteNum=0;
+int g_audioWritePCMNum=0;
 static bool waitNextKeyFrame = false;
 - (NSArray *) decodeFrames: (CGFloat) minDuration
 {
-    NSLog(@"decodeFrames %f", minDuration);
+    ///NSLog(@"#BUG4875#TimeStamp# decodeFrames %f", minDuration);
     if (_videoStream == -1 &&
         _audioStream == -1) {
         NSLog(@"decodeFrames return nil");
@@ -2323,7 +2502,6 @@ static bool waitNextKeyFrame = false;
                     
                         KxVideoFrame *frame = [self handleVideoFrame];
                         //LoggerVideo(1, @"decoded v timestamp %f", frame.timestamp);
-                        NSLog(@"decoded v timestamp %f", frame.timestamp);
                     
                         if (frame) {
                         
@@ -2363,7 +2541,36 @@ static bool waitNextKeyFrame = false;
                 }
                 
                 if (gotframe) {
-                    
+                    //cwq
+                    if(pAACFile != NULL)
+                    {
+                        Byte byte[7]={0};
+                        [self addADTStoPacket:byte:packet->size];
+                        fwrite(byte, 7, 1, pAACFile);
+                        fwrite(packet->data, packet->size, 1, pAACFile);
+                        g_audioWriteNum++;
+//                        if (g_audioWriteNum==700) {
+//                            fclose(pAACFile);
+//                            pAACFile = NULL;
+//                        }
+                    }
+#ifdef AACFileFlag
+                    if(pPCMFile != NULL && pPCMFileB != NULL)
+                    {
+                        fwrite(_audioFrame->data[0], 4096, 1, pPCMFile);
+                        fwrite(_audioFrame->data[1], 4096, 1, pPCMFileB);
+//                        fwrite(_audioFrame->data[1], 4, 1, pPCMFile);
+//                        fwrite(_audioFrame->data[2], 4, 1, pPCMFile);
+//                        fwrite(_audioFrame->data[3], 4, 1, pPCMFile);
+                        g_audioWritePCMNum++;
+                        if (g_audioWritePCMNum==700) {
+                            fclose(pPCMFile);
+                            pPCMFile = NULL;
+                            fclose(pPCMFileB);
+                            pPCMFileB = NULL;
+                        }
+                    }
+#endif
                     KxAudioFrame * frame = [self handleAudioFrame];
                     if (frame) {
                         
@@ -2444,7 +2651,129 @@ static bool waitNextKeyFrame = false;
     return result;
 }
 
+- (UInt32) getOriAudioChannel
+{
+    return _audioCodecCtx != NULL? _audioCodecCtx->channels : 2;
+}
+- (FILE *) getAACFilePointer
+{
+    return pAACFile;
+}
+- (void) createAACFilePointer:(NSString *) path
+{
+    if (pAACFile==NULL) {
+        pAACFile = fopen(path.UTF8String, "wb");
+    }
+}
 
+//cwq changeSpeed  2018/03/16
+- (void) changePlaySpeed:(EnumChangePlaySpeed)eChangePlaySpeed
+{
+    @synchronized(self){
+    CGFloat fNum = 1;
+    switch(eChangePlaySpeed)
+    {
+        case Speed_1x:
+            fNum = 1;
+            break;
+            
+        case Speed_1p2x:
+            fNum = 0.5;
+            break;
+        case Speed_1p4x:
+            fNum = 0.25;
+            break;
+        case Speed_1p8x:
+            fNum = 0.125;
+            break;
+        case Speed_2x:
+            fNum = 2;
+            break;
+        case Speed_4x:
+            fNum = 4;
+            break;
+        case Speed_8x:
+            fNum = 8;
+            break;
+        default:
+            fNum = 1;
+            break;
+    }
+    ori_cNum = fNum;
+    
+    AVStream *st = _formatCtx->streams[_videoStream];
+    CGFloat fps, timebase;
+    if (st != nil)
+    {
+        
+        _formatCtx->duration = ori_duration/fNum;
+        
+        if (st->time_base.den && st->time_base.num)
+        {
+            st->time_base.den = ori_den*fNum;
+            timebase = av_q2d(st->time_base);
+        }
+        else if(st->codec->time_base.den && st->codec->time_base.num)
+        {
+            st->codec->time_base.den = ori_den*fNum;
+            timebase = av_q2d(st->codec->time_base);
+        }
+        else
+        {
+            timebase = 0.04;
+        }
+        
+        if (st->avg_frame_rate.den && st->avg_frame_rate.num)
+        {
+            st->avg_frame_rate.num = ori_num*fNum;
+            fps = av_q2d(st->avg_frame_rate);
+        }
+        else if (st->r_frame_rate.den && st->r_frame_rate.num)
+        {
+            st->r_frame_rate.num /= ori_num*fNum;
+            fps = av_q2d(st->r_frame_rate);
+        }
+        else
+        {
+            fps = 1.0 / timebase;
+        }
+        
+        _videoTimeBase = timebase;
+        _fps = ori_fps*fNum;
+    }
+    
+    //Audio
+    st = _audioStream >= 0 ? _formatCtx->streams[_audioStream] : NULL;
+    if(st != NULL)
+    {
+        //[result addObject:frame];
+        //id<KxAudioManager> audioManager = [KxAudioManager audioManager];
+        if (_audioStream != -1) {
+            //int64_t ts = (int64_t)(seconds / _audioTimeBase);
+            //avformat_seek_file(_formatCtx, _audioStream, ts, ts, ts, AVSEEK_FLAG_FRAME);
+            avcodec_flush_buffers(_audioCodecCtx);
+        }
+        
+        if (st->time_base.den && st->time_base.num)
+        {
+            st->time_base.den = ori_a_den*fNum;
+            timebase = av_q2d(st->time_base);
+        }
+        else if(st->codec->time_base.den && st->codec->time_base.num)
+        {
+            st->codec->time_base.den = ori_a_den*fNum;
+            timebase = av_q2d(st->codec->time_base);
+        }
+        else
+        {
+            timebase = 0.025;
+        }
+        _audioTimeBase = timebase;
+    }
+    isFirstChangeSpeed = TRUE;
+    }
+}
+////
 - (boolean_t) readPackets: (CGFloat) minDuration
 {
     //NSLog(@"readPackets %f", minDuration);
@@ -2462,11 +2791,32 @@ static bool waitNextKeyFrame = false;
    
         AVPacket packet;
         @synchronized(self){
-            if (!_formatCtx || av_read_frame(_formatCtx, &packet) < 0) {
-                NSLog(@"#Codec# KxMovieDecoder readPackets: isEOF = YES @ %@", self);
+//            if (!_formatCtx || av_read_frame(_formatCtx, &packet) < 0) {
+//                NSLog(@"#Codec# KxMovieDecoder readPackets: isEOF = YES @ %@", self);
+//                _isEOF = YES;
+//                return FALSE;
+//            }
+            
+            //cwq 2018.03.02
+            if (!_formatCtx) {
+                NSLog(@"#Codec# n_formatCtx=null @ %@", self);
                 _isEOF = YES;
                 return FALSE;
             }
+            long nRetVal = av_read_frame(_formatCtx, &packet);
+            if (nRetVal < 0) {
+                NSLog(@"#Codec# KxMovieDecoder av_read_frame < 0 @ %@", self);
+                if(nRetVal == AVERROR_EOF)
+                {
+                    if (pAACFile!=NULL) {
+                        fclose(pAACFile);
+                        pAACFile = NULL;
+                    }
+                    _isEOF = YES;
+                }
+                return FALSE;
+            }
+            ////
         }
         AVPacket *newpacket = (AVPacket*)malloc(sizeof(struct AVPacket));
 #ifdef DUMPH264

@@ -19,6 +19,12 @@
 
 #pragma mark    MadvGLProgram Def
 
+typedef enum {
+    GLShaderDebugFlag0 = 0x01,
+    GLShaderDebugFlag1 = 0x02,
+    GLShaderDebugFlag2 = 0x04,
+} GLShaderFlag;
+
 class MadvGLProgram : public GLProgram {
 public:
     
@@ -152,10 +158,6 @@ public:
     inline GLint getRightSourceTexture() {return _srcTextureR;}
     inline GLenum getSourceTextureTarget() {return _srcTextureTarget;}
     
-    void setGyroMatrix(float* matrix, int rank);
-    
-    void setModelPostRotation(kmVec3 fromVector, kmVec3 toVector);
-    
     inline void setFlipY(bool flipY) {_flipY = flipY;}
     inline void setFlipX(bool flipX) {_flipX = flipX;}
     
@@ -177,7 +179,10 @@ public:
 //    static void clearCachedLUT(const char* lutPath);
     
 //    static void extractLUTFiles(const char* destDirectory, const char* lutBinFilePath, uint32_t fileOffset);
-    
+    void setGLShaderFlags(int flags);
+
+    static inline int getGLShaderFlags() {return _shaderFlags;}
+
 protected:
     
     void* setLUTData(Vec2f lutDstSize, Vec2f leftSrcSize,Vec2f rightSrcSize, int dataSizeInShort, const GLushort* lxIntData, const GLushort* lxMinData, const GLushort* lyIntData, const GLushort* lyMinData, const GLushort* rxIntData, const GLushort* rxMinData, const GLushort* ryIntData, const GLushort* ryMinData);
@@ -203,19 +208,13 @@ protected:
     
     void setDebugPrimitive(AutoRef<Mesh3D> mesh, int key);
     AutoRef<GLVAO> getDebugPrimitive(int key);
-    
+
     Vec2f _renderSourceSize;
     
 protected:
     
     void* _renderSource;
     bool _needRenderNewSource;
-    
-    float _gyroMatrix[16];
-    int _gyroMatrixRank = 0;
-    
-    kmVec3 _modelPostRotationFromVector;
-    kmVec3 _modelPostRotationToVector;
     
 #ifdef USE_MSAA
     GLuint _msaaFramebuffer;
@@ -291,7 +290,9 @@ protected:
 //    bool _isPrevDisplayModeLittlePlanet = false;
     
     bool _debugTexcoord = false;
-    
+
+    static GLuint _shaderFlags;
+
     pthread_mutex_t _mutex;
 };
 

@@ -222,4 +222,5 @@ typedef void(^ProgressiveActionBlock)(int completedCount, int totalCount, BOOL* 
 - (void) onCameraDataSourceUpdated:(NSArray<MVMedia* >*)medias dataSetEvent:(DataSetEvent)dataSetEvent errorCode:(int)errorCode;
 //导出的时候调用这个 用来刷新是否拼接
 - (void) onLocalDataSourceUpdated:(NSArray<MVMedia* >*)medias dataSetEvent:(DataSetEvent)dataSetEvent;
+UIImage* getVideoImage(NSString* videoURL);
 @end

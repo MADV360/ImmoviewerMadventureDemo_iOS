@@ -50,6 +50,12 @@ PanoCameraController::PanoCameraController(AutoRef<GLCamera> panoCamera)
     }
 }
 
+PanoCameraController::PanoCameraController(AutoRef<MadvGLRenderer> panoRenderer)
+:PanoCameraController((AutoRef<GLCamera>)(NULL == panoRenderer ? NULL : panoRenderer->glCamera()))
+{
+    
+}
+
 void PanoCameraController::setCamera(AutoRef<GLCamera> panoCamera) {
     _camera = panoCamera;
     if (panoCamera)
@@ -148,7 +154,32 @@ void PanoCameraController::setGyroRotationQuaternion(kmQuaternion* inertialGyroQ
 
 void PanoCameraController::startTouchControl(kmVec2 normalizedTouchPoint) {
     if (PanoControlStateFling == getState())
-        return;
+    {
+        float t = _accumulatedAngle / _diffAngle;
+        if (0.f == _diffAngle || isnan(t))
+        {
+            t = 1.f;
+        }
+        float yawAngle = _diffYawAndPitch.x * t;
+        float pitchAngle = _diffYawAndPitch.y * t;
+
+        kmMat4 modelRotationMatrix;
+        kmMat4RotationQuaternion(&modelRotationMatrix, &_baseModelRotation);
+        kmMat4RotationAxisAngleBy(&modelRotationMatrix, &_yawAxis, yawAngle);
+        kmMat4RotationAxisAngleBy(&modelRotationMatrix, &_pitchAxis, pitchAngle);
+
+        GLCamera::normalizeRotationMatrix(&modelRotationMatrix);
+
+        if (_camera)
+        {
+            _camera->setModelRotationMatrix(&modelRotationMatrix);
+        }
+
+        kmQuaternionRotationMatrix(&_baseModelRotation, &modelRotationMatrix);
+
+        _isModelRotationInvalid = false;
+        setState(PanoControlStateIdle);
+    }
     
     adjustDragAxis();
     //ALOGE("#GLCamera#setState# PanoControlStateTouch @ startTouchControl:");
@@ -244,11 +275,46 @@ void PanoCameraController::setScreenOrientation(Orientation2D orientation) {
     calcAndSetVirtualCameraPreRotationMatrixIfNecessary(NULL, true);
 }
 
+void PanoCameraController::setGyroMatrix(float* matrix, int rank) {
+    if (NULL == _camera)
+        return;
+    
+    _camera->setGyroMatrix(matrix, rank);
+}
+
+void PanoCameraController::setModelPostRotation(kmVec3 fromVector, kmVec3 toVector) {
+    if (NULL == _camera)
+        return;
+    
+    _camera->setModelPostRotation(&fromVector, &toVector);
+}
+
+void PanoCameraController::setAsteroidMode(bool toSetOrUnset) {
+    kmMat4 cameraPostRotationMatrix;
+    if (toSetOrUnset)
+    {
+        kmMat4RotationX(&cameraPostRotationMatrix, -M_PI/2);
+    }
+    else
+    {
+        kmMat4Identity(&cameraPostRotationMatrix);
+    }
+    _camera->setCameraPostRotationMatrix(&cameraPostRotationMatrix);
+}
+
 bool PanoCameraController::getViewMatrix(kmMat4* viewMatrix) {
     kmMat4 modelMatrix, cameraMatrix0, cameraPreRotationMatrix;
     calcAndSetVirtualCameraPreRotationMatrixIfNecessary(&cameraPreRotationMatrix, true);
     calcAndSetVirtualCameraRotationMatrixIfNecessary(&cameraMatrix0, true);
     calcAndSetModelRotationMatrixIfNecessary(&modelMatrix, &cameraMatrix0, true);
+    if (_camera)
+    {
+        _camera->getViewMatrix(viewMatrix);
+    }
+    return false;
+}
+
+bool PanoCameraController::peekViewMatrix(kmMat4* viewMatrix) {
     if (_camera)
     {
         _camera->getViewMatrix(viewMatrix);
@@ -674,4 +740,13 @@ void PanoCameraController::calcAndSetModelRotationMatrixIfNecessary(kmMat4* mode
             _isModelRotationInvalid = false;
         }
     }
+}
+
+kmVec3 PanoCameraController::getEulerAnglesFromViewMatrix() {
+    kmMat4 viewMatrix;
+    peekViewMatrix(&viewMatrix);
+    kmMat4Inverse(&viewMatrix, &viewMatrix);
+    kmVec3 eulerAngles = GLCamera::rotationMatrixToEulerAngles(&viewMatrix);
+    //ALOGE("#eulerAngles# getEulerAnglesFromViewMatrix = (%f, %f, %f), matrix = {%f, %f, %f, %f, %f, %f, %f, %f, %f}\n", kmRadiansToDegrees(eulerAngles.x), kmRadiansToDegrees(eulerAngles.y), kmRadiansToDegrees(eulerAngles.z), viewMatrix.mat[0], viewMatrix.mat[1], viewMatrix.mat[2], viewMatrix.mat[4], viewMatrix.mat[5], viewMatrix.mat[6], viewMatrix.mat[8], viewMatrix.mat[9], viewMatrix.mat[10]);
+    return eulerAngles;
 }

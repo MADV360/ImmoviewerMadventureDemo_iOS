@@ -84,11 +84,16 @@
     titleLabe.font=[UIFont systemFontOfSize:20];
     titleLabe.textColor=[UIColor colorWithHexString:@"#F6F6F6"];
     titleLabe.text=FGGetStringWithKeyFromTable(CONNECTFAIL, nil);
-    
+    helper * helperInstance = [helper sharedInstance];
+    CGFloat statusHeight = helperInstance.statusHeight;
+    CGFloat bottomSafearea = 20;
+    if (statusHeight > 20) {
+        bottomSafearea = 34;
+    }
     UIButton * startBtn=[[UIButton alloc] init];
     [self addSubview:startBtn];
     [startBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(@-20);
+        make.bottom.equalTo(@(-bottomSafearea));
         make.left.equalTo(@15);
         make.right.equalTo(@-15);
         make.height.equalTo(@44);
@@ -106,7 +111,7 @@
     
     UILabel * forgetPwdLabel=[[UILabel alloc] init];
     [self addSubview:forgetPwdLabel];
-    forgetPwdLabel.frame = CGRectMake(ScreenWidth*0.5-50, ScreenHeight - 74 -13, 100, 13);
+    forgetPwdLabel.frame = CGRectMake(ScreenWidth*0.5-50, ScreenHeight - 74 -13 - (bottomSafearea - 20), 100, 13);
 //    [forgetPwdLabel mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.bottom.equalTo(startBtn.mas_top).offset(-10);
 //        make.centerX.equalTo(self.mas_centerX);

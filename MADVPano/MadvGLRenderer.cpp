@@ -8,6 +8,7 @@
 
 #include "MadvGLRenderer.h"
 #include "MadvGLRendererImpl.h"
+#include "PanoCameraController.h"
 #include "MadvUtils.h"
 #include "EXIFParser.h"
 #include "JPEGUtils.h"
@@ -211,7 +212,9 @@ void MadvGLRenderer::drawRemappedPanorama(int x, int y, int width, int height, i
     }
     _cubemapFaceSize = cubemapFaceSize;//#ST_BUG#4634
 
-    _cubemapTexture = drawToRemappedCubemap(_cubemapTexture, cubemapFaceSize);
+    if (((_debugCubemapRenderNumber++) % MaxCubemapRenderNumber) == 0) {///!!!For Debug
+        _cubemapTexture = drawToRemappedCubemap(_cubemapTexture, cubemapFaceSize);
+    }
     drawFromCubemap(x, y, width, height, _cubemapTexture);
 #endif
 }
@@ -228,7 +231,9 @@ void MadvGLRenderer::drawRemappedPanorama(int lutStitchMode, int x, int y, int w
     }
     _cubemapFaceSize = cubemapFaceSize;//#ST_BUG#4634
 
-    _cubemapTexture = drawToRemappedCubemap(_cubemapTexture, cubemapFaceSize);
+    if (((_debugCubemapRenderNumber++) % MaxCubemapRenderNumber) == 0) {///!!!For Debug
+        _cubemapTexture = drawToRemappedCubemap(_cubemapTexture, cubemapFaceSize);
+    }
     drawFromCubemap(x, y, width, height, _cubemapTexture);
 #endif
 }
@@ -333,20 +338,6 @@ GLenum MadvGLRenderer::getSourceTextureTarget() {
     return impl->getSourceTextureTarget();
 }
 
-void MadvGLRenderer::setGyroMatrix(float* matrix, int rank) {
-    MadvGLRendererImpl* impl = (MadvGLRendererImpl*)_impl;
-    if (!impl) return;
-    
-    impl->setGyroMatrix(matrix, rank);
-}
-
-void MadvGLRenderer::setModelPostRotation(kmVec3 fromVector, kmVec3 toVector) {
-    MadvGLRendererImpl* impl = (MadvGLRendererImpl*)_impl;
-    if (!impl) return;
-    
-    impl->setModelPostRotation(fromVector, toVector);
-}
-
 void MadvGLRenderer::setFlipY(bool flipY) {
     MadvGLRendererImpl* impl = (MadvGLRendererImpl*)_impl;
     if (!impl) return;
@@ -403,6 +394,13 @@ void MadvGLRenderer::setDebugTexcoord(bool debugTexcoord) {
     impl->setDebugTexcoord(debugTexcoord);
 }
 
+void MadvGLRenderer::setGLShaderFlags(int flags) {
+    MadvGLRendererImpl* impl = (MadvGLRendererImpl*)_impl;
+    if (!impl) return;
+
+    impl->setGLShaderFlags(flags);
+}
+
 //void MadvGLRenderer::clearCachedLUT(const char* lutPath) {
 //    MadvGLRendererImpl::clearCachedLUT(lutPath);
 //}
@@ -449,6 +447,7 @@ void MadvGLRenderer::renderTextureToJPEG(const char* destJpegPath, int dstWidth,
     
     Vec2f lutSourceSize = { DEFAULT_LUT_VALUE_WIDTH, DEFAULT_LUT_VALUE_HEIGHT };
     AutoRef<MadvGLRenderer> renderer = new MadvGLRenderer(lutPath, lutSourceSize, lutSourceSize, longitudeSegments, latitudeSegments);
+    AutoRef<PanoCameraController> panoController = new PanoCameraController(renderer);
     renderer->setIsYUVColorSpace(false);
     bool withLUTStitching = (lutPath && 0 < strlen(lutPath));
     renderer->setDisplayMode(withLUTStitching ? PanoramaDisplayModeLUTInMesh : 0);
@@ -468,7 +467,7 @@ void MadvGLRenderer::renderTextureToJPEG(const char* destJpegPath, int dstWidth,
     ///!!!} Important
     if (gyroMatrixRank > 0)
     {
-        renderer->setGyroMatrix(gyroMatrix, gyroMatrixRank);
+        panoController->setGyroMatrix(gyroMatrix, gyroMatrixRank);
     }
     CHECK_GL_ERROR();
 	GLint maxCubemapSize = 1024;
@@ -565,6 +564,7 @@ void MadvGLRenderer::debugRenderTextureToJPEG(const char* destJpegPath, int dstW
     
     Vec2f lutSourceSize = { DEFAULT_LUT_VALUE_WIDTH, DEFAULT_LUT_VALUE_HEIGHT };
     AutoRef<MadvGLRenderer> renderer = new MadvGLRenderer(lutPath, lutSourceSize, lutSourceSize, longitudeSegments, latitudeSegments);
+    AutoRef<PanoCameraController> panoController = new PanoCameraController(renderer);
     renderer->setIsYUVColorSpace(false);
     bool withLUTStitching = (lutPath && 0 < strlen(lutPath));
     renderer->setDisplayMode(withLUTStitching ? PanoramaDisplayModeLUTInMesh : 0);
@@ -584,7 +584,7 @@ void MadvGLRenderer::debugRenderTextureToJPEG(const char* destJpegPath, int dstW
     //*/!!!For Debug:
     if (gyroMatrixRank > 0)
     {
-        renderer->setGyroMatrix(gyroMatrix, gyroMatrixRank);
+        panoController->setGyroMatrix(gyroMatrix, gyroMatrixRank);
     }
     
     glEnable(GL_BLEND);
@@ -684,13 +684,13 @@ void MadvGLRenderer::renderMadvJPEGToJPEG(const char* destJpegPath, const char* 
 
 		exivImageSaveMetaData(exivImageHandler);
 		releaseExivImage(exivImageHandler);
-	}
+	}//*/
 }
 
 #define RAW_BITS 14
 #define RAW_SHIFTLEFT_BITS (RAW_BITS - 8)
 #define RAW_SHIFTRIGHT_BITS (16 - RAW_BITS)
-#define REWRITE_RAW_TIFF_FIELDS
+///!!!#define REWRITE_RAW_TIFF_FIELDS
 
 bool MadvGLRenderer::renderMadvRawToRaw(const char* destRawPath, const char* sourceRawPath, int dstWidth, int dstHeight, const char* lutPath, int filterID, const char* glFilterResourcePath, float* gyroMatrix, int gyroMatrixRank, GLuint longitudeSegments, GLuint latitudeSegments, MVProgressClosure progressClosure) {
 	GLenum srcInternalFormat = GL_R16F;//GL_RGBA;
@@ -789,6 +789,7 @@ bool MadvGLRenderer::renderMadvRawToRaw(const char* destRawPath, const char* sou
 	// Panoramic renderer:
 	Vec2f lutSourceSize = { DEFAULT_LUT_VALUE_WIDTH, DEFAULT_LUT_VALUE_HEIGHT };
 	AutoRef<MadvGLRenderer> renderer = new MadvGLRenderer(lutPath, lutSourceSize, lutSourceSize, longitudeSegments, latitudeSegments);
+    AutoRef<PanoCameraController> panoController = new PanoCameraController(renderer);
 	renderer->setIsYUVColorSpace(false);
 	bool withLUTStitching = (lutPath && 0 < strlen(lutPath));
     renderer->setDisplayMode(withLUTStitching ? PanoramaDisplayModeLUTInMesh : 0);
@@ -805,7 +806,7 @@ bool MadvGLRenderer::renderMadvRawToRaw(const char* destRawPath, const char* sou
 	renderer->setFlipY(true);
 	if (!withLUTStitching && gyroMatrixRank > 0)
 	{
-		renderer->setGyroMatrix(gyroMatrix, gyroMatrixRank);
+		panoController->setGyroMatrix(gyroMatrix, gyroMatrixRank);
 	}
 	CHECK_GL_ERROR();
 	GLenum dstInternalFormat = GL_RGBA;
@@ -820,8 +821,11 @@ bool MadvGLRenderer::renderMadvRawToRaw(const char* destRawPath, const char* sou
 	{
 		progressClosure.callback(25, progressClosure.context);
 	}
-    
-    int cubemapFaceSize = roundf(dstHeight * 0.57735);
+#if !defined(TARGET_OS_WINDOWS) || TARGET_OS_WINDOWS == 0
+	int cubemapFaceSize = roundf(dstHeight * 0.57735);
+#else
+	int cubemapFaceSize = 1024;
+#endif
     GLuint cubemapTexture = 0;
     AutoRef<GLRenderTexture> cubemapFaceTexture = NULL;
     
@@ -1024,68 +1028,131 @@ bool MadvGLRenderer::renderMadvRawToRaw(const char* destRawPath, const char* sou
 	delete stitchedRenderTexture;
     cubemapFaceTexture = NULL;
     glDeleteTextures(1, &cubemapTexture);
-	glFinish();
+    glDeleteTextures(1, (GLuint*)&sourceTexture);
+    glFinish();
 	CHECK_GL_ERROR();
-
+    free(pixelData);
+    
 	//Write output DNG:
 	TIFFHeader tiffHeader;
 	std::list<std::list<DirectoryEntry> > IFDList;
 	fp = fopen(sourceRawPath, "rb+");
 	readTIFF(&tiffHeader, IFDList, fp);
 	fclose(fp);
-#ifdef REWRITE_RAW_TIFF_FIELDS
-	std::list<std::list<DirectoryEntry> >::iterator iIFDList = IFDList.begin();
-	int iIFDMeta = 0;
-	for (; iIFDList != IFDList.end(); iIFDMeta++, iIFDList++)
-	{
-		std::list<DirectoryEntry>& DEList = *iIFDList;
-		for (std::list<DirectoryEntry>::iterator iDE = DEList.begin(); iDE != DEList.end();)
-		{
-			DirectoryEntry& DE = *iDE;
-			switch (DE.tag)
-			{
-			case TAG_USER_COMMENT:
-			{
-				/*
-				std::list<DirectoryEntry>::iterator tmpIter = iDE;
-				iDE++;
-				DEList.erase(tmpIter);
-				continue;
-				/*/
-				DE.length = 0;
-				DE.value = 0;
-				//*/
-			}
-			break;
-			case TAG_FILE_SOURCE:
-			{
-				DE.value = 0;
-			}
-			break;
-			case TAG_SCENE_TYPE:
-			{
-				DE.value = 2;
-			}
-			break;
-			default:
-				break;
-			}
-
-			iDE++;
-		}
-	}
-#endif //#ifdef REWRITE_RAW_TIFF_FIELDS
-	fp = fopen(destRawPath, "wb+");
-	writeTIFF(fp, tiffHeader, rawData, sizeof(GLushort) * dstWidth * dstHeight, IFDList);
+    
+    fp = fopen(sourceRawPath, "rb+");
+    fseek(fp, 0, SEEK_END);
+    uint32_t fileLength = (uint32_t)ftell(fp);
+    ///fseek(fp, 0, SEEK_SET);///!!!
+    
+	FILE* fpOut = fopen(destRawPath, "wb+");
+    
+    TIFFHeaderRaw rawTIFFHeader;
+    convertTIFFHeaderToRaw(rawTIFFHeader, tiffHeader);
+    fwrite(&rawTIFFHeader, SizeOfTIFFHeaderRaw, 1, fpOut);
+    size_t dataSessionSize = sizeof(GLushort) * dstWidth * dstHeight;
+    fwrite(rawData, dataSessionSize, 1, fpOut);
+    fseek(fp, SizeOfTIFFHeaderRaw + dataSessionSize, SEEK_SET);///!!!
+    free(rawData);
+    
+    std::list<DirectoryEntry> allDEs;
+    for (std::list<std::list<DirectoryEntry> >::iterator iIFDList = IFDList.begin();
+         iIFDList != IFDList.end();
+         iIFDList++)
+    {
+        std::list<DirectoryEntry>& DEList = *iIFDList;
+        for (std::list<DirectoryEntry>::iterator iDE = DEList.begin(); iDE != DEList.end(); iDE++)
+        {
+            DirectoryEntry& DE = *iDE;
+            switch (DE.tag)
+            {
+//#ifdef REWRITE_RAW_TIFF_FIELDS
+                case TAG_USER_COMMENT:
+                {
+                    DE.length = 0;
+                    DE.value = 0;
+                }
+                    break;
+                case TAG_FILE_SOURCE:
+                {
+                    DE.value = 0;
+                }
+                    break;
+                case TAG_SCENE_TYPE:
+                {
+                    DE.value = 2;
+                }
+                    break;
+                case TAG_DNG_WIDTH:
+                {
+                    dstWidth = DE.value;
+                }
+                    break;
+                case TAG_DNG_HEIGHT:
+                {
+                    dstHeight = DE.value;
+                }
+                    break;
+//#endif //#ifdef REWRITE_RAW_TIFF_FIELDS
+                default:
+                    break;
+            }
+            allDEs.push_back(DE);
+        }
+    }
+    ///!!!allDEs.sort(compareDEOffset);
+    
+    const int BufferSize = 1048576 * 8;
+    uint8_t* buffer = (uint8_t*)malloc(BufferSize);
+	
+    std::list<DirectoryEntry>::iterator iter = allDEs.begin();
+    size_t thisBlockBytesLeft = (allDEs.size() > 0 ? iter->thisOffsetInFile : fileLength) - SizeOfTIFFHeaderRaw - dataSessionSize;
+    do
+    {
+        for (; thisBlockBytesLeft >= BufferSize; thisBlockBytesLeft -= BufferSize)
+        {
+            fread(buffer, BufferSize, 1, fp);
+            fwrite(buffer, BufferSize, 1, fpOut);
+        }
+        if (thisBlockBytesLeft > 0)
+        {
+            fread(buffer, thisBlockBytesLeft, 1, fp);
+            fwrite(buffer, thisBlockBytesLeft, 1, fpOut);
+        }
+        
+        if (iter != allDEs.end())
+        {
+            DirectoryEntry& DE = *iter;
+            DirectoryEntryRaw rawDE, rawDE0;
+            fread(&rawDE0, SizeOfDirectoryEntryRaw, 1, fp);
+            convertDirectoryEntryToRaw(rawDE, DE, tiffHeader.isBigEndian);
+            
+            long valueSize = sizeOfDEValueType((DEValueType)DE.type) * DE.length;
+            if (valueSize > 4)
+            {
+                memcpy(rawDE.valueOrOffset, rawDE0.valueOrOffset, sizeof(rawDE.valueOrOffset));
+            }
+            
+            fwrite(&rawDE, SizeOfDirectoryEntryRaw, 1, fpOut);
+            
+            iter++;
+            uint64_t currentLocation = ftell(fp);
+            if (iter != allDEs.end())
+            {
+                uint64_t nextOffset = iter->thisOffsetInFile;
+                thisBlockBytesLeft = nextOffset - currentLocation;
+            }
+            else
+            {
+                thisBlockBytesLeft = fileLength - currentLocation;
+            }
+        }
+    } while (ftell(fp) < fileLength);
+    
+    free(buffer);
+    fclose(fpOut);
 	fclose(fp);
-	free(rawData);
-	/*/
-	JPEGCompressOutput* imageOutput = startWritingImageToJPEG(destRawPath, GL_RGBA, GL_UNSIGNED_BYTE, 100, dstWidth, dstHeight);
-	appendImageStrideToJPEG(imageOutput, pixelData, dstHeight);
-	//*/
-	free(pixelData);
-	//*/
-	glDeleteTextures(1, (GLuint*)&sourceTexture);
+	
 	if (NULL != progressClosure.callback)
 	{
 		progressClosure.callback(100, progressClosure.context);

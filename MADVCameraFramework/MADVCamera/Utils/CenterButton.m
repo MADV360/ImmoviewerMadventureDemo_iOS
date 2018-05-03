@@ -18,7 +18,11 @@
     center.x = self.frame.size.width/2;
     if (self.isTop) {
         center.y = self.height * 0.5 -5 - self.imageView.frame.size.height + 5;
-    }else
+    }else if(self.isAlignment)
+    {
+        center.y = self.imageView.frame.size.height * 0.5;
+    }
+    else
     {
         center.y = self.height * 0.5 -5 - self.imageView.frame.size.height + 15;
     }

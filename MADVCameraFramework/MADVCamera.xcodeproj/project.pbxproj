@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		521A4F331F0B95C200E5F155 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 521A4F321F0B95C200E5F155 /* libxml2.2.dylib */; };
+		BB14E1792041073000910330 /* libPods-MADVCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D27E8279C21A0191FBAEA102 /* libPods-MADVCamera.a */; };
 		BB190ECF1F0B30330045BAD0 /* MADVCamera.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB190EC51F0B30330045BAD0 /* MADVCamera.framework */; };
 		BB190ED41F0B30330045BAD0 /* MADVCameraTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BB190ED31F0B30330045BAD0 /* MADVCameraTests.m */; };
 		BB190ED61F0B30330045BAD0 /* MADVCamera.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190EC81F0B30330045BAD0 /* MADVCamera.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -96,8 +97,6 @@
 		BB1910701F0B42BA0045BAD0 /* kxmovie-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = BB1910621F0B42BA0045BAD0 /* kxmovie-Prefix.pch */; };
 		BB1910711F0B42BA0045BAD0 /* kxmovie.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BB1910631F0B42BA0045BAD0 /* kxmovie.bundle */; };
 		BB1910731F0B42BA0045BAD0 /* KxMovieDecoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB1910651F0B42BA0045BAD0 /* KxMovieDecoder.mm */; };
-		BB1910951F0B49A00045BAD0 /* ImageBlender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1910931F0B49A00045BAD0 /* ImageBlender.cpp */; };
-		BB1910961F0B49A00045BAD0 /* ImageBlender.h in Headers */ = {isa = PBXBuildFile; fileRef = BB1910941F0B49A00045BAD0 /* ImageBlender.h */; };
 		BB1910E91F0B4A510045BAD0 /* SdWhiteDetail.h in Headers */ = {isa = PBXBuildFile; fileRef = BB1910BB1F0B4A510045BAD0 /* SdWhiteDetail.h */; };
 		BB1910EA1F0B4A510045BAD0 /* SdWhiteDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1910BC1F0B4A510045BAD0 /* SdWhiteDetail.m */; };
 		BB206DC91F4A93EC00EB50C0 /* MVGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB206DC71F4A93EB00EB50C0 /* MVGLView.mm */; };
@@ -153,6 +152,7 @@
 		BBC7BC8020171AD100767A35 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBC7BC7B20171ACF00767A35 /* libavcodec.a */; };
 		BBC7BC8120171AD100767A35 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBC7BC7C20171AD000767A35 /* libswscale.a */; };
 		BBC7BC8220171AD100767A35 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBC7BC7D20171AD000767A35 /* libavutil.a */; };
+		BBDB9EDC2099B2B80045913A /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBDB9EDB2099B2B50045913A /* opencv2.framework */; };
 		BBDFA0B91F468A3100C816F4 /* MVCameraDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = BB190F2B1F0B30A70045BAD0 /* MVCameraDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BBF390AC1F22100B0023DC8B /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBF390AB1F22100B0023DC8B /* CoreLocation.framework */; };
 		BBF390AF1F2217400023DC8B /* AMBASetGPSInfoRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = BB130BAF1F1DE0B90052A6F3 /* AMBASetGPSInfoRequest.m */; };
@@ -177,7 +177,6 @@
 		BBFE0C251F39B39800D38C4D /* UIColor+MVExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = BBFE0C211F39B39800D38C4D /* UIColor+MVExtensions.m */; };
 		BBFE0C261F39B39800D38C4D /* UIViewController+MVExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = BBFE0C221F39B39800D38C4D /* UIViewController+MVExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BBFE0C271F39B39800D38C4D /* UIViewController+MVExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = BBFE0C231F39B39800D38C4D /* UIViewController+MVExtensions.m */; };
-		E0CB0E769C93EB3BE5C64145 /* libPods-MADVCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D27E8279C21A0191FBAEA102 /* libPods-MADVCamera.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -195,6 +194,7 @@
 		521A4F321F0B95C200E5F155 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = ../../../../../usr/lib/libxml2.2.dylib; sourceTree = "<group>"; };
 		BB130BAE1F1DE0B90052A6F3 /* AMBASetGPSInfoRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMBASetGPSInfoRequest.h; sourceTree = "<group>"; };
 		BB130BAF1F1DE0B90052A6F3 /* AMBASetGPSInfoRequest.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = AMBASetGPSInfoRequest.m; sourceTree = "<group>"; };
+		BB14E1782041053100910330 /* libPods-ImmoviewerMADVentureDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-ImmoviewerMADVentureDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB190EC51F0B30330045BAD0 /* MADVCamera.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADVCamera.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB190EC81F0B30330045BAD0 /* MADVCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADVCamera.h; sourceTree = "<group>"; };
 		BB190EC91F0B30330045BAD0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -291,8 +291,6 @@
 		BB1910621F0B42BA0045BAD0 /* kxmovie-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "kxmovie-Prefix.pch"; sourceTree = "<group>"; };
 		BB1910631F0B42BA0045BAD0 /* kxmovie.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = kxmovie.bundle; sourceTree = "<group>"; };
 		BB1910651F0B42BA0045BAD0 /* KxMovieDecoder.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = KxMovieDecoder.mm; sourceTree = "<group>"; };
-		BB1910931F0B49A00045BAD0 /* ImageBlender.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = ImageBlender.cpp; sourceTree = "<group>"; };
-		BB1910941F0B49A00045BAD0 /* ImageBlender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageBlender.h; sourceTree = "<group>"; };
 		BB1910BB1F0B4A510045BAD0 /* SdWhiteDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdWhiteDetail.h; sourceTree = "<group>"; };
 		BB1910BC1F0B4A510045BAD0 /* SdWhiteDetail.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = SdWhiteDetail.m; sourceTree = "<group>"; };
 		BB1910F51F0B4AFD0045BAD0 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = ../../../../usr/lib/libxml2.2.dylib; sourceTree = "<group>"; };
@@ -349,6 +347,7 @@
 		BBC7BC7B20171ACF00767A35 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = libs/FFmpeg/libavcodec.a; sourceTree = "<group>"; };
 		BBC7BC7C20171AD000767A35 /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = libs/FFmpeg/libswscale.a; sourceTree = "<group>"; };
 		BBC7BC7D20171AD000767A35 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = libs/FFmpeg/libavutil.a; sourceTree = "<group>"; };
+		BBDB9EDB2099B2B50045913A /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		BBF390AB1F22100B0023DC8B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		BBF393751F26FD0F0023DC8B /* IDRDecoder.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; path = IDRDecoder.c; sourceTree = "<group>"; };
 		BBF393761F26FD0F0023DC8B /* IDRDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDRDecoder.h; sourceTree = "<group>"; };
@@ -380,6 +379,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB14E1792041073000910330 /* libPods-MADVCamera.a in Frameworks */,
 				BBC7BC7E20171AD100767A35 /* libswresample.a in Frameworks */,
 				BBC7BC7F20171AD100767A35 /* libavformat.a in Frameworks */,
 				BBC7BC8020171AD100767A35 /* libavcodec.a in Frameworks */,
@@ -394,12 +394,12 @@
 				BB190FC41F0B33BA0045BAD0 /* MessageUI.framework in Frameworks */,
 				BB190FC21F0B33B40045BAD0 /* MapKit.framework in Frameworks */,
 				BB190FC01F0B33AF0045BAD0 /* ImageIO.framework in Frameworks */,
+				BBDB9EDC2099B2B80045913A /* opencv2.framework in Frameworks */,
 				BB190FBE1F0B33A90045BAD0 /* QuartzCore.framework in Frameworks */,
 				BB190FBC1F0B33A30045BAD0 /* Foundation.framework in Frameworks */,
 				BB190FBA1F0B33990045BAD0 /* CoreGraphics.framework in Frameworks */,
 				BB190FB81F0B33910045BAD0 /* AssetsLibrary.framework in Frameworks */,
 				BB190FB61F0B33800045BAD0 /* MADVPano.framework in Frameworks */,
-				E0CB0E769C93EB3BE5C64145 /* libPods-MADVCamera.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -617,8 +617,6 @@
 			isa = PBXGroup;
 			children = (
 				BBFE0BF21F396B4500D38C4D /* KDCustom */,
-				BB1910931F0B49A00045BAD0 /* ImageBlender.cpp */,
-				BB1910941F0B49A00045BAD0 /* ImageBlender.h */,
 			);
 			path = ThirdParty;
 			sourceTree = "<group>";
@@ -735,6 +733,8 @@
 		D526D1E1463C953F44D44324 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BBDB9EDB2099B2B50045913A /* opencv2.framework */,
+				BB14E1782041053100910330 /* libPods-ImmoviewerMADVentureDemo.a */,
 				BBC7BC7B20171ACF00767A35 /* libavcodec.a */,
 				BBC7BC7A20171ACF00767A35 /* libavformat.a */,
 				BBC7BC7D20171AD000767A35 /* libavutil.a */,
@@ -809,7 +809,6 @@
 				BB190F7A1F0B30A70045BAD0 /* AMBASaveMediaFileDoneResponse.h in Headers */,
 				BB190F521F0B30A70045BAD0 /* AMBARequest.h in Headers */,
 				BB190F591F0B30A70045BAD0 /* AMBACancelFileTransferResponse.h in Headers */,
-				BB1910961F0B49A00045BAD0 /* ImageBlender.h in Headers */,
 				BB9CB1211F1E0FA300FFC6C7 /* FGLanguageTool.h in Headers */,
 				BB190F7D1F0B30A70045BAD0 /* AMBASetClientInfoResponse.h in Headers */,
 				BB89B5B31F5510A5007AC0A2 /* AMBASetCameraModeResponse.h in Headers */,
@@ -965,7 +964,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\nset +u\n# Avoid recursively calling this script.\nif [[ $SF_MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport SF_MASTER_SCRIPT_RUNNING=1\n\n\n# Constants\nSF_TARGET_NAME=${PROJECT_NAME}\n#UNIVERSAL_OUTPUTFOLDER=`pwd`/${CONFIGURATION}-universal\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-iphoneos\n\n# Take build target\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSF_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\n#if [[ \"$SF_SDK_PLATFORM\" = \"iphoneos\" ]]\n#then\n#echo \"Please choose iPhone simulator as the build target.\"\n#exit 1\n#fi\n\nIPHONE_DEVICE_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphoneos\nIPHONE_SIM_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphonesimulator\n#echo ${IPHONE_SIM_BUILD_DIR}\n# Build the other (non-simulator) platform\nxcodebuild -workspace \"${SRCROOT}/MADVCamera.xcworkspace\" -scheme MADVCamera -configuration \"${CONFIGURATION}\" -sdk iphonesimulator BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" CONFIGURATION_BUILD_DIR=\"${IPHONE_SIM_BUILD_DIR}/x86_64\" SYMROOT=\"${SYMROOT}\" ARCHS='x86_64' VALID_ARCHS='x86_64' $ACTION\n\n#xcodebuild -project \"${SRCROOT}/MADVCamera.xcodeproj\" -target MADVPano -configuration \"${CONFIGURATION}\" -sdk iphonesimulator BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" CONFIGURATION_BUILD_DIR=\"${IPHONE_SIM_BUILD_DIR}/i386\" SYMROOT=\"${SYMROOT}\" ARCHS='i386' VALID_ARCHS='i386' $ACTION\n\nxcodebuild -workspace \"${SRCROOT}/MADVCamera.xcworkspace\" -scheme MADVCamera -configuration \"${CONFIGURATION}\" -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" CONFIGURATION_BUILD_DIR=\"${IPHONE_DEVICE_BUILD_DIR}/arm64\" SYMROOT=\"${SYMROOT}\" ARCHS='arm64' VALID_ARCHS='arm64' $ACTION\n\nxcodebuild -workspace \"${SRCROOT}/MADVCamera.xcworkspace\" -scheme MADVCamera -configuration \"${CONFIGURATION}\" -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\"  CONFIGURATION_BUILD_DIR=\"${IPHONE_DEVICE_BUILD_DIR}/armv7\" SYMROOT=\"${SYMROOT}\" ARCHS='armv7 armv7s' VALID_ARCHS='armv7 armv7s' $ACTION\n\n# Copy the framework structure to the universal folder (clean it first)\nrm -rf \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework\"\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/armv7/${PROJECT_NAME}.framework\" \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework\"\n\n# Smash them together to combine all architectures\n# \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/i386/${PROJECT_NAME}.framework/${PROJECT_NAME}\"\nlipo -create \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/arm64/${PROJECT_NAME}.framework/${PROJECT_NAME}\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/armv7/${PROJECT_NAME}.framework/${PROJECT_NAME}\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/x86_64/${PROJECT_NAME}.framework/${PROJECT_NAME}\" -output \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework/${PROJECT_NAME}\"";
+			shellScript = "set -e\nset +u\n# Avoid recursively calling this script.\nif [[ $SF_MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport SF_MASTER_SCRIPT_RUNNING=1\n\n\n# Constants\nSF_TARGET_NAME=${PROJECT_NAME}\n#UNIVERSAL_OUTPUTFOLDER=`pwd`/${CONFIGURATION}-universal\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-iphoneos\n\n# Take build target\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSF_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\n#if [[ \"$SF_SDK_PLATFORM\" = \"iphoneos\" ]]\n#then\n#echo \"Please choose iPhone simulator as the build target.\"\n#exit 1\n#fi\n\nIPHONE_DEVICE_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphoneos\n## IPHONE_SIM_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphonesimulator\n#echo ${IPHONE_SIM_BUILD_DIR}\n# Build the other (non-simulator) platform\n## xcodebuild -workspace \"${SRCROOT}/MADVCamera.xcworkspace\" -scheme MADVCamera -configuration \"${CONFIGURATION}\" -sdk iphonesimulator BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" CONFIGURATION_BUILD_DIR=\"${IPHONE_SIM_BUILD_DIR}/x86_64\" SYMROOT=\"${SYMROOT}\" ARCHS='x86_64' VALID_ARCHS='x86_64' $ACTION\n\n#xcodebuild -project \"${SRCROOT}/MADVCamera.xcodeproj\" -target MADVPano -configuration \"${CONFIGURATION}\" -sdk iphonesimulator BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" CONFIGURATION_BUILD_DIR=\"${IPHONE_SIM_BUILD_DIR}/i386\" SYMROOT=\"${SYMROOT}\" ARCHS='i386' VALID_ARCHS='i386' $ACTION\n\nxcodebuild -workspace \"${SRCROOT}/MADVCamera.xcworkspace\" -scheme MADVCamera -configuration \"${CONFIGURATION}\" -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" CONFIGURATION_BUILD_DIR=\"${IPHONE_DEVICE_BUILD_DIR}/arm64\" SYMROOT=\"${SYMROOT}\" ARCHS='arm64' VALID_ARCHS='arm64' $ACTION\n\nxcodebuild -workspace \"${SRCROOT}/MADVCamera.xcworkspace\" -scheme MADVCamera -configuration \"${CONFIGURATION}\" -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\"  CONFIGURATION_BUILD_DIR=\"${IPHONE_DEVICE_BUILD_DIR}/armv7\" SYMROOT=\"${SYMROOT}\" ARCHS='armv7 armv7s' VALID_ARCHS='armv7 armv7s' $ACTION\n\n# Copy the framework structure to the universal folder (clean it first)\nrm -rf \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework\"\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/armv7/${PROJECT_NAME}.framework\" \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework\"\n\n# Smash them together to combine all architectures\n# \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/i386/${PROJECT_NAME}.framework/${PROJECT_NAME}\"\n## lipo -create \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/arm64/${PROJECT_NAME}.framework/${PROJECT_NAME}\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/armv7/${PROJECT_NAME}.framework/${PROJECT_NAME}\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/x86_64/${PROJECT_NAME}.framework/${PROJECT_NAME}\" -output \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework/${PROJECT_NAME}\"\nlipo -create \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/arm64/${PROJECT_NAME}.framework/${PROJECT_NAME}\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/armv7/${PROJECT_NAME}.framework/${PROJECT_NAME}\" -output \"${UNIVERSAL_OUTPUTFOLDER}/${PROJECT_NAME}.framework/${PROJECT_NAME}\"";
 		};
 		65BA0E9DFFE8F26FFCD830AC /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1011,7 +1010,6 @@
 				BB190F761F0B30A70045BAD0 /* AMBAPutFileResponse.m in Sources */,
 				BB1910EA1F0B4A510045BAD0 /* SdWhiteDetail.m in Sources */,
 				BB19105C1F0B42650045BAD0 /* MadvGLRenderer_iOS.mm in Sources */,
-				BB1910951F0B49A00045BAD0 /* ImageBlender.cpp in Sources */,
 				BB190F731F0B30A70045BAD0 /* AMBAListResponse.m in Sources */,
 				BB190F8B1F0B30A70045BAD0 /* ImageFilterBean.m in Sources */,
 				BBC7BC582016FFAB00767A35 /* MVPhotosManager.m in Sources */,
@@ -1212,6 +1210,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/**",
 					/usr/lib/libxml2.2.dylib,
+					"$(PROJECT_DIR)",
 				);
 				GCC_PREFIX_HEADER = MADVCamera/PrefixHeader.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1295,6 +1294,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/**",
 					/usr/lib/libxml2.2.dylib,
+					"$(PROJECT_DIR)",
 				);
 				GCC_PREFIX_HEADER = MADVCamera/PrefixHeader.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (

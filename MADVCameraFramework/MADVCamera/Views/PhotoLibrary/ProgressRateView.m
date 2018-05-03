@@ -27,6 +27,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadTime_outError:) name:TIME_OUT object:nil];
 
 //    self.closeBtn=closeBtn;
+    helper * helperInstance = [helper sharedInstance];
+    CGFloat bottomSafeArea = 0;
+    if (helperInstance.statusHeight > 20) {
+        bottomSafeArea = 34;
+    }
     
     UIView * uploadView=[[UIView alloc] init];
     [self addSubview:uploadView];
@@ -34,7 +39,7 @@
         [uploadView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(@10);
             make.right.equalTo(@-10);
-            make.bottom.equalTo(@-10);
+            make.bottom.equalTo(@(-10 - bottomSafeArea));
             make.height.equalTo(@100);
         }];
     }
@@ -187,7 +192,7 @@
         [uploadView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(@10);
             make.right.equalTo(@-10);
-            make.bottom.equalTo(@-10);
+            make.bottom.equalTo(@(-10 - bottomSafeArea));
             make.height.equalTo(@(150 - 15 + agreementLabel.height));
         }];
     }
@@ -232,7 +237,7 @@
     UIView * finishView=[[UIView alloc] init];
     [self addSubview:finishView];
     [finishView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(@-10);
+        make.bottom.equalTo(@(-10 - bottomSafeArea));
         make.left.equalTo(@10);
         make.right.equalTo(@-10);
         make.height.equalTo(@200);

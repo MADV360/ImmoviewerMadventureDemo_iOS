@@ -274,6 +274,7 @@ bool removeDirectory(const char* dir_name)
 }
 
 void extractLUTFiles(const char* destDirectory, const char* lutBinFilePath, uint32_t fileOffset) {
+    ALOGE("#GLRenderLoopState#TempLUT# extractLUTFiles:%s\n", destDirectory);
     ifstream ifs(lutBinFilePath, ios::in | ios::binary);
     //DoctorLog(@"#Bug3763# extractLUTFiles : fileOffset=%u, destDirectory='%s', lutBinFilePath='%s'", fileOffset, destDirectory, lutBinFilePath);
     //    fseek(fp, fileOffset, SEEK_CUR);
@@ -365,15 +366,16 @@ void clearCachedLUT(const char* lutPath) {
 
 #define TempLUTDirectoryPrefix "tmplut"
 
-char* createTempLUTDirectory(const char* parentDirectory) {
+char* createTempLUTDirectory(const char* parentDirectory, const char* suffix) {
     char* path = (char*) malloc(strlen(parentDirectory) + 18);
-    sprintf(path, "%s/%s%d", parentDirectory, TempLUTDirectoryPrefix, rand());
+    sprintf(path, "%s/%s%s", parentDirectory, TempLUTDirectoryPrefix, suffix);
     createDirectories(path);
     //free(path);
     return path;
 }
 
 void deleteIfTempLUTDirectory(const char* directory) {
+    ALOGE("#GLRenderLoopState#TempLUT# deleteIfTempLUTDirectory:%s\n", directory);
     if (strstr(directory, TempLUTDirectoryPrefix))
     {
         removeDirectory(directory);

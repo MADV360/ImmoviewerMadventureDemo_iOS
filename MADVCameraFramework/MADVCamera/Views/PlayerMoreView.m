@@ -8,8 +8,10 @@
 
 #import "PlayerMoreView.h"
 #import "Masonry.h"
+#import "ScreenCapSetCell.h"
+#import "ScreenCapSetSizeCell.h"
 
-@interface PlayerMoreView()<UITableViewDelegate,UITableViewDataSource,PlayerMoreCellDelegate>
+@interface PlayerMoreView()<UITableViewDelegate,UITableViewDataSource,PlayerMoreCellDelegate,ScreenCapSetCellDelegate,ScreenCapSetSizeCellDelegate>
 @property(nonatomic,weak)UITableView * tableView;
 @end
 
@@ -54,16 +56,47 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView registerClass:[PlayerMoreCell class] forCellReuseIdentifier:@"PlayerMore"];
+    PlayerMoreModel * playerMoreModel = self.dataSource[indexPath.row];
+    NSString * identifier;
+    Class class;
+    if (playerMoreModel.moreType == Phone_Gyroscope_NoImage || playerMoreModel.moreType == Watermark) {
+        identifier = @"ScreenCapSetCell";
+        class = [ScreenCapSetCell class];
+    }else if(playerMoreModel.moreType == Screen_Size)
+    {
+        identifier = @"Screen_Size";
+        class = [ScreenCapSetSizeCell class];
+    }else
+    {
+        identifier = @"PlayerMore";
+        class = [PlayerMoreCell class];
+    }
+    [tableView registerClass:class forCellReuseIdentifier:identifier];
     
-    PlayerMoreCell * cell = [tableView dequeueReusableCellWithIdentifier:@"PlayerMore"];
+    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     cell.contentView.backgroundColor = [UIColor clearColor];
     cell.textLabel.textColor = [UIColor whiteColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = [UIColor clearColor];
-    PlayerMoreModel * playerMoreModel = self.dataSource[indexPath.row];
-    cell.playerMoreModel = playerMoreModel;
-    cell.delegate = self;
+    
+    if (playerMoreModel.moreType == Phone_Gyroscope_NoImage || playerMoreModel.moreType == Watermark) {
+        ScreenCapSetCell * screenCapSetCell = (ScreenCapSetCell *)cell;
+        screenCapSetCell.playerMoreModel = playerMoreModel;
+        screenCapSetCell.delegate = self;
+        
+    }else if (playerMoreModel.moreType == Screen_Size)
+    {
+        ScreenCapSetSizeCell * screenCapSetSizeCell = (ScreenCapSetSizeCell *)cell;
+        screenCapSetSizeCell.playerMoreModel = playerMoreModel;
+        screenCapSetSizeCell.delegate = self;
+        
+    }else
+    {
+        PlayerMoreCell * moreCell = (PlayerMoreCell *)cell;
+        moreCell.playerMoreModel = playerMoreModel;
+        moreCell.delegate = self;
+    }
+    
     
     if (indexPath.row == self.dataSource.count - 1) {
         cell.separatorInset = UIEdgeInsetsMake(0, self.width, 0, 0);
@@ -76,6 +109,10 @@
 #pragma mark --UITableViewDelegate代理方法的实现--
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    PlayerMoreModel * playerMoreModel = self.dataSource[indexPath.row];
+    if (playerMoreModel.moreType == Screen_Size || playerMoreModel.moreType == Watermark || playerMoreModel.moreType == Phone_Gyroscope_NoImage) {
+        return 69;
+    }
     return 51;
 }
 
@@ -83,9 +120,9 @@
 {
     NSLog(@"dfjkdsjkf");
     PlayerMoreModel * playerMoreModel = self.dataSource[indexPath.row];
-    if (!playerMoreModel.isGyroscope && !(playerMoreModel.moreType == Export && playerMoreModel.isExported)) {
-        if ([self.delegate respondsToSelector:@selector(playerMoreView:moreType:switchOn:)]) {
-            [self.delegate playerMoreView:self moreType:playerMoreModel.moreType switchOn:NO];
+    if (!playerMoreModel.isGyroscope && !(playerMoreModel.moreType == Export && playerMoreModel.isExported) && playerMoreModel.moreType != Watermark && playerMoreModel.moreType != Phone_Gyroscope_NoImage) {
+        if ([self.delegate respondsToSelector:@selector(playerMoreView:playerMoreModel:switchOn:index:)]) {
+            [self.delegate playerMoreView:self playerMoreModel:playerMoreModel switchOn:NO index:indexPath.item];
         }
     }
     
@@ -95,8 +132,24 @@
 #pragma mark --PlayerMoreCellDelegate代理方法的实现--
 - (void)playerMoreCell:(PlayerMoreCell *)playerMoreCell switchOn:(BOOL)on
 {
-    if ([self.delegate respondsToSelector:@selector(playerMoreView:moreType:switchOn:)]) {
-        [self.delegate playerMoreView:self moreType:playerMoreCell.playerMoreModel.moreType switchOn:on];
+    if ([self.delegate respondsToSelector:@selector(playerMoreView:playerMoreModel:switchOn:index:)]) {
+        [self.delegate playerMoreView:self playerMoreModel:playerMoreCell.playerMoreModel switchOn:on index:0];
+    }
+}
+
+#pragma mark --ScreenCapSetCellDelegate代理方法的实现--
+- (void)screenCapSetCell:(ScreenCapSetCell *)screenCapSetCell switchOn:(BOOL)on
+{
+    if ([self.delegate respondsToSelector:@selector(playerMoreView:playerMoreModel:switchOn:index:)]) {
+        [self.delegate playerMoreView:self playerMoreModel:screenCapSetCell.playerMoreModel switchOn:on index:0];
+    }
+}
+
+#pragma mark --ScreenCapSetSizeCellDelegate代理方法的实现--
+- (void)screenCapSetSizeCell:(ScreenCapSetSizeCell *)screenCapSetSizeCell index:(NSInteger)index
+{
+    if ([self.delegate respondsToSelector:@selector(playerMoreView:playerMoreModel:switchOn:index:)]) {
+        [self.delegate playerMoreView:self playerMoreModel:screenCapSetSizeCell.playerMoreModel switchOn:NO index:index];
     }
 }
 - (void)refresh

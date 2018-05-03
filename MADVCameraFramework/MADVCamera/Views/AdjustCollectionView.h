@@ -12,13 +12,14 @@ typedef enum : NSInteger {
     TopPicture_BottomWord = 0,
     TopBottomWord = 1,
     CircleWord = 2,
+    Picture = 3,
 } AdjustType;
 
 @class AdjustCollectionView;
 
 @protocol AdjustCollectionViewDelegate <NSObject>
 
-- (void)adjustCollectionView:(AdjustCollectionView *)adjustCollectionView click:(AdjustCameraModel *)adjustCameraModel;
+- (void)adjustCollectionView:(AdjustCollectionView *)adjustCollectionView click:(AdjustCameraModel *)adjustCameraModel index:(NSInteger)index;
 
 @end
 

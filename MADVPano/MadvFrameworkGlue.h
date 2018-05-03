@@ -12,6 +12,10 @@ extern "C" {
 MadvGLRenderer_Android* getCppRendererFromJavaRenderer(JNIEnv* env, jobject self);
 
 Vec2f Vec2fFromJava(JNIEnv *env, jobject vec2Obj);
+jobject Vec2fToJava(JNIEnv* env, Vec2f v2);
+
+Vec3f Vec3fFromJava(JNIEnv *env, jobject vec3Obj);
+jobject Vec3fToJava(JNIEnv* env, Vec3f v3);
 
 /*
  * Class:     com_android_madv_glrenderer_MadvGLRenderer
@@ -64,9 +68,6 @@ JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_drawRemappedPa
 
 JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_renderMadvJPEGToJPEG(JNIEnv* env, jclass selfClass, jstring destJpegPath, jstring sourceJpegPath, jint dstWidth, jint dstHeight, jstring lutPath, jint filterID, jstring glFilterResourcePath, jfloatArray gyroMatrix, jint gyroMatrixRank);
 
-JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setGyroMatrix
-        (JNIEnv* env, jobject self, jfloatArray matrix, jint rank);
-
 JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setTextureMatrix___3F(JNIEnv* env, jobject self, jfloatArray textureMatrix);
 
 JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setTextureMatrix___3FI(JNIEnv* env, jobject self, jfloatArray textureMatrix, jint videoCaptureResolution);
@@ -74,8 +75,6 @@ JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setTextureMatr
 JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setIllusionTextureMatrix___3F(JNIEnv* env, jobject self, jfloatArray illusionTextureMatrix);
 
 JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setIllusionTextureMatrix___3FI(JNIEnv* env, jobject self, jfloatArray illusionTextureMatrix, jint videoCaptureResolution);
-
-JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setModelPostRotation(JNIEnv* env, jobject self, jobject fromVector, jobject toVector);
 
 JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setEnableDebug(JNIEnv* env, jobject self, jboolean enableDebug);
 
@@ -114,6 +113,10 @@ JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setIsYUVColorS
 
 JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setFlipY
         (JNIEnv* env, jobject self, jboolean flipY);
+
+JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setGLShaderFlags(JNIEnv* env, jobject self, jint flags);
+
+JNIEXPORT jint JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_getGLShaderFlags(JNIEnv* env, jclass selfClass);
 
 JNIEXPORT jboolean JNICALL Java_com_madv360_madv_utils_FileUtil_saveFileChunk
         (JNIEnv* env, jclass selfClass, jstring filePath, jlong fileOffset, jbyteArray data, jlong dataOffset, jlong length);

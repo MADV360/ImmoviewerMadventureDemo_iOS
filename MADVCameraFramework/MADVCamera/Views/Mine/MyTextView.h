@@ -14,6 +14,7 @@
 // 提示文本
 @property (nonatomic, copy) NSString *placeholder;
 @property(nonatomic,assign)CGFloat viewWidth;
+@property(nonatomic,assign)BOOL isPlaceholderCentre;
 - (void)textChange;
 //// 返回需要发送的文本
 //- (NSString *)fullTextStr;

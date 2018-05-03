@@ -405,7 +405,7 @@ extern "C" {
  */
 - (void) setHeartbeatEnabled:(BOOL)enabled forDemander:(NSString*)demander;
 
-- (void) startGPSInfoSynchronization;
+- (void) startGPSInfoSynchronization:(BOOL)isGPSParamChange;
 - (void) stopGPSInfoSynchronization;
 //相机陀螺仪校正
 - (void)startAdjustCameraGyro;

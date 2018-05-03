@@ -111,6 +111,7 @@ NSString * formatTimeInterval(CGFloat seconds, BOOL isLeft);
 @property (nonatomic, assign) int filterID;
 @property(nonatomic,assign)CGFloat firstVideoTimestamp;
 @property(nonatomic,assign)CGFloat outputVideoFrameCount;
+@property(nonatomic,assign)BOOL isShare;
 
 #ifdef ENCODING_WITHOUT_MYGLVIEW
 - (void) cancelEncoding;
@@ -127,9 +128,12 @@ NSString * formatTimeInterval(CGFloat seconds, BOOL isLeft);
 - (void) pause;
 - (void) stop;
 - (void) restorePlay;
-
+//cwq 2018/03/16
+- (void) changePlaySpeed:(EnumChangePlaySpeed)eChangePlaySpeed;
+- (BOOL) isCanDoublePlaySpeed;
+////
 - (void) dismissWaitView;
-- (void) showWaitView;
+- (void) showWaitViewInView:(UIView *)view;//分享的时候需要显示这个，这时不一定是在这个屏幕的中间
 - (void) freeBufferedFrames;
 
 #pragma mark    Protected
@@ -144,8 +148,10 @@ NSString * formatTimeInterval(CGFloat seconds, BOOL isLeft);
 + (int) decreaseLiveObjectsCount;
 
 + (NSString*) editorOutputVideoFileBaseName:(NSString*)contentPath;
++ (NSString*) screenCaptureVideoFileBaseName:(NSString*)contentPath;
 
 - (NSInteger) frameNumberOfVideoTime:(float)seconds maxFrameNumber:(int)maxFrameNumber;
 - (NSData*) gyroDataOfFrameNumber:(NSInteger)frameNumber;
+- (void)setUDPPro:(BOOL)UseUDPPro;
 
 @end

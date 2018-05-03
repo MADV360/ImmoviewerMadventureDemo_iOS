@@ -11,7 +11,8 @@
 
 #include "TargetConditionals.h"
 #include <stdio.h>
-//#define DEBUG 0
+
+#define SHOW_LOG
 
 #if defined(TARGET_OS_ANDROID) && TARGET_OS_ANDROID != 0
 
@@ -27,13 +28,23 @@
 
 #elif defined(TARGET_OS_OSX) && TARGET_OS_OSX != 0
 
+#ifdef SHOW_LOG
 #define ALOGE(...) printf(__VA_ARGS__)
 #define ALOGV(...) printf(__VA_ARGS__)
+#else
+#define ALOGE(...)
+#define ALOGV(...)
+#endif
 
 #elif defined(TARGET_OS_UNIX) && TARGET_OS_UNIX != 0
 
+#ifdef SHOW_LOG
 #define ALOGE(...) printf(__VA_ARGS__)
 #define ALOGV(...) printf(__VA_ARGS__)
+#else
+#define ALOGE(...)
+#define ALOGV(...)
+#endif
 
 #elif defined(TARGET_OS_IOS) && TARGET_OS_IOS != 0
 
@@ -62,7 +73,7 @@
 
 #else
 
-#ifdef DEBUG
+#ifdef SHOW_LOG
 #define ALOGE(...) printf(__VA_ARGS__)
 #define ALOGV(...) printf(__VA_ARGS__)
 #else

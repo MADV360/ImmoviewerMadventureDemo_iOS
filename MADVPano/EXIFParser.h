@@ -37,7 +37,7 @@ extern "C" {
 #endif // MADVPANO_DLL
 //*/
 typedef enum : int {
-	StitchTypeFishEye = 0x54590000,
+	StitchTypeFishEye = 0x00005954,
 	StitchTypeStitched = 0,
 	StitchTypePreserved = 0,
 } StitchType;
@@ -260,6 +260,7 @@ typedef enum : int {
             uint8_t* valueData;
         };
         unsigned long dataOffsetInFile;
+        unsigned long thisOffsetInFile;
     } DirectoryEntry;
     
     typedef struct {
@@ -388,6 +389,16 @@ typedef enum : int {
 
 	MADVPANO_API void exivImageSaveMetaData(long exivImageHandler);
 
+    void createFakeDNG(const char* destDNGPath, const char* sourceDNGPath, int dstWidth, int dstHeight);
+    
+    void convertTIFFHeaderToRaw(TIFFHeaderRaw& rawTIFFHeader, TIFFHeader tiffHeader);
+    
+    void convertDirectoryEntryToRaw(DirectoryEntryRaw& rawDE, DirectoryEntry DE, bool isBigEndian);
+    
+    uint16_t sizeOfDEValueType(DEValueType type);
+    
+    int compareDEOffset(DirectoryEntry& de0, DirectoryEntry& de1);
+    
 #pragma mark    EXIFDataBundle
 
 class MADVPANO_API EXIFDataBundle {

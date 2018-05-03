@@ -55,24 +55,39 @@
 - (void)setPlaceholder:(NSString *)placeholder
 {
     _placeholder = placeholder;
+    if (self.placeholderLabel) {
+        [self.placeholderLabel removeFromSuperview];
+    }
     UILabel *label = [[UILabel alloc] init];
+    [self addSubview:label];
 //    label.text = FGGetStringWithKeyFromTable(INPUTFUNCONTENT, nil);
     label.textColor = [UIColor colorWithHexString:@"#C7C7CD"];
     label.font = self.font;
     label.x = 5;
     label.y = 3;
     //[label sizeToFit];
-    if (self.viewWidth == 0) {
-        label.frame=CGRectMake(5, 10, ScreenWidth-85, 130);
+    if (self.isPlaceholderCentre) {
+        [label mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(@5);
+            make.right.equalTo(@-5);
+            make.centerX.equalTo(self.mas_centerX);
+            make.centerY.equalTo(self.mas_centerY);
+        }];
     }else
     {
-        label.frame=CGRectMake(5, 10, self.viewWidth-20, 130);
+        if (self.viewWidth == 0) {
+            label.frame=CGRectMake(5, 10, ScreenWidth-85, 130);
+        }else
+        {
+            label.frame=CGRectMake(5, 10, self.viewWidth-20, 130);
+        }
     }
+    
     
     
     label.numberOfLines=0;
     self.placeholderLabel = label;
-    [self addSubview:label];
+    
     
     // 2.监听自己有没有输入内容, 监听自己内容的变化
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChange) name:UITextViewTextDidChangeNotification object:nil];

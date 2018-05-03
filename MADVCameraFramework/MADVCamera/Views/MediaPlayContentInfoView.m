@@ -205,7 +205,12 @@
 - (void)setSourceArr:(NSArray *)sourceArr
 {
     _sourceArr = sourceArr;
-    
+    helper * helperInstance = [helper sharedInstance];
+    CGFloat statusHeight = helperInstance.statusHeight;
+    CGFloat topSafeArea = 0;
+    if (statusHeight > 20) {
+        topSafeArea = statusHeight;
+    }
     [UIView animateWithDuration:0 animations:^{
         [self.tabelView reloadData];
     } completion:^(BOOL finished) {
@@ -213,7 +218,7 @@
             if (sourceArr.count == 0) {
                 if (self.tableHeaderView.height + 40 < self.height) {
                     CGFloat height = self.tableHeaderView.height + 40;
-                    self.frame = CGRectMake(0, ScreenHeight - height, ScreenWidth, height);
+                    self.frame = CGRectMake(0, ScreenHeight - topSafeArea - height, ScreenWidth, height);
                     //self.tabelView.bounces = NO;
                 }
                 
@@ -221,7 +226,7 @@
             {
                 if (40 + self.tabelView.contentSize.height < self.height) {
                     CGFloat height = 40 + self.tabelView.contentSize.height;
-                    self.frame = CGRectMake(0, ScreenHeight - height, ScreenWidth, height);
+                    self.frame = CGRectMake(0, ScreenHeight - topSafeArea - height, ScreenWidth, height);
                     //self.tabelView.bounces = NO;
                 }
             }

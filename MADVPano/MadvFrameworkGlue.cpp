@@ -2,6 +2,7 @@
 // Created by QiuDong on 16/5/30.
 //
 #include "MadvFrameworkGlue.h"
+#include "MadvGLRendererImpl.h"
 #include "GLFilters/GLFilterCache.h"
 #include "GLRenderTexture.h"
 #include "EXIFParser.h"
@@ -30,12 +31,16 @@ static jclass clazz_GLRenderTexture = NULL;
 static jfieldID field_GLRenderTexture_nativeGLRenderTexturePointer = NULL;
 
 static jmethodID method_Vec2f_CtorFF = NULL;
+static jmethodID method_Vec3f_CtorFFF = NULL;
 
 Vec2f Vec2fFromJava(JNIEnv *env, jobject vec2Obj) {
     if (NULL == clazz_Vec2f)
     {
         clazz_Vec2f = env->GetObjectClass(vec2Obj);
         ALOGE("Vec2f class = %ld", clazz_Vec2f);
+    }
+    if (NULL == field_Vec2f_x)
+    {
         field_Vec2f_x = env->GetFieldID(clazz_Vec2f, "x", "F");
         ALOGE("field_Vec2f_x = %ld", field_Vec2f_x);
         field_Vec2f_y = env->GetFieldID(clazz_Vec2f, "y", "F");
@@ -53,11 +58,44 @@ Vec2f Vec2fFromJava(JNIEnv *env, jobject vec2Obj) {
     return ret;
 }
 
+jobject Vec2fToJava(JNIEnv* env, Vec2f v2) {
+     if (NULL == clazz_Vec2f)
+    {
+        jclass tmp = env->FindClass("com/madv360/glrenderer/Vec2f");
+        clazz_Vec2f = (jclass) env->NewGlobalRef(tmp);
+    }
+    if (NULL == method_Vec2f_CtorFF)
+    {
+        method_Vec2f_CtorFF = env->GetMethodID(clazz_Vec2f, "<init>", "(FF)V");
+    }
+    jobject ret = env->NewObject(clazz_Vec2f, method_Vec2f_CtorFF, v2.x, v2.y);
+    return ret;
+}
+
+jobject Vec3fToJava(JNIEnv* env, Vec3f v3) {
+    if (NULL == clazz_Vec3f)
+    {
+        jclass tmp = env->FindClass("com/madv360/glrenderer/Vec3f");
+        clazz_Vec3f = (jclass) env->NewGlobalRef(tmp);
+    }
+//    ALOGE("#BUG4969# Vec3fToJava clazz_Vec3f=0x%lx\n", (long)clazz_Vec3f);
+    if (NULL == method_Vec3f_CtorFFF)
+    {
+        method_Vec3f_CtorFFF = env->GetMethodID(clazz_Vec3f, "<init>", "(FFF)V");
+    }
+//    ALOGE("#BUG4969# Vec3fToJava method_Vec3f_CtorFFF=0x%lx\n", (long)method_Vec3f_CtorFFF);
+    jobject ret = env->NewObject(clazz_Vec3f, method_Vec3f_CtorFFF, v3.x, v3.y, v3.z);
+    return ret;
+}
+
 Vec3f Vec3fFromJava(JNIEnv *env, jobject vec3Obj) {
     if (NULL == clazz_Vec3f)
     {
         clazz_Vec3f = env->GetObjectClass(vec3Obj);
         ALOGE("Vec3f class = %ld", clazz_Vec3f);
+    }
+    if (NULL == field_Vec3f_x)
+    {
         field_Vec3f_x = env->GetFieldID(clazz_Vec3f, "x", "F");
         ALOGE("field_Vec3f_x = %ld", field_Vec3f_x);
         field_Vec3f_y = env->GetFieldID(clazz_Vec3f, "y", "F");
@@ -257,24 +295,6 @@ JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_drawRemappedPa
     glRenderer->drawRemappedPanorama(lutStitchMode, x, y, width, height, cubemapFaceSize, srcTextureType, srcTexture);
 }
 
-JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setGyroMatrix
-        (JNIEnv* env, jobject self, jfloatArray matrix, jint rank) {
-    MadvGLRenderer_Android* glRenderer = getCppRendererFromJavaRenderer(env, self);
-    if (!glRenderer)
-        return;
-    if (NULL == matrix || 0 == rank)
-        return;
-
-    jboolean isCopy;
-    jfloat* matrixData = env->GetFloatArrayElements(matrix, &isCopy);
-
-    glRenderer->setGyroMatrix(matrixData, rank);
-    if (isCopy)
-    {
-        env->ReleaseFloatArrayElements(matrix, matrixData, 0);
-    }
-}
-
 JNIEXPORT jint JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_getDisplayMode
         (JNIEnv* env, jobject self) {
     MadvGLRenderer_Android* glRenderer = getCppRendererFromJavaRenderer(env, self);
@@ -312,6 +332,17 @@ JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setFlipY
     if (!glRenderer) return;
 //    ALOGE("setFlipY : %d", flipY);
     glRenderer->setFlipY(flipY);
+}
+
+JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setGLShaderFlags(JNIEnv* env, jobject self, jint flags) {
+    MadvGLRenderer_Android* glRenderer = getCppRendererFromJavaRenderer(env, self);
+    if (!glRenderer) return;
+
+    glRenderer->setGLShaderFlags(flags);
+}
+
+JNIEXPORT jint JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_getGLShaderFlags(JNIEnv* env, jclass selfClass) {
+    return MadvGLRendererImpl::getGLShaderFlags();
 }
 
 JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setTextureMatrix___3F
@@ -392,17 +423,6 @@ JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setIllusionTex
     {
         env->ReleaseFloatArrayElements(illusionTextureMatrix, data, 0);
     }
-}
-
-JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setModelPostRotation(JNIEnv* env, jobject self, jobject fromVector, jobject toVector) {
-    MadvGLRenderer_Android *glRenderer = getCppRendererFromJavaRenderer(env, self);
-    if (!glRenderer) return;
-
-    Vec3f ccFromVector = Vec3fFromJava(env, fromVector);
-    Vec3f ccToVector = Vec3fFromJava(env, toVector);
-    kmVec3 kmFromVector = {ccFromVector.x, ccFromVector.y, ccFromVector.z};
-    kmVec3 kmToVector = {ccToVector.x, ccToVector.y, ccToVector.z};
-    glRenderer->setModelPostRotation(kmFromVector, kmToVector);
 }
 
 JNIEXPORT void JNICALL Java_com_madv360_glrenderer_MadvGLRenderer_setEnableDebug(JNIEnv* env, jobject self, jboolean enableDebug) {

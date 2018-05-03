@@ -44,7 +44,7 @@ static const char* FragmentShaderSource = STRINGIZE2
         if (v_texcoord.s >= 0.0 && v_texcoord.s <= 1.0 && v_texcoord.t >= 0.0 && v_texcoord.t <= 1.0)
             gl_FragColor = texture2D(u_texture, v_texcoord);
         else
-            gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+            gl_FragColor = vec4(0.0,0.0,0.0,0.0);
 }
 
 );

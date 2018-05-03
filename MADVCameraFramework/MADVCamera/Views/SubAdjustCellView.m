@@ -53,7 +53,7 @@
 }
 
 #pragma mark --AdjustCollectionViewDelegate代理方法的实现--
-- (void)adjustCollectionView:(AdjustCollectionView *)adjustCollectionView click:(AdjustCameraModel *)adjustCameraModel
+- (void)adjustCollectionView:(AdjustCollectionView *)adjustCollectionView click:(AdjustCameraModel *)adjustCameraModel index:(NSInteger)index
 {
     if ([self.delegate respondsToSelector:@selector(subAdjustCellView:click:)]) {
         [self.delegate subAdjustCellView:self click:adjustCameraModel];

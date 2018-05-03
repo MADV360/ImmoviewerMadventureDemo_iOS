@@ -27,7 +27,7 @@ typedef enum : NSInteger {
 
 typedef enum : int {
     GLRenderLoopNotReady = 0,
-    //GLRenderLoopPreparing = 1,
+    GLRenderLoopPreparing = 1,
     GLRenderLoopRunning = 2,
     GLRenderLoopPausing = 3,
     GLRenderLoopPaused = 4,
@@ -82,6 +82,7 @@ extern NSString* kNotificationGLRenderLoopDidBecomeActive;
 
 - (void) setFOVRange:(int)initFOV maxFOV:(int)maxFOV minFOV:(int)minFOV;
 
+- (void) setIsGyroEnabled:(BOOL)enabled;
 - (void) setEnablePitchDragging:(BOOL)enabled;
 
 - (void) setVideoRecorder:(NSString*)outputVideoBaseName qualityLevel:(MVQualityLevel)qualityLevel forCapturing:(BOOL)forCapturing;
@@ -107,7 +108,9 @@ extern NSString* kNotificationGLRenderLoopDidBecomeActive;
 - (BOOL) pauseRendering;
 - (BOOL) resumeRendering;
 - (BOOL) stopRendering;
+- (BOOL) stopRendering:(BOOL)waitForDone;
 - (BOOL) startRendering;
+- (BOOL) startRendering:(BOOL)waitForPrepared;
 
 - (void) setShareMode;
 
@@ -116,6 +119,9 @@ extern NSString* kNotificationGLRenderLoopDidBecomeActive;
 
 - (BOOL) readyToRenderNextFrame;
 - (void) takeSnapShot:(NSString*)destPath completion:(dispatch_block_t)completion;
+
+- (void) startCapturing:(CGSize)videoSize;
+- (void) stopCapturing;
 
 @property (nonatomic, weak) id<GLRenderLoopDelegate> delegate;
 
@@ -126,8 +132,6 @@ extern NSString* kNotificationGLRenderLoopDidBecomeActive;
 @property (nonatomic, assign) BOOL isGlassMode;
 
 @property (nonatomic, assign) BOOL isYUVColorSpace;
-
-@property (nonatomic, assign) BOOL inCapturing;
 
 @property (nonatomic, assign) MVQualityLevel encoderQualityLevel;
 

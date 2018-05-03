@@ -13,6 +13,7 @@
 
 #include "MadvGLRenderer.h"
 #include "EXIFParser.h"
+#include <GL/wglext.h>
 #include <atlstr.h>
 #include <string>
 
@@ -53,10 +54,14 @@ public:
 	static HWND createWindow(int width, int height, HINSTANCE hInstance);
 
 	HWND _hWnd = NULL;
-	HDC _hDC = NULL;
-	HGLRC _hRC = NULL;
-	HGDIOBJ _hGDIObj = NULL;
-	HBITMAP _hBitmap = NULL;
+	HDC _hPrevDC = NULL;
+	HGLRC _hPrevRC = NULL;
+	//HGDIOBJ _hGDIObj = NULL;
+	//HBITMAP _hBitmap = NULL;
+	HPBUFFERARB _hBuffer = NULL;
+	HDC _hpBufDC = NULL;
+	HGLRC _pBufGLCtx = NULL;
+	
 	GLuint _framebuffer = 0;
 	GLuint _rendertexture = 0;
 	GLuint _depthbuffer = 0;

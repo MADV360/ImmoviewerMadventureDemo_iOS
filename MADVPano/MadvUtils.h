@@ -39,7 +39,7 @@ extern "C" {
     
 	MADVPANO_API void clearCachedLUT(const char* lutPath);
     
-    MADVPANO_API char* createTempLUTDirectory(const char* parentDirectory);
+    MADVPANO_API char* createTempLUTDirectory(const char* parentDirectory, const char* suffix);
     
     MADVPANO_API void deleteIfTempLUTDirectory(const char* directory);
     

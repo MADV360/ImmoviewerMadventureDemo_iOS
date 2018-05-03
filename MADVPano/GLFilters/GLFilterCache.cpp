@@ -184,8 +184,8 @@ GLFilter* GLFilterCache::createFilter(int filterID) {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);//GL_LINEAR//GL_NEAREST
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);//GL_CLAMP_TO_EDGE);//
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);//GL_CLAMP_TO_EDGE);//
-            glPixelStorei(GL_PACK_ALIGNMENT, 4);
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+            glPixelStorei(GL_PACK_ALIGNMENT, 1);
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
             glBindTexture(GL_TEXTURE_2D, prevTextureBinding);
 
             GLColorLookupFilter* filter = new GLColorLookupFilter;

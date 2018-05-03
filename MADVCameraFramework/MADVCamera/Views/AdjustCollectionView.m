@@ -11,8 +11,9 @@
 #import "AdjustTopPicture_bottomWordCell.h"
 #import "AdjustCircleWordCell.h"
 #import "AdjustTopBottomWordCell.h"
+#import "PictureCell.h"
 
-@interface AdjustCollectionView()<UICollectionViewDelegate,UICollectionViewDataSource>
+@interface AdjustCollectionView()<UICollectionViewDelegate,UICollectionViewDataSource,PictureCellDelegate>
 @property(nonatomic,weak)UICollectionView* collectionView;
 @end
 
@@ -64,10 +65,14 @@
     {
         identifier = @"TopBottomWord";
         class = [AdjustTopBottomWordCell class];
-    }else
+    }else if(self.adjustType == CircleWord)
     {
         identifier = @"CircleWord";
         class = [AdjustCircleWordCell class];
+    }else
+    {
+        identifier = @"Picture";
+        class = [PictureCell class];
     }
     
     [collectionView registerClass:class forCellWithReuseIdentifier:identifier];
@@ -80,34 +85,47 @@
     {
         AdjustTopBottomWordCell * adjustCell = (AdjustTopBottomWordCell *)cell;
         adjustCell.adjustCameraModel = adjustCameraModel;
-    }else
+    }else if(self.adjustType == CircleWord)
     {
         AdjustCircleWordCell * adjustCell = (AdjustCircleWordCell *)cell;
         adjustCell.adjustCameraModel = adjustCameraModel;
         
+    }else
+    {
+        PictureCell * pictureCell = (PictureCell *)cell;
+        pictureCell.adjustCameraModel = adjustCameraModel;
+        pictureCell.delegate = self;
+        pictureCell.index = indexPath.item;
     }
     
     return cell;
 }
-
+#pragma mark --PictureCellDelegate代理方法的实现--
+- (void)pictureCellClick:(PictureCell *)pictureCell
+{
+    if ([self.delegate respondsToSelector:@selector(adjustCollectionView:click:index:)]) {
+        [self.delegate adjustCollectionView:self click:pictureCell.adjustCameraModel index:pictureCell.index];
+    }
+}
 #pragma mark    UICollectionViewDelegateFlowLayout
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat width;
     width = self.width/self.dataSource.count;
-    if (width < 60) {
-        width = 60;
+    if (self.adjustType != Picture) {
+        if (width < 60) {
+            width = 60;
+        }
     }
-    
     return CGSizeMake(width, self.height);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.adjustType != TopBottomWord) {
-        if ([self.delegate respondsToSelector:@selector(adjustCollectionView:click:)]) {
+    if (self.adjustType != TopBottomWord || self.adjustType != Picture) {
+        if ([self.delegate respondsToSelector:@selector(adjustCollectionView:click:index:)]) {
             AdjustCameraModel * adjustCameraModel = self.dataSource[indexPath.item];
-            [self.delegate adjustCollectionView:self click:adjustCameraModel];
+            [self.delegate adjustCollectionView:self click:adjustCameraModel index:indexPath.item];
         }
     }
 }

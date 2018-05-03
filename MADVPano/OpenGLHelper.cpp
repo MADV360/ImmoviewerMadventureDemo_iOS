@@ -204,7 +204,9 @@ GLint compileAndLinkShaderProgramWithShaderPointers(const GLchar* const* vertexS
         ///!!!exit(1);
     }
     
+    glDetachShader(program, vertexShader);
     glDeleteShader(vertexShader);
+    glDetachShader(program, fragmentShader);
     glDeleteShader(fragmentShader);
     
     return program;

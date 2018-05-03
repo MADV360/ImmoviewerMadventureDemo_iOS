@@ -133,7 +133,7 @@ long getCurrentTimeMills()
 static CycordVideoRecorder* gSharedInstance = nil;
 
 void FKC_hookOCClasses();
-void FKC_restoreOCClasses();
+///!!!void FKC_restoreOCClasses();
 
 typedef void (*ObjectiveCVoidMethod)(id, SEL, ...);
 typedef id (*ObjectiveCIdMethod)(id, SEL, ...);
@@ -328,7 +328,7 @@ void FKC_PresentDrawableAtTime(id self, SEL _cmd, id<MTLDrawable> drawable, CFTi
             [gSharedInstance releaseSizeDependentMembers];
             [gSharedInstance releaseOffscreenGLVariables];
             gSharedInstance = nil;
-            FKC_restoreOCClasses();
+            ///!!!FKC_restoreOCClasses();
         }
     }
 }
@@ -885,7 +885,11 @@ void FKC_PresentDrawableAtTime(id self, SEL _cmd, id<MTLDrawable> drawable, CFTi
                 frameSeconds =(float)CMTimeGetSeconds(frameTime);
                 append_ok = [_pixelBufferAdaptor appendPixelBuffer:_pixelBuffer withPresentationTime:frameTime];
                 appendError = _videoWriter.error;
-                NSLog(@"#FrameLoss#6 recordOneFrame error=%d, timestamp=%f", (!append_ok || nil != appendError), videoTimeMillSeconds);
+                if (!append_ok || nil != appendError)
+                {
+                    NSLog(@"#FrameLoss#6 recordOneFrame with error, timestamp=%f, appendError=%@", frameSeconds, appendError);
+                }
+                
 #ifdef DEBUG_VIDEORECORDER_INTERRUPTED_BY_ERROR
                 if (s_isFirstTime)
                 {
@@ -1265,7 +1269,7 @@ void FKC_hookOCClasses()
         g_isClassHooked = true;
     }
 }
-
+/*
 void FKC_restoreOCClasses()
 {
     if (g_isClassHooked)
@@ -1297,7 +1301,7 @@ void FKC_restoreOCClasses()
         g_isClassHooked = false;
     }
 }
-
+//*/
 - (void) setupVideoWriter : (CGSize)size
 {
     //write by spy
@@ -1547,6 +1551,7 @@ void FKC_restoreOCClasses()
     return [self.class outputMovieFileBaseName:_destVideoBaseName];
 }
 
+//extern FILE * pAACFile;
 - (BOOL) compileAudioAndVideoToMovie:(void(^)(NSError*, NSString*))handler
 {
     //这个方法在沙盒中把视频与录制的声音合并成一个新视频
@@ -1593,12 +1598,30 @@ void FKC_restoreOCClasses()
     AVMutableComposition* mixComposition = [AVMutableComposition composition];
     AVMutableCompositionTrack *a_compositionVideoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
     NSArray* tracks = [videoAsset tracksWithMediaType:AVMediaTypeVideo];
-    [a_compositionVideoTrack insertTimeRange:video_timeRange ofTrack:[tracks objectAtIndex:0] atTime:nextClipStartTime error:nil];
+    if (tracks.count > 0)
+    {
+        [a_compositionVideoTrack insertTimeRange:video_timeRange ofTrack:[tracks objectAtIndex:0] atTime:nextClipStartTime error:nil];
+    }
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:audio_inputFilePath]) {
         AVURLAsset* audioAsset = [[AVURLAsset alloc]initWithURL:audio_inputFileUrl options:nil];
+        //cwq 2018.03.02
+        CMTime m = audioAsset.duration;
+        long nTime = videoAsset.duration.value/videoAsset.duration.timescale - audioAsset.duration.value/audioAsset.duration.timescale;
+        if (nTime>=0) {
+            m.value += 48000*nTime;
+        }
+        else
+        {
+            //m.value += 48000*(videoAsset.duration.value/videoAsset.duration.timescale - audioAsset.duration.value/audioAsset.duration.timescale);
+        }
+        ////
+        
         if (audioAsset.duration.value > 0) {
-            CMTimeRange audio_timeRange = CMTimeRangeMake(kCMTimeZero, audioAsset.duration);
+            //CMTimeRange audio_timeRange = CMTimeRangeMake(kCMTimeZero, audioAsset.duration);
+            //cwq 2018.03.02
+            CMTimeRange audio_timeRange = CMTimeRangeMake(kCMTimeZero, m);
+            ////
             AVMutableCompositionTrack *b_compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
             [b_compositionAudioTrack insertTimeRange:audio_timeRange ofTrack:[[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0] atTime:nextClipStartTime error:nil];
         } else {

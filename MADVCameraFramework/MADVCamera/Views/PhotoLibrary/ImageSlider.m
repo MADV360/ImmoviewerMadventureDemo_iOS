@@ -279,14 +279,14 @@
             return;
         }
         UIImage* originalImage = nil;
-        originalImage = [UIImage getVideoImage:[media localFilePathSync] time:time*index];
+        originalImage = [UIImage getVideoImage:[media localFilePathSync:NO] time:time*index];
         if (originalImage) {
             UIImageView* imageView = self.imageViewArr[index];
             UIImage* thumbnailImage;
             //*
             float gyroMatrix[9];
             int rank = copyGyroMatrixFromString(gyroMatrix, media.gyroMatrixString.UTF8String);
-            thumbnailImage = [MVPanoRenderer renderImage:originalImage destSize:CGSizeMake(128, 64) forceLUTStitching:YES sourcePath:[media localFilePathSync] pMadvEXIFExtension:NULL filterID:0 gyroMatrix:gyroMatrix gyroMatrixBank:rank videoCaptureResolution:media.videoCaptureResolution];
+            thumbnailImage = [MVPanoRenderer renderImage:originalImage destSize:CGSizeMake(128, 64) forceLUTStitching:YES sourcePath:[media localFilePathSync:NO] pMadvEXIFExtension:NULL filterID:0 gyroMatrix:gyroMatrix gyroMatrixBank:rank videoCaptureResolution:media.videoCaptureResolution];
             /*/
             thumbnailImage = originalImage;
             //*/

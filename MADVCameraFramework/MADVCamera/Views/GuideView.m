@@ -36,11 +36,18 @@
     titleLabel.textColor = [UIColor whiteColor];
     titleLabel.text = FGGetStringWithKeyFromTable(MICAMERA, nil);
     
-    
+    helper * helperInstance = [helper sharedInstance];
+    CGFloat statusHeight = helperInstance.statusHeight;
+    CGFloat bottomSafeArea = 0;
+    CGFloat topSafeArea = 0;
+    if (statusHeight > 20) {
+        bottomSafeArea = 34;
+        topSafeArea = 44;
+    }
     UIButton * goBtn = [[UIButton alloc] init];
     [backImageView addSubview:goBtn];
     [goBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(@-50);
+        make.bottom.equalTo(@(-50 - bottomSafeArea));
         make.left.equalTo(@30);
         make.right.equalTo(@-30);
         make.height.equalTo(@40);
@@ -54,7 +61,7 @@
     
     GuideScrollView * scrollView = [[GuideScrollView alloc] init];
     [backImageView addSubview:scrollView];
-    scrollView.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight-90);
+    scrollView.frame = CGRectMake(0, 0, ScreenWidth, self.height - 90 - bottomSafeArea);
     [scrollView loadGuideScrollView];
     scrollView.dataArr = @[@[FGGetStringWithKeyFromTable(ADVENTURE, nil)],@[FGGetStringWithKeyFromTable(NEWMEMORY, nil)],@[FGGetStringWithKeyFromTable(MICAMERA, nil),FGGetStringWithKeyFromTable(FINDNEW, nil)]];
     

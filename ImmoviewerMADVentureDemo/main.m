@@ -11,16 +11,18 @@
 
 #import <MadvGLRenderer_iOS.h>
 #import <MADVPano/JPEGUtils.h>
+#import <MADVPano/MadvGLRendererBase_iOS.h>
+
 void stitchJPEG(NSString* destPath, NSString* sourcePath) {
     MadvEXIFExtension madvExtension = readMadvEXIFExtensionFromJPEG(sourcePath.UTF8String);
     jpeg_decompress_struct jpegInfo = readImageInfoFromJPEG(sourcePath.UTF8String);
     if (madvExtension.gyroMatrixBytes > 0)
     {
-        [MVPanoRenderer renderJPEGToJPEG:destPath sourcePath:sourcePath dstWidth:jpegInfo.image_width dstHeight:jpegInfo.image_height forceLUTStitching:NO pMadvEXIFExtension:&madvExtension filterID:0 gyroMatrix:madvExtension.cameraParams.gyroMatrix gyroMatrixRank:3];
+        MadvGLRendererBase_iOS::renderJPEGToJPEG(destPath, sourcePath, jpegInfo.image_width, jpegInfo.image_height, NO, &madvExtension, 0, madvExtension.cameraParams.gyroMatrix, 3);
     }
     else
     {
-        [MVPanoRenderer renderJPEGToJPEG:destPath sourcePath:sourcePath dstWidth:jpegInfo.image_width dstHeight:jpegInfo.image_height forceLUTStitching:NO pMadvEXIFExtension:&madvExtension filterID:0 gyroMatrix:NULL gyroMatrixRank:0];
+        MadvGLRendererBase_iOS::renderJPEGToJPEG(destPath, sourcePath, jpegInfo.image_width, jpegInfo.image_height, NO, &madvExtension, 0, NULL, 0);
     }
 }
 

@@ -46,26 +46,11 @@
 static std::string s_resourceRootDirectory = "C:\\MADVPano\\res\\";
 static HINSTANCE s_hInstance = NULL;
 
-//#define RENDER_TO_BITMAP
+#define RENDER_TO_BITMAP
 
 char* string2lpStr(std::string& str) {
 	return (char*)str.c_str();
 }
-
-/*
-char* CString2pChar(CString strData)
-{
-	int nLength = strData.GetLength();
-	//宽字符(unicode)转换为多字节(char*),首先获取长度  
-	int nBytes = WideCharToMultiByte(CP_ACP, 0, strData, nLength, NULL, 0, NULL, NULL);
-	char* VoicePath = new char[nBytes + 1];
-	memset(VoicePath, 0, nLength + 1);
-	//真正进行转换  
-	WideCharToMultiByte(CP_OEMCP, 0, strData, nLength, VoicePath, nBytes, NULL, NULL);
-	VoicePath[nBytes] = 0;
-	return VoicePath;
-}
-//*/
 
 void MadvGLRenderer_windows::initialize(const char* resourceDirectoryRoot, HINSTANCE hInstance) {
 	s_resourceRootDirectory = resourceDirectoryRoot;
@@ -196,118 +181,143 @@ HWND WGLContext::createWindow(int width, int height, HINSTANCE hInstance) {
 //*/
 }
 
+/*
+#define ALIAS_FUNCTION_POINTER( funcname, type ) type p##funcname
+
+ALIAS_FUNCTION_POINTER(wglGetExtensionsStringARB, PFNWGLGETEXTENSIONSSTRINGARBPROC);
+ALIAS_FUNCTION_POINTER(wglCreatePbufferARB, PFNWGLCREATEPBUFFERARBPROC);
+ALIAS_FUNCTION_POINTER(wglGetPbufferDCARB, PFNWGLGETPBUFFERDCARBPROC);
+ALIAS_FUNCTION_POINTER(wglReleasePbufferDCARB, PFNWGLRELEASEPBUFFERDCARBPROC);
+ALIAS_FUNCTION_POINTER(wglDestroyPbufferARB, PFNWGLDESTROYPBUFFERARBPROC);
+ALIAS_FUNCTION_POINTER(wglQueryPbufferARB, PFNWGLQUERYPBUFFERARBPROC);
+ALIAS_FUNCTION_POINTER(wglGetPixelFormatAttribivARB, PFNWGLGETPIXELFORMATATTRIBIVARBPROC);
+ALIAS_FUNCTION_POINTER(wglGetPixelFormatAttribfvARB, PFNWGLGETPIXELFORMATATTRIBFVARBPROC);
+ALIAS_FUNCTION_POINTER(wglChoosePixelFormatARB, PFNWGLCHOOSEPIXELFORMATARBPROC);
+
+#define wglGetExtensionsStringARB pwglGetExtensionsStringARB
+#define wglCreatePbufferARB pwglCreatePbufferARB
+#define wglGetPbufferDCARB pwglGetPbufferDCARB
+#define wglReleasePbufferDCARB pwglReleasePbufferDCARB
+#define wglDestroyPbufferARB pwglDestroyPbufferARB
+#define wglQueryPbufferARB pwglQueryPbufferARB
+#define wglGetPixelFormatAttribivARB pwglGetPixelFormatAttribivARB
+#define wglGetPixelFormatAttribfvARB pwglGetPixelFormatAttribfvARB
+#define wglChoosePixelFormatARB pwglChoosePixelFormatARB
+
+#define INIT_ENTRY_POINT( funcname, type )                \
+	p##funcname = (type) wglGetProcAddress(#funcname); \
+	if (!p##funcname) { \
+	    fprintf(stderr, "%s() not initialized\n", #funcname); \
+		p##funcname = funcname; }
+/*
+// function ptr: WGL specific extensions for v3.0+
+typedef const char* (WINAPI * PFNWGLGETEXTENSIONSSTRINGARBPROC)(HDC hdc);
+PFNWGLGETEXTENSIONSSTRINGARBPROC  pwglGetExtensionsStringARB = 0;
+#define wglGetExtensionsStringARB pwglGetExtensionsStringARB
+//*/
 WGLContext::~WGLContext() {
 	release();
 }
 
 WGLContext::WGLContext(HWND hWindow, HINSTANCE hInstance, int width, int height) {
+	///!!!For Debug:
+	//width = nextPOT(width);
+	//height = nextPOT(height);
 	//wglMakeCurrent(NULL, NULL);
-	HDC prevDC = wglGetCurrentDC();
-#ifndef RENDER_TO_BITMAP
-	//HWND hDesktopWindow = GetDesktopWindow();
-	//*pDC = wglGetCurrentDC();
-	if (hWindow)
-		_hDC = GetDC(hWindow);
-	else
+	_hPrevDC = wglGetCurrentDC();
+	_hPrevRC = wglGetCurrentContext();
+
+	_hWnd = createWindow(width, height, hInstance);
+	HDC dummyDC = GetDC(_hWnd);
+	HGLRC dummyRC = wglCreateContext(dummyDC);
+	wglMakeCurrent(dummyDC, dummyRC);
+
+	/*
+	// get WGL specific extensions for v3.0+
+	INIT_ENTRY_POINT(
+		wglGetExtensionsStringARB, PFNWGLGETEXTENSIONSSTRINGARBPROC);
+	if (wglGetExtensionsStringARB)
 	{
-		_hWnd = createWindow(width, height, hInstance); ///!!! GetDesktopWindow(); ///!!! 
-		_hDC = GetDC(_hWnd);
+		const char* str = wglGetExtensionsStringARB(dummyDC);
+		if (str)
+		{
+			std::cout << str << std::endl;
+		}
 	}
-	//GetDesktopWindow());
-#else
+
+	// Initialize WGL_ARB_pbuffer entry points.
+	INIT_ENTRY_POINT(
+		wglCreatePbufferARB, PFNWGLCREATEPBUFFERARBPROC);
+	INIT_ENTRY_POINT(
+		wglGetPbufferDCARB, PFNWGLGETPBUFFERDCARBPROC);
+	INIT_ENTRY_POINT(
+		wglReleasePbufferDCARB, PFNWGLRELEASEPBUFFERDCARBPROC);
+	INIT_ENTRY_POINT(
+		wglDestroyPbufferARB, PFNWGLDESTROYPBUFFERARBPROC);
+	INIT_ENTRY_POINT(
+		wglQueryPbufferARB, PFNWGLQUERYPBUFFERARBPROC);
+	// Initialize WGL_ARB_pixel_format entry points.
+	INIT_ENTRY_POINT(
+		wglGetPixelFormatAttribivARB,
+		PFNWGLGETPIXELFORMATATTRIBIVARBPROC);
+	INIT_ENTRY_POINT(
+		wglGetPixelFormatAttribfvARB,
+		PFNWGLGETPIXELFORMATATTRIBFVARBPROC);
+	INIT_ENTRY_POINT(
+		wglChoosePixelFormatARB,
+		PFNWGLCHOOSEPIXELFORMATARBPROC);
+	//*/
+	//*
+	const int MAX_ATTRIBS = 32, MAX_PFORMATS = 32;
+	// Get ready to query for a suitable pixel format that meets our // minimum requirements.
+	int   iattributes[2 * MAX_ATTRIBS];
+	float fattributes[2 * MAX_ATTRIBS];
+	int   nfattribs = 0;
+	int   niattribs = 0;
+	// Attribute arrays must be “0” terminated – for simplicity, first // just zero-out the array then fill from left to right.
+	for (int a = 0; a < 2 * MAX_ATTRIBS; a++)
+	{
+		iattributes[a] = 0;
+		fattributes[a] = 0;
+	}
+	// Since we are trying to create a pbuffer, the pixel format we request (and subsequently use) must be “p-buffer capable”.
+	iattributes[2 * niattribs] = WGL_DRAW_TO_PBUFFER_ARB; iattributes[2 * niattribs + 1] = true;
+	niattribs++;
+
+	// We require a minimum of 24-bit depth.
+	iattributes[2*niattribs ] = WGL_DEPTH_BITS_ARB; iattributes[2*niattribs+1] = 16;
+	niattribs++;
+
+	// We require a minimum of 8-bits for each R, G, B and A
+	iattributes[2*niattribs ] = WGL_RED_BITS_ARB; iattributes[2*niattribs+1] = 8;
+	niattribs++;
+	iattributes[2 * niattribs] = WGL_GREEN_BITS_ARB; iattributes[2 * niattribs + 1] = 8;
+	niattribs++;
+	iattributes[2 * niattribs] = WGL_BLUE_BITS_ARB; iattributes[2 * niattribs + 1] = 8;
+	niattribs++;
+	iattributes[2 * niattribs] = WGL_ALPHA_BITS_ARB; iattributes[2 * niattribs + 1] = 8;
+	niattribs++;
+	//iattributes[2 * niattribs] = WGL_PBUFFER_WIDTH_ARB; iattributes[2 * niattribs + 1] = width;
+	//niattribs++;
+	//iattributes[2 * niattribs] = WGL_PBUFFER_HEIGHT_ARB; iattributes[2 * niattribs + 1] = height;
+	//niattribs++;
+	ALOGE("\nWGLContext init #1, dummyDC = 0x%lx, dummyRC = 0x%lx \n", (long)dummyDC, (long)dummyRC);
+	// Now obtain a list of pixel formats that meet these minimum requirements.
+	int pformat[MAX_PFORMATS];
+	unsigned int nformats;
+	if (!wglChoosePixelFormatARB(dummyDC, iattributes, fattributes, MAX_PFORMATS, pformat, &nformats))
+	{
+		fprintf(stderr, "pbuffer creation error: Couldn't find a suitable pixel format.\n");
+		exit( -1 );
+	}
 	// Ref: http://blog.csdn.net/sin_geek/article/details/38750357
-	hDC = CreateCompatibleDC(0);
-	if (NULL == hDC)
-	{
-		ALOGE("Could not create memory device context");
-	}
-	// Create a bitmap compatible with the DC  
-	// must use CreateDIBSection(), and this means all pixel ops must be synchronised  
-	// using calls to GdiFlush() (see CreateDIBSection() docs)  
-	BITMAPINFO bmi = {
-		{ sizeof(BITMAPINFOHEADER), width, height, 1, 32, BI_RGB, 0, 0, 0, 0, 0 },
-		{ 0 }
-	};
-	unsigned char *pbits; // pointer to bitmap bits  
-	hBitmap = CreateDIBSection(hDC, &bmi, DIB_RGB_COLORS, (void **)&pbits, 0, 0);
-	//HDC hdcScreen = GetDC(0);  
-	//m_hBitmap = CreateCompatibleBitmap(m_hDC, width, height);  
-	if (NULL == hBitmap)
-	{
-		ALOGE("Could not create bitmap");
-	}
-
-	// Select the bitmap into the DC  
-	hGDIObj = SelectObject(hDC, hBitmap);
-	if (NULL == hGDIObj)
-	{
-		ALOGE("Could not select bitmap into DC");
-	}
-
-	// Choose the pixel format  
-	PIXELFORMATDESCRIPTOR pfd = {
-		sizeof(PIXELFORMATDESCRIPTOR), // struct size  
-		1, // Version number  
-		PFD_DRAW_TO_BITMAP | PFD_SUPPORT_OPENGL, // use OpenGL drawing to BM  
-		PFD_TYPE_RGBA, // RGBA pixel values  
-		24, // color bits  
-		0, 0, 0, // RGB bits shift sizes...  
-		0, 0, 0, // Don't care about them  
-		0, 0, // No alpha buffer info  
-		0, 0, 0, 0, 0, // No accumulation buffer  
-		0, // depth buffer bits  
-		0, // No stencil buffer  
-		0, // No auxiliary buffers  
-		PFD_MAIN_PLANE, // Layer type  
-		0, // Reserved (must be 0)  
-		0, // No layer mask  
-		0, // No visible mask  
-		0, // No damage mask  
-	};
-	int pfid = ChoosePixelFormat(hDC, &pfd);
-	if (pfid == 0)
-	{
-		ALOGE("Pixel format selection failed");
-	}
-
-	// Set the pixel format  
-	// - must be done *after* the bitmap is selected into DC  
-	BOOL b = SetPixelFormat(hDC, pfid, &pfd);
-	if (!b)
-	{
-		ALOGE("Pixel format set failed");
-	}
-#endif
-	//ALOGE("#CMp4Join# (@%lx) InitGLComponents : m_hDC = %lx", (long)this, (long)m_hDC);
-
-#ifdef RENDER_TO_BITMAP
-	///m_hRC = wglGetCurrentContext();
-	// Create the OpenGL resource context (RC) and make it current to the thread  
-	hRC = wglCreateContext(hDC);
-	if (NULL == hRC)
-	{
-		ALOGE("OpenGL resource context creation failed");
-	}
-	//wglMakeCurrent(hDC, hRC);
-	//ALOGE("#CMp4Join# (@%lx) InitGLComponents : #0 m_hRC = %lx", (long)this, (long)m_hRC);
-#else
-	PIXELFORMATDESCRIPTOR pfd;
-	memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
-	pfd.nVersion = 1;
-	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
-	pfd.cColorBits = 32;
-	pfd.cDepthBits = 0;///!!! 16;
-	pfd.cStencilBits = 0;
-	pfd.iPixelType = PFD_TYPE_RGBA;
-	pfd.iLayerType = PFD_MAIN_PLANE;
-	pfd.dwFlags = PFD_SUPPORT_OPENGL;///!!! | PFD_DOUBLEBUFFER | PFD_DRAW_TO_WINDOW;
-
-	int pixelFormat = ChoosePixelFormat(_hDC, &pfd);
-	SetPixelFormat(_hDC, pixelFormat, &pfd);
-
-	HGLRC prevHRC = wglGetCurrentContext();
-	_hRC = wglCreateContext(_hDC);
-	wglMakeCurrent(_hDC, _hRC);
+	
+	int format = pformat[0];
+	_hBuffer = wglCreatePbufferARB(dummyDC, format, width, height, iattributes);
+	_hpBufDC = wglGetPbufferDCARB(_hBuffer);
+	_pBufGLCtx = wglCreateContext(_hpBufDC);
+	wglMakeCurrent(_hpBufDC, _pBufGLCtx);
+	ALOGE("\nWGLContext init #2\n");
 	if (0 == _framebuffer)
 	{
 		GLint prevFramebuffer, prevRenderbuffer, prevTexture;
@@ -321,24 +331,26 @@ WGLContext::WGLContext(HWND hWindow, HINSTANCE hInstance, int width, int height)
 		glGenTextures(1, &_rendertexture);
 		glBindTexture(GL_TEXTURE_2D, _rendertexture);
 		CHECK_GL_ERROR();
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);//GL_LINEAR//GL_NEAREST
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);//GL_LINEAR//GL_NEAREST//GL_LINEAR_MIPMAP_LINEAR
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);//GL_CLAMP_TO_EDGE);//GL_REPEAT
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);//GL_CLAMP_TO_EDGE);//GL_REPEAT
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);//GL_LINEAR//GL_NEAREST
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);//GL_LINEAR//GL_NEAREST//GL_LINEAR_MIPMAP_LINEAR
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);//GL_CLAMP_TO_EDGE);//GL_REPEAT
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);//GL_CLAMP_TO_EDGE);//GL_REPEAT
 		CHECK_GL_ERROR();
-		glPixelStorei(GL_PACK_ALIGNMENT, 4);
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+		glPixelStorei(GL_PACK_ALIGNMENT, 1);///!!!https://stackoverflow.com/questions/26647672/npot-support-in-opengl-for-r8g8b8-texture
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 		CHECK_GL_ERROR();
 		//glFramebufferRenderbuffer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbuffer);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _rendertexture, 0);
+		ALOGE("#glFramebufferTexture2D _rendertexture=%d, _framebuffer=%d\n", _rendertexture, _framebuffer);
 		CHECK_GL_ERROR();
 		glGenRenderbuffers(1, &_depthbuffer);
 		glBindRenderbuffer(GL_RENDERBUFFER, _depthbuffer);
 		CHECK_GL_ERROR();
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
 		CHECK_GL_ERROR();
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthbuffer);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _depthbuffer);
+		CHECK_GL_ERROR();
 		//*/
 		GLuint status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		if (GL_FRAMEBUFFER_COMPLETE != status)
@@ -352,44 +364,49 @@ WGLContext::WGLContext(HWND hWindow, HINSTANCE hInstance, int width, int height)
 		glBindTexture(GL_TEXTURE_2D, prevTexture);
 	}
 
-	wglMakeCurrent(prevDC, prevHRC);
-	//ALOGE("#CMp4Join# (@%lx) InitGLComponents : #1 m_hRC = %lx", (long)this, (long)m_hRC);
-	//setup opengl context complete
-#endif
+	wglMakeCurrent(_hPrevDC, _hPrevRC);
 }
 
 void WGLContext::makeCurrent() {
-	wglMakeCurrent(_hDC, _hRC);
+	_hPrevDC = wglGetCurrentDC();
+	_hPrevRC = wglGetCurrentContext();
+
+	wglMakeCurrent(_hpBufDC, _pBufGLCtx);
 	glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
 }
 
 void WGLContext::flush() {
+	glFlush();
 	GdiFlush();
+	wglMakeCurrent(_hPrevDC, _hPrevRC);
 }
 
 void WGLContext::release() {
+	if (0 == _rendertexture)
+		return;
+
 	// Clean up
 	makeCurrent();
 	glDeleteTextures(1, &_rendertexture);
+	_rendertexture = 0;
+
 	glDeleteRenderbuffers(1, &_depthbuffer);
+	_depthbuffer = 0;
+
 	glDeleteFramebuffers(1, &_framebuffer);
+	_framebuffer = 0;
 
-	wglMakeCurrent(NULL, NULL);
-	if (_hRC)
-	{
-		wglDeleteContext(_hRC); // Delete RC
-		_hRC = NULL;
-	}
-	if (_hGDIObj)
-	{
-		SelectObject(_hDC, _hGDIObj); // Remove bitmap from DC  
-		if (_hBitmap) DeleteObject(_hBitmap); // Delete bitmap  
-		if (_hDC) DeleteDC(_hDC); // Delete DC
+	wglMakeCurrent(_hPrevDC, _hPrevRC);
 
-		_hDC = NULL;
-		_hGDIObj = NULL;
-		_hBitmap = NULL;
-	}
+	wglDeleteContext(_pBufGLCtx);
+	_pBufGLCtx = NULL;
+
+	wglReleasePbufferDCARB(_hBuffer, _hpBufDC);
+	_hpBufDC = NULL;
+
+	wglDestroyPbufferARB(_hBuffer);
+	_hBuffer = NULL;
+
 	if (_hWnd)
 	{
 		ALOGE("\nMadvGLRenderer_windows $ WGLContext::release() : SendMessage\n");

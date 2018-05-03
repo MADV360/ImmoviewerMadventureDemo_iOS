@@ -10,43 +10,13 @@
 #define MadvGLRenderer_iOS_hpp
 
 #ifdef MADVPANO_BY_SOURCE
-#import "OpenGLHelper.h"
-#import "MadvGLRenderer.h"
-#import "EXIFParser.h"
+#import "MadvGLRendererBase_iOS.h"
 #else
-#import <MADVPano/OpenGLHelper.h>
-#import <MADVPano/MadvGLRenderer.h>
-#import <MADVPano/EXIFParser.h>
+#import <MADVPano/MadvGLRendererBase_iOS.h>
 #endif
 
 #import "MVMedia.h"
 #import <UIKit/UIKit.h>
-
-#define MADV_DUAL_FISHEYE_VIDEO_TAG @"MADV_DUAL_FISHEYE"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-    
-    inline Vec2f CGPoint2Vec2f(CGPoint point) {
-        Vec2f vec2;
-        vec2.x = point.x;
-        vec2.y = point.y;
-        return vec2;
-    }
-
-    inline Vec2f CGSize2Vec2f(CGSize size) {
-        Vec2f vec2;
-        vec2.x = size.width;
-        vec2.y = size.height;
-        return vec2;
-    }
-    
-#ifdef __cplusplus
-}
-#endif
-
-extern void cgDataProviderReleaseDataCallback(void * __nullable info, const void *  data, size_t size);
 
 @interface MVPanoRenderer : NSObject
 
@@ -92,10 +62,6 @@ extern void cgDataProviderReleaseDataCallback(void * __nullable info, const void
 - (void) setRenderSource:(void*)renderSource;
 
 - (CGSize) renderSourceSize;
-
-- (void) setGyroMatrix:(float*)matrix rank:(int)rank;
-
-- (void) setModelPostRotationFrom:(kmVec3)fromVector to:(kmVec3)toVector;
 
 - (GLint) leftSourceTexture;
 - (GLint) rightSourceTexture;

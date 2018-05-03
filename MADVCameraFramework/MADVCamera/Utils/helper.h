@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface helper : NSObject
+@property(nonatomic,assign)CGFloat statusHeight;
 
 + (NSString *)getMD:(NSString *) str;
 + (void) writeProfileString:(NSString *)key value:(NSString *)content;
@@ -122,4 +123,5 @@
 //计算目录下面所有文件的大小
 + (long long)countDirectorySize:(NSString *)directory;
 + (NSString *)getAppVersion;
++ (id)sharedInstance;
 @end

@@ -37,7 +37,7 @@ static NSString* MediaCellIdentifier = @"MediaCellIdentifier";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(downloadedListUpdated:) name:kNotificationDownloadedListUpdated object:nil];
+    ///!!![[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(downloadedListUpdated:) name:kNotificationDownloadedListUpdated object:nil];
 }
 
 

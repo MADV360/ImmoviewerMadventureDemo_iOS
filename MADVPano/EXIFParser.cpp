@@ -46,6 +46,15 @@
  information than 2004-10-23T18:00:00Z.
  */
 
+int compareDEOffset(DirectoryEntry& de0, DirectoryEntry& de1) {
+    if (de0.thisOffsetInFile > de1.thisOffsetInFile)
+        return 1;
+    else if (de0.thisOffsetInFile < de1.thisOffsetInFile)
+        return -1;
+    else
+        return 0;
+}
+
 bool setXmpGPanoPacket(const char* imagePath) {
     if (NULL == imagePath) {
         return false;
@@ -741,6 +750,8 @@ uint16_t sizeOfDEValueType(DEValueType type) {
         case DERational:
         case DESRational:
             return 8;
+        default:
+            return 1;
     }
 }
 
@@ -962,6 +973,7 @@ bool readTIFF(TIFFHeader* outTIFFHeader, std::list<std::list<DirectoryEntry> >& 
         uint16_t DEEntriesCount = 0;
         uint32_t nextIFDOffset = 0;
         fread(&DEEntriesCount, sizeof(uint16_t), 1, fp);
+        unsigned long DEEntriesOffset = ftell(fp);
         DirectoryEntryRaw* rawDEEntries = new DirectoryEntryRaw[DEEntriesCount];
         fread(rawDEEntries, SizeOfDirectoryEntryRaw, DEEntriesCount, fp);
         fread(&nextIFDOffset, sizeof(uint32_t), 1, fp);
@@ -973,13 +985,15 @@ bool readTIFF(TIFFHeader* outTIFFHeader, std::list<std::list<DirectoryEntry> >& 
             DirectoryEntry DE;
             
             convertDirectoryEntryFromRaw(DE, rawDE, outTIFFHeader->isBigEndian);
+            DE.thisOffsetInFile = DEEntriesOffset + iDE * SizeOfDirectoryEntryRaw;
+            
             long valueSize = sizeOfDEValueType((DEValueType)DE.type) * DE.length;
             if (valueSize > 4)
             {
                 uint8_t* valueData = (uint8_t*) malloc(valueSize);
                 long currentPosition = ftell(fp);
                 DE.dataOffsetInFile = tiffBeginOffset + DE.value;
-                fseek(fp, tiffBeginOffset + DE.value, SEEK_SET);
+                fseek(fp, DE.dataOffsetInFile, SEEK_SET);
                 fread(valueData, valueSize, 1, fp);
                 DE.valueData = valueData;
                 fseek(fp, currentPosition, SEEK_SET);
@@ -1596,7 +1610,7 @@ MadvEXIFExtension readMadvEXIFExtensionFromRaw(const char* rawPath, TIFFHeader* 
                     break;
                 case TAG_SCENE_TYPE:
                 {
-                    ret.sceneType = (int) sizeOfValue;
+                    ret.sceneType = DE.value;
                     
                     if (0 == --itemsLeft)
                     {
@@ -1677,19 +1691,12 @@ MadvEXIFExtension readMadvEXIFExtensionFromRaw(const char* rawPath, TIFFHeader* 
     }
     
 _EXIT:
-    if (isMADVMaker && isMADVModel)
+    if (StitchTypeFishEye != ret.sceneType)
     {
-        if (0 != ret.sceneType)
-        {
-            ret.sceneType = StitchTypeFishEye;
-        }
+        ret.sceneType = StitchTypeStitched;
     }
-    else
+    if (!isMADVMaker || !isMADVModel)
     {
-        if (StitchTypeFishEye != ret.sceneType)
-        {
-            ret.sceneType = StitchTypeStitched;
-        }
         MadvEXIFExtensionReset(ret);
     }
     return ret;
@@ -2009,4 +2016,137 @@ float EXIFDataBundle::getRationalFloatValue(const char* key, int index) {
 float EXIFDataBundle::getGPSCoordinate(const char* key) {
     EXIFDataBundleImpl* impl = (EXIFDataBundleImpl*)_impl;
     return impl ? impl->getGPSCoordinate(key) : 0;
+}
+
+void createFakeDNG(const char* destDNGPath, const char* sourceDNGPath, int dstWidth, int dstHeight) {
+    //Write output DNG:
+    TIFFHeader tiffHeader;
+    std::list<std::list<DirectoryEntry> > IFDList;
+    FILE* fp = fopen(sourceDNGPath, "rb+");
+    readTIFF(&tiffHeader, IFDList, fp);
+    printIFDList(std::cout, tiffHeader, IFDList);///!!!For Debug
+    fclose(fp);
+    
+    std::list<DirectoryEntry> allDEs;
+    for (std::list<std::list<DirectoryEntry> >::iterator iIFDList = IFDList.begin();
+         iIFDList != IFDList.end();
+         iIFDList++)
+    {
+        std::list<DirectoryEntry>& DEList = *iIFDList;
+        for (std::list<DirectoryEntry>::iterator iDE = DEList.begin(); iDE != DEList.end(); iDE++)
+        {
+            DirectoryEntry& DE = *iDE;
+            switch (DE.tag)
+            {
+//#ifdef REWRITE_RAW_TIFF_FIELDS
+                case TAG_USER_COMMENT:
+                {
+                    /*
+                     std::list<DirectoryEntry>::iterator tmpIter = iDE;
+                     iDE++;
+                     DEList.erase(tmpIter);
+                     continue;
+                     /*/
+                    DE.length = 0;
+                    DE.value = 0;
+                    //*/
+                }
+                    break;
+                case TAG_FILE_SOURCE:
+                {
+                    DE.value = 0;
+                }
+                    break;
+                case TAG_SCENE_TYPE:
+                {
+                    DE.value = 2;
+                }
+                    break;
+                case TAG_DNG_WIDTH:
+                {
+                    dstWidth = DE.value;
+                }
+                    break;
+                case TAG_DNG_HEIGHT:
+                {
+                    dstHeight = DE.value;
+                }
+                    break;
+//#endif //#ifdef REWRITE_RAW_TIFF_FIELDS
+                default:
+                    break;
+            }
+            allDEs.push_back(DE);
+        }
+    }
+    allDEs.sort(compareDEOffset);
+    //*
+    fp = fopen(sourceDNGPath, "rb+");
+    fseek(fp, 0, SEEK_END);
+    uint32_t fileLength = (uint32_t)ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+    
+    FILE* fpOut = fopen(destDNGPath, "wb+");
+    const int BufferSize = 1048576 * 8;
+    uint8_t* buffer = (uint8_t*)malloc(BufferSize);
+    
+    std::list<DirectoryEntry>::reverse_iterator iter = allDEs.rbegin();
+    size_t thisBlockBytesLeft = (allDEs.size() > 0 ? iter->thisOffsetInFile : fileLength);
+    do
+    {
+        for (; thisBlockBytesLeft >= BufferSize; thisBlockBytesLeft -= BufferSize)
+        {
+            fread(buffer, BufferSize, 1, fp);
+            fwrite(buffer, BufferSize, 1, fpOut);
+        }
+        if (thisBlockBytesLeft > 0)
+        {
+            fread(buffer, thisBlockBytesLeft, 1, fp);
+            fwrite(buffer, thisBlockBytesLeft, 1, fpOut);
+        }
+        
+        if (iter != allDEs.rend())
+        {
+            DirectoryEntry& DE = *iter;
+            DirectoryEntryRaw rawDE, rawDE0;
+            fread(&rawDE0, SizeOfDirectoryEntryRaw, 1, fp);
+            convertDirectoryEntryToRaw(rawDE, DE, tiffHeader.isBigEndian);
+            
+            long valueSize = sizeOfDEValueType((DEValueType)DE.type) * DE.length;
+            if (valueSize > 4)
+            {
+                memcpy(rawDE.valueOrOffset, rawDE0.valueOrOffset, sizeof(rawDE.valueOrOffset));
+            }
+            
+            fwrite(&rawDE, SizeOfDirectoryEntryRaw, 1, fpOut);
+            
+            iter++;
+            uint64_t currentLocation = ftell(fp);
+            if (iter != allDEs.rend())
+            {
+                uint64_t nextOffset = iter->thisOffsetInFile;
+                thisBlockBytesLeft = nextOffset - currentLocation;
+            }
+            else
+            {
+                thisBlockBytesLeft = fileLength - currentLocation;
+            }
+        }
+    } while (ftell(fp) < fileLength);
+    
+    free(buffer);
+    fclose(fpOut);
+    fclose(fp);
+    /*/
+     fp = fopen(destDNGPath, "wb+");
+     GLushort* rawData = (GLushort*)malloc(sizeof(GLushort) * dstWidth * dstHeight);
+     writeTIFF(fp, tiffHeader, rawData, sizeof(GLushort) * dstWidth * dstHeight, IFDList);
+     fclose(fp);
+     free(rawData);
+     
+     fp = fopen(destDNGPath, "rb+");
+     readTIFF(&tiffHeader, IFDList, fp);
+     printIFDList(std::cout, tiffHeader, IFDList);///!!!For Debug
+     fclose(fp);
+     //*/
 }

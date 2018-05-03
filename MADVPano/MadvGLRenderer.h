@@ -190,16 +190,6 @@ public:
     GLint getRightSourceTexture();
     GLenum getSourceTextureTarget();
     
-    /** Set gyroscope stabilizer data
-     * MADV360 APP can perform anti-shake by applying rotation of camera, which is calculated with data from 6-axis gyroscope in MADV360 camera.
-     * APIs for extracting recorded gyro data in EXIF of JPEG or box in MP4 are provided in other place. Please refer to #EXIFParser# and other classes
-     * @param matrix   Transform matrix data
-     @ @param rank     Rank of the matrix, always be 3
-     */
-    void setGyroMatrix(float* matrix, int rank);
-    
-    void setModelPostRotation(kmVec3 fromVector, kmVec3 toVector);
-    
     /** 是否要上下镜像 */
     void setFlipY(bool flipY);
     
@@ -226,6 +216,8 @@ public:
     void setDebugTexcoord(bool debugTexcoord);
     
 //    static void clearCachedLUT(const char* lutPath);
+
+    void setGLShaderFlags(int flags);
 
     AutoRef<GLCamera> glCamera();
 
@@ -273,6 +265,8 @@ protected:
     AutoRef<GLCamera> _glCamera = NULL;
     GLuint _cubemapTexture = 0;
     GLint _cubemapFaceSize = 0;
+    int _debugCubemapRenderNumber = 0;
+    const int MaxCubemapRenderNumber = 1;
 };
 
 //typedef AutoRef<MadvGLRenderer> MadvGLRendererRef;

@@ -83,8 +83,8 @@ GLRenderTexture::GLRenderTexture(GLint texture, GLenum textureTarget, GLint widt
         glTexParameteri(_textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);//GL_LINEAR//GL_NEAREST
         glTexParameteri(_textureTarget, GL_TEXTURE_WRAP_S, _wrapS);//GL_CLAMP_TO_EDGE);//GL_REPEAT
         glTexParameteri(_textureTarget, GL_TEXTURE_WRAP_T, _wrapT);//GL_CLAMP_TO_EDGE);//GL_REPEAT
-        glPixelStorei(GL_PACK_ALIGNMENT, 4);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+        glPixelStorei(GL_PACK_ALIGNMENT, 1);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         
         glBindFramebuffer(GL_FRAMEBUFFER, prevFramebuffer);
         glBindTexture(GL_TEXTURE_2D, prevTexture2D);
@@ -165,8 +165,8 @@ int GLRenderTexture::resizeIfNecessary(GLint width, GLint height) {
             glTexParameteri(_textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);//GL_LINEAR//GL_NEAREST
             glTexParameteri(_textureTarget, GL_TEXTURE_WRAP_S, _wrapS);//GL_CLAMP_TO_EDGE);//GL_REPEAT
             glTexParameteri(_textureTarget, GL_TEXTURE_WRAP_T, _wrapT);//GL_CLAMP_TO_EDGE);//GL_REPEAT
-            glPixelStorei(GL_PACK_ALIGNMENT, 4);
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+            glPixelStorei(GL_PACK_ALIGNMENT, 1);
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
             
             //    GLubyte* pixelData = (GLubyte*) malloc(destSize.width * destSize.height * 4);
             glTexImage2D(_textureTarget, 0, _internalFormat, width, height, 0, _format, _dataType, 0);

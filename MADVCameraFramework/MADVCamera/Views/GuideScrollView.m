@@ -46,7 +46,7 @@
 {
     MyPageView * pageView = [[MyPageView alloc] init];
     [self addSubview:pageView];
-    pageView.frame = CGRectMake(10, ScreenHeight-35-10-90, 25 * 2 + 10, 10);
+    pageView.frame = CGRectMake(10, self.height-10 - 35, 25 * 2 + 10, 10);
     pageView.center = CGPointMake(self.center.x, pageView.center.y);
     pageView.borderColor = [UIColor whiteColor];
     pageView.currentBgColor = [UIColor whiteColor];
@@ -72,7 +72,7 @@
     for (int i = 0; i < dataArr.count; i++) {
         UIView * baseView = [[UIView alloc] init];
         [self.scrollView addSubview:baseView];
-        baseView.frame = CGRectMake(ScreenWidth * i, 0, ScreenWidth, ScreenHeight-90);
+        baseView.frame = CGRectMake(ScreenWidth * i, 0, ScreenWidth, self.height);
         baseView.backgroundColor = [UIColor clearColor];
         
         NSArray * arr = self.dataArr[i];

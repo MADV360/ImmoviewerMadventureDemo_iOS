@@ -76,9 +76,6 @@ public:
     inline GLint getFOVDegree() {return _fovDegree;}
     inline void setFOVDegree(GLint fovDegree) {_fovDegree = fovDegree;}
     
-    inline GLint getViewSphereRadius() {return _viewSphereRadius;}
-    inline void setViewSphereRadius(GLint viewSphereRadius) {_viewSphereRadius = viewSphereRadius;}
-    
     void getViewMatrix(kmMat4* viewMatrix);
     
     void setCameraPostRotation(const kmQuaternion* cameraPostRotationQuaternion);
@@ -95,6 +92,8 @@ public:
     
     void setModelPostRotation(const kmVec3* fromVector, const kmVec3* toVector);
     
+    void setGyroMatrix(float* matrix, int rank);
+    
     void setModelRotation(const kmQuaternion* modelRotationQuaternion);
     void setModelRotationMatrix(const kmMat4* modelRotation);
     
@@ -107,6 +106,9 @@ public:
     static bool checkQuaternion(const kmQuaternion* quaternion);
     
     static void normalizeQuaternion(kmQuaternion* quaternion);
+    
+    static kmVec3 rotationMatrixToEulerAngles(kmMat3* mat3);
+    static kmVec3 rotationMatrixToEulerAngles(kmMat4* mat4);
     
     kmVec4 _debugGetPolarAxis();
     kmVec4 _debugGetNorthPolar();
@@ -132,12 +134,14 @@ private:
     kmVec3 _modelPostRotationFromVector;
     kmVec3 _modelPostRotationToVector;
     
+    float _gyroMatrix[16];
+    int _gyroMatrixRank = 0;
+    
     GLint _width;
     GLint _height;
     GLint _near;
     GLint _far;
     GLint _fovDegree;
-    GLint _viewSphereRadius;
 };
 
 typedef AutoRef<GLCamera> GLCameraRef;

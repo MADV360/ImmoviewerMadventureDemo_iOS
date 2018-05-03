@@ -29,6 +29,7 @@
 //#import <Masonry/Masonry.h>
 #import "VideoExportView.h"
 #import "z_Sandbox.h"
+#import "helper.h"
 
 @interface MVMediaPlayerViewController () <VideoExportViewDelegate>
 
@@ -107,7 +108,9 @@
     if (self.isUsedAsEncoder) {
         VideoExportView * videoExportView = [[VideoExportView alloc] init];
         [self.view addSubview:videoExportView];
-        videoExportView.frame = CGRectMake(0, 64, ScreenWidth, ScreenHeight-64);
+        helper * helperInstance = [helper sharedInstance];
+        CGFloat statusHeight = helperInstance.statusHeight;
+        videoExportView.frame = CGRectMake(0, 44 + statusHeight, ScreenWidth, ScreenHeight-44 - statusHeight);
         [videoExportView loadVideoExportView];
         videoExportView.delegate = self;
         
@@ -115,7 +118,7 @@
     }
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSString* localFilePath = self.media.localFilePathSync;
+        NSString* localFilePath = [self.media localFilePathSync:NO];
         [self setContentPath:localFilePath parameters:self.parameters];
     });
 }

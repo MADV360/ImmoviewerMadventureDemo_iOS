@@ -60,7 +60,10 @@ public:
     void setCamera(AutoRef<GLCamera> panoCamera);
     
     bool getViewMatrix(kmMat4* viewMatrix);
-    
+    bool peekViewMatrix(kmMat4* viewMatrix);///!!!
+
+    kmVec3 getEulerAnglesFromViewMatrix();
+
     /** Enable/Disable vertical dragging which controls pitch angle
      * 目前实践中效果比较好的控制方式是（仿Theta）:
      * In order to avoid some weird problem of tilt yaw axis, we recommend that pitch dragging be disabled while cellphone gyroscope control is enabled simutaneously (just like the way Theta does).
@@ -82,6 +85,18 @@ public:
     void setGyroRotationQuaternion(kmQuaternion* inertialGyroQuaternion, bool isInversed);
     
     void setInertiaGyroRotation(kmQuaternion* inertialGyroQuaternion, bool isInversed);
+    
+    /** Set gyroscope stabilizer data
+     * MADV360 APP can perform anti-shake by applying rotation of camera, which is calculated with data from 6-axis gyroscope in MADV360 camera.
+     * APIs for extracting recorded gyro data in EXIF of JPEG or box in MP4 are provided in other place. Please refer to #EXIFParser# and other classes
+     * @param matrix   Transform matrix data
+     @ @param rank     Rank of the matrix, always be 3
+     */
+    void setGyroMatrix(float* matrix, int rank);
+    
+    void setModelPostRotation(kmVec3 fromVector, kmVec3 toVector);
+    
+    void setAsteroidMode(bool toSetOrUnset);
     
     void startGyroControl(kmQuaternion* startInertialGyroRotation, bool isInversed);
     void startGyroControl();

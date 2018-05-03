@@ -189,3 +189,60 @@ JNIEXPORT void JNICALL Java_com_madv360_glrenderer_PanoCameraController_update(J
     }
     panoCtrl->update(dtSeconds);
 }
+
+JNIEXPORT void JNICALL Java_com_madv360_glrenderer_PanoCameraController_setModelPostRotation(JNIEnv* env, jobject self, jobject from, jobject to) {
+    PanoCameraController* panoCtrl = getCppPanoCameraControllerFromJavaObject(env, self);
+    if (NULL == panoCtrl)
+    {
+        return;
+    }
+
+    Vec3f v3fFrom = Vec3fFromJava(env, from);
+    Vec3f v3fTo = Vec3fFromJava(env, to);
+    kmVec3 kmv3From = {v3fFrom.x, v3fFrom.y, v3fFrom.z};
+    kmVec3 kmv3To = {v3fTo.x, v3fTo.y, v3fTo.z};
+    panoCtrl->setModelPostRotation(kmv3From, kmv3To);
+}
+
+JNIEXPORT void JNICALL Java_com_madv360_glrenderer_PanoCameraController_setGyroMatrix(JNIEnv* env, jobject self, jfloatArray gyroMatrix, jint rank) {
+    PanoCameraController* panoCtrl = getCppPanoCameraControllerFromJavaObject(env, self);
+    if (NULL == panoCtrl)
+    {
+        return;
+    }
+
+    if (NULL == gyroMatrix || 0 == rank)
+        return;
+
+    jboolean isCopy;
+    jfloat* matrixData = env->GetFloatArrayElements(gyroMatrix, &isCopy);
+
+    panoCtrl->setGyroMatrix(matrixData, rank);
+
+    if (isCopy)
+    {
+        env->ReleaseFloatArrayElements(gyroMatrix, matrixData, 0);
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_madv360_glrenderer_PanoCameraController_setAsteroidMode(JNIEnv* env, jobject self, jboolean set) {
+    PanoCameraController* panoCtrl = getCppPanoCameraControllerFromJavaObject(env, self);
+    if (NULL == panoCtrl)
+    {
+        return;
+    }
+
+    panoCtrl->setAsteroidMode(set);
+}
+
+JNIEXPORT jobject JNICALL Java_com_madv360_glrenderer_PanoCameraController_getEulerAnglesFromViewMatrix(JNIEnv* env, jobject self) {
+    PanoCameraController* panoCtrl = getCppPanoCameraControllerFromJavaObject(env, self);
+    if (NULL == panoCtrl)
+    {
+        return NULL;
+    }
+
+    kmVec3 v3 = panoCtrl->getEulerAnglesFromViewMatrix();
+    jobject jV3 = Vec3fToJava(env, Vec3f{v3.x, v3.y, v3.z});
+    return jV3;
+}

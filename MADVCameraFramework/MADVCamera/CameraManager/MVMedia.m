@@ -145,6 +145,14 @@ static NSMutableDictionary * downloadStatusOfMediaRemoteDict;
 {
     return [self dbValueForKeyPath:@"dbLocalIdentifier"];
 }
+- (void)setShareLocalIdentifier:(NSString *)shareLocalIdentifier
+{
+    self.dbShareLocalIdentifier = shareLocalIdentifier;
+}
+- (NSString *)shareLocalIdentifier
+{
+    return [self dbValueForKeyPath:@"dbShareLocalIdentifier"];
+}
 - (void)setShotDateTime:(NSString *)shotDateTime
 {
     self.dbShotDateTime = shotDateTime;
@@ -253,11 +261,11 @@ static NSMutableDictionary * downloadStatusOfMediaRemoteDict;
     return [[self dbValueForKeyPath:@"dbFps"] doubleValue];
 }
 
-- (id) localFilePathSync {
+- (id) localFilePathSync:(BOOL)isGetImageData {
     __block BOOL finished = NO;
     __block id ret = nil;
     NSCondition* cond = [[NSCondition alloc] init];
-    ret = [self requestLocalFilePath:^(id localPath) {
+    ret = [self requestLocalFilePath:isGetImageData completion:^(id localPath) {
         finished = YES;
         ret = localPath;
         [cond lock];
@@ -278,7 +286,7 @@ static NSMutableDictionary * downloadStatusOfMediaRemoteDict;
     return ret;
 }
 
-- (id) requestLocalFilePath:(void(^)(id filePath))completionHandler {
+- (id) requestLocalFilePath:(BOOL)isGetImageData completion:(void(^)(id filePath))completionHandler{
     if (self.localPath && self.localPath.length > 0 && [z_Sandbox isFileExists:[z_Sandbox documentPath:self.localPath]])
     {
         NSString* documentFilePath = [z_Sandbox documentPath:self.localPath];
@@ -346,11 +354,20 @@ static NSMutableDictionary * downloadStatusOfMediaRemoteDict;
                                 BOOL downloadFinined = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];
                                 if (downloadFinined)
                                 {
-                                    UIImage * image = [UIImage imageWithData:imageData];
-                                    if (completionHandler)
+                                    if (isGetImageData) {
+                                        if (completionHandler)
+                                        {
+                                            completionHandler(imageData);
+                                        }
+                                    }else
                                     {
-                                        completionHandler(image);
+                                        UIImage * image = [UIImage imageWithData:imageData];
+                                        if (completionHandler)
+                                        {
+                                            completionHandler(image);
+                                        }
                                     }
+                                    
                                 }else
                                 {
                                     if (completionHandler)
@@ -716,7 +733,7 @@ static NSMutableDictionary * downloadStatusOfMediaRemoteDict;
         {
             if ([helper isNull:isStitchedRefresh] && media.mediaType == MVMediaTypeVideo) {
                 KxMovieDecoder* decoder = [[KxMovieDecoder alloc] init];
-                [decoder openFile:[media localFilePathSync] error:nil];
+                [decoder openFile:[media localFilePathSync:NO] error:nil];
                 int64_t LutzOffset = [decoder getLutzOffset];
                 int64_t LutzSize = [decoder getLutzSize];
                 int xResolution = [[NSNumber numberWithUnsignedInteger:decoder.frameWidth] intValue];
@@ -973,7 +990,7 @@ static NSMutableDictionary * downloadStatusOfMediaRemoteDict;
             }
         }
     }];
-    if (self.mediaType == MVMediaTypeVideo && ![self localFilePathSync]) {
+    if (self.mediaType == MVMediaTypeVideo && ![self localFilePathSync:NO]) {
         anyAssetExists = NO;
     }
     return anyAssetExists;
@@ -1125,7 +1142,7 @@ static NSMutableDictionary * downloadStatusOfMediaRemoteDict;
 }
 //数据库忽略该属性 不操作该属性
 + (NSArray *)ignoredProperties {
-    return @[@"downloadStatus",@"dbDownloadStatus",@"mediaType",@"cameraUUID",@"remotePath",@"localPath",@"thumbnailImagePath",@"createDate",@"modifyDate",@"size",@"downloadedSize",@"videoDuration",@"filterID",@"isStitched",@"gyroMatrixString",@"videoCaptureResolution",@"finishDownloadedSize",@"downloadResumeData",@"error",@"localIdentifier",@"shotDateTime",@"model",@"xResolution",@"yResolution",@"exposureTime",@"ISO",@"whiteBalance",@"longitude",@"latitude",@"altitude",@"resolution",@"exposureBiasValue",@"location",@"isLocationHandled",@"avAsset",@"videoPath",@"isTimeElapsedVideo",@"fps",@"encoderQualityLevel"];
+    return @[@"downloadStatus",@"dbDownloadStatus",@"mediaType",@"cameraUUID",@"remotePath",@"localPath",@"thumbnailImagePath",@"createDate",@"modifyDate",@"size",@"downloadedSize",@"videoDuration",@"filterID",@"isStitched",@"gyroMatrixString",@"videoCaptureResolution",@"finishDownloadedSize",@"downloadResumeData",@"error",@"localIdentifier",@"shotDateTime",@"model",@"xResolution",@"yResolution",@"exposureTime",@"ISO",@"whiteBalance",@"longitude",@"latitude",@"altitude",@"resolution",@"exposureBiasValue",@"location",@"isLocationHandled",@"avAsset",@"videoPath",@"isTimeElapsedVideo",@"fps",@"encoderQualityLevel",@"shareLocalIdentifier"];
 }
 //属性的默认值
 + (NSDictionary *)defaultPropertyValues {

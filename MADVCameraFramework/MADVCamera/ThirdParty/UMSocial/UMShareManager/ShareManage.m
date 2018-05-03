@@ -661,7 +661,7 @@ static ShareManage *shareManage;
 #pragma mark --veer分享--
 - (void)veerShareWithViewControll:(UIViewController *)viewC
 {
-    [VeeRSDK sharePHAssetToVeeR:self.localIdentifier tags:@[@"Madv360"] videoStereoType:VeeRSDKVideoStereoTypeMono FOVHorizontalDegree:0 FOVVerticalDegree:0];
+    [VeeRSDK sharePHAssetToVeeR:self.localIdentifier tags:@[@"Madv360"] stereoType:VeeRSDKStereoTypeMono FOVHorizontalDegree:0 FOVVerticalDegree:0];
 }
 
 
