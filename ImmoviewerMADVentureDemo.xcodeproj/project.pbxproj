@@ -255,6 +255,7 @@
 		BB14E79720410AB100910330 /* NSRecursiveCondition.m in Sources */ = {isa = PBXBuildFile; fileRef = BB14E6EE20410AB000910330 /* NSRecursiveCondition.m */; };
 		BB14E79820410AB100910330 /* PNGUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB14E6F220410AB000910330 /* PNGUtils.cpp */; };
 		BB14E79920410AB100910330 /* Thread_Apple.c in Sources */ = {isa = PBXBuildFile; fileRef = BB14E6F620410AB000910330 /* Thread_Apple.c */; };
+		BB2D77F7209BF235001344C5 /* MadvGLRendererBase_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2D77F5209BF235001344C5 /* MadvGLRendererBase_iOS.mm */; };
 		BBAD07CB20187960005BAD6F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD07CA20187960005BAD6F /* AppDelegate.m */; };
 		BBAD07CE20187960005BAD6F /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD07CD20187960005BAD6F /* FirstViewController.m */; };
 		BBAD07D120187960005BAD6F /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD07D020187960005BAD6F /* SecondViewController.m */; };
@@ -798,6 +799,8 @@
 		BB14E6F420410AB000910330 /* TargetConditionals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TargetConditionals.h; sourceTree = "<group>"; };
 		BB14E6F520410AB000910330 /* Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
 		BB14E6F620410AB000910330 /* Thread_Apple.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; path = Thread_Apple.c; sourceTree = "<group>"; };
+		BB2D77F5209BF235001344C5 /* MadvGLRendererBase_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MadvGLRendererBase_iOS.mm; sourceTree = "<group>"; };
+		BB2D77F6209BF235001344C5 /* MadvGLRendererBase_iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MadvGLRendererBase_iOS.h; sourceTree = "<group>"; };
 		BBAD07C62018795F005BAD6F /* ImmoviewerMADVentureDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImmoviewerMADVentureDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBAD07C920187960005BAD6F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		BBAD07CA20187960005BAD6F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -1740,6 +1743,8 @@
 		BB14E6E420410AB000910330 /* platforms */ = {
 			isa = PBXGroup;
 			children = (
+				BB2D77F6209BF235001344C5 /* MadvGLRendererBase_iOS.h */,
+				BB2D77F5209BF235001344C5 /* MadvGLRendererBase_iOS.mm */,
 				BB14E6EB20410AB000910330 /* MVPanoCameraController.h */,
 				BB14E6EC20410AB000910330 /* MVPanoCameraController.m */,
 				BB14E6ED20410AB000910330 /* NSRecursiveCondition.h */,
@@ -2196,6 +2201,7 @@
 				BB14E4FF20410AA200910330 /* NSCondition+Extensions.m in Sources */,
 				BB14E79820410AB100910330 /* PNGUtils.cpp in Sources */,
 				BB14E44B20410AA100910330 /* AMBASetClientInfoResponse.m in Sources */,
+				BB2D77F7209BF235001344C5 /* MadvGLRendererBase_iOS.mm in Sources */,
 				BB14E44A20410AA100910330 /* AMBASetCameraModeResponse.m in Sources */,
 				BB14E73520410AB000910330 /* xmp.cpp in Sources */,
 				BB14E73320410AB000910330 /* value.cpp in Sources */,

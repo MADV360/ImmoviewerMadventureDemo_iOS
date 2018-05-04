@@ -381,3 +381,46 @@ void deleteIfTempLUTDirectory(const char* directory) {
         removeDirectory(directory);
     }
 }
+
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS != 0
+
+#import "sys/utsname.h"
+#import <CommonCrypto/CommonDigest.h>
+
+NSString* md5OfData(unsigned char* data, UInt32 length) {
+    unsigned char result[16];
+    CC_MD5(data, length, result);
+    
+    char md5str[16 * 2 + 1];
+    md5str[16 * 2] = '\0';
+    char* pDst = md5str;
+    unsigned char* pSrc = result;
+    for (int i=0; i<16; ++i)
+    {
+        sprintf(pDst, "%02x", *pSrc);
+        pDst += 2;
+        pSrc++;
+    }
+    
+    return [NSString stringWithUTF8String:md5str];
+}
+
+NSString* makeTempLUTDirectory(NSString* sourceURI) {
+    NSData* sourceURIData = [sourceURI dataUsingEncoding:NSUTF8StringEncoding];
+    NSString* suffix = [md5OfData((unsigned char*)sourceURIData.bytes, (uint32_t)sourceURIData.length) substringToIndex:8];
+    NSString* docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+    char* cstrLutPath = createTempLUTDirectory(docPath.UTF8String, suffix.UTF8String);
+    NSString* lutPath = [NSString stringWithUTF8String:cstrLutPath];
+    free(cstrLutPath);
+    /*
+     NSString* lutPath = [NSString stringWithFormat:@"%@%d", [z_Sandbox documentPath:@"tmplut"], rand()];
+     NSFileManager* fm = [NSFileManager defaultManager];
+     BOOL isDirectory = YES;
+     if (![fm fileExistsAtPath:lutPath isDirectory:&isDirectory] || !isDirectory)
+     {
+     [fm removeItemAtPath:lutPath error:nil];
+     [fm createDirectoryAtPath:lutPath withIntermediateDirectories:YES attributes:nil error:nil];
+     }//*/
+    return lutPath;
+}
+#endif

@@ -294,6 +294,9 @@
 #define SCREEN_CAPTURE_FILENAME_PREFIX @"ScreenCap_"
 
 #define OPENGPS @"OPENGPS"
+
+#define GPSPARAM @"GPSPARAM"// gps参数
+
 //纬度
 #define LATITUDE @"LATITUDE"
 //经度
@@ -305,5 +308,7 @@
 #define LASTLOCATIONENABLED @"LASTLOCATIONENABLED"
 
 //#define ISFULLSCREEN
+
+#define TRANSPORTPROTOCOL @"TRANSPORTPROTOCOL"
 
 #endif /* PrefixHeader_h */

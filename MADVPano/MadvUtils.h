@@ -47,4 +47,9 @@ extern "C" {
 }
 #endif
 
+#if defined(TARGET_OS_IOS) && TARGET_OS_IOS != 0
+#import <Foundation/Foundation.h>
+NSString* makeTempLUTDirectory(NSString* sourceURI);
+#endif
+
 #endif /* MadvUtils_hpp */

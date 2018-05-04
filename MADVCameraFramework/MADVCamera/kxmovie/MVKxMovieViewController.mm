@@ -2148,6 +2148,10 @@ static int frameCount = 0;
 {
     NSInteger frameNumber = [self frameNumberOfVideoTime:(frame.timestamp / 1000.f + _editStartTime) maxFrameNumber:-1];
     frame.frameNumber = frameNumber;
+    if ((self.isUsedAsEncoder || self.isUsedAsVideoEditor) && self.decoder.getOriAudioChannel >= 4)
+    {
+        self.isCameraGyroAdustEnabled = NO;
+    }
     if (self.isCameraGyroAdustEnabled)
     {
         NSData* gyroData = [self gyroDataOfFrameNumber:frameNumber];
