@@ -9,13 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 
+#import <MadvGLRenderer.h>
 #import <MadvGLRenderer_iOS.h>
 #import <MADVPano/JPEGUtils.h>
-#import <MADVPano/MadvGLRendererBase_iOS.h>
+//#import <MADVPano/MadvGLRendererBase_iOS.h>
 
 void stitchJPEG(NSString* destPath, NSString* sourcePath) {
-    MadvEXIFExtension madvExtension = readMadvEXIFExtensionFromJPEG(sourcePath.UTF8String);
     jpeg_decompress_struct jpegInfo = readImageInfoFromJPEG(sourcePath.UTF8String);
+    /*
+    MadvEXIFExtension madvExtension = readMadvEXIFExtensionFromJPEG(sourcePath.UTF8String);
     if (madvExtension.gyroMatrixBytes > 0)
     {
         MadvGLRendererBase_iOS::renderJPEGToJPEG(destPath, sourcePath, jpegInfo.image_width, jpegInfo.image_height, NO, &madvExtension, 0, madvExtension.cameraParams.gyroMatrix, 3);
@@ -24,6 +26,16 @@ void stitchJPEG(NSString* destPath, NSString* sourcePath) {
     {
         MadvGLRendererBase_iOS::renderJPEGToJPEG(destPath, sourcePath, jpegInfo.image_width, jpegInfo.image_height, NO, &madvExtension, 0, NULL, 0);
     }
+    /*/
+    EAGLContext* eaglContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
+    [EAGLContext setCurrentContext:eaglContext];
+    //GLint sourceTexture = createTextureWithJPEG(sourcePath.UTF8String);
+    //MadvGLRenderer::renderTextureToJPEG(destPath.UTF8String, jpegInfo.image_width, jpegInfo.image_height, sourceTexture, NULL, 0, NULL, NULL, 0, 180, 90);
+    //glDeleteTextures(1, (const GLuint*)&sourceTexture);
+    MadvGLRenderer::renderMadvJPEGToJPEG(destPath.UTF8String, sourcePath.UTF8String, jpegInfo.image_width, jpegInfo.image_height, NULL, 0, NULL, NULL, 0, 180, 90);
+    glFinish();
+    [EAGLContext setCurrentContext:nil];
+    //*/
 }
 
 int main(int argc, char * argv[]) {

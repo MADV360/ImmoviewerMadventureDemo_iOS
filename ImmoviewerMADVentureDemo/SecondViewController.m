@@ -8,7 +8,7 @@
 
 #import "SecondViewController.h"
 #import "AppDelegate.h"
-#import <MVGLView.h>
+#import "MVGLView.h"
 
 static NSString* MediaCellIdentifier = @"MediaCellIdentifier";
 
