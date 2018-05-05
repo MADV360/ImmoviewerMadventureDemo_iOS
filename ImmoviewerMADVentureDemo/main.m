@@ -27,14 +27,12 @@ void stitchJPEG(NSString* destPath, NSString* sourcePath) {
         MadvGLRendererBase_iOS::renderJPEGToJPEG(destPath, sourcePath, jpegInfo.image_width, jpegInfo.image_height, NO, &madvExtension, 0, NULL, 0);
     }
     /*/
-    EAGLContext* eaglContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
-    [EAGLContext setCurrentContext:eaglContext];
+    
     //GLint sourceTexture = createTextureWithJPEG(sourcePath.UTF8String);
     //MadvGLRenderer::renderTextureToJPEG(destPath.UTF8String, jpegInfo.image_width, jpegInfo.image_height, sourceTexture, NULL, 0, NULL, NULL, 0, 180, 90);
     //glDeleteTextures(1, (const GLuint*)&sourceTexture);
     MadvGLRenderer::renderMadvJPEGToJPEG(destPath.UTF8String, sourcePath.UTF8String, jpegInfo.image_width, jpegInfo.image_height, NULL, 0, NULL, NULL, 0, 180, 90);
     glFinish();
-    [EAGLContext setCurrentContext:nil];
     //*/
 }
 
@@ -43,16 +41,18 @@ int main(int argc, char * argv[]) {
         NSString* documentPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
         NSFileManager* fm = [NSFileManager defaultManager];
         NSDirectoryEnumerator* enumerator = [fm enumeratorAtPath:documentPath];
+        EAGLContext* eaglContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
+        [EAGLContext setCurrentContext:eaglContext];
         for (NSString* file in enumerator)
         {
-            if ([file.pathExtension.lowercaseString isEqualToString:@"jpg"])
+            if ([file.pathExtension.lowercaseString isEqualToString:@"jpg"] && ![file hasSuffix:@"stitched.jpg"])
             {
-                NSString* sourcePath = [documentPath stringByAppendingPathComponent:file];
+                NSString* sourcePath = [ documentPath stringByAppendingPathComponent:file];
                 NSString* destPath = [documentPath stringByAppendingPathComponent:[[file stringByDeletingPathExtension] stringByAppendingPathExtension:@"stitched.jpg"]];
-                stitchJPEG(destPath, sourcePath);
+                for (int i=0; i<11; ++i) stitchJPEG(destPath, sourcePath);
             }
         }
-        
+        [EAGLContext setCurrentContext:nil];
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }
 }
