@@ -341,7 +341,7 @@ void main(void) { \n
  \n
      highp vec2 dstTexcoord = a_vertexIndex; \n
 STRINGIZE0(#if defined(DEBUG_FLAG1)) \n
-     highp vec2 wrappedDstTexcoord = (dstTexcoord); \n
+     highp vec2 wrappedDstTexcoord = wrappedTexcoord(dstTexcoord); \n
 STRINGIZE0(#else) \n
         highp vec2 wrappedDstTexcoord = (dstTexcoord); \n
 STRINGIZE0(#endif) \n
