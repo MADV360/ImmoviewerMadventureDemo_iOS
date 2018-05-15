@@ -12,7 +12,7 @@
 #import <MadvGLRenderer.h>
 #import <MadvGLRenderer_iOS.h>
 #import <MADVPano/JPEGUtils.h>
-//#import <MADVPano/MadvGLRendererBase_iOS.h>
+#import <MADVPano/MadvGLRendererBase_iOS.h>
 
 void stitchJPEG(NSString* destPath, NSString* sourcePath) {
     jpeg_decompress_struct jpegInfo = readImageInfoFromJPEG(sourcePath.UTF8String);
@@ -27,13 +27,11 @@ void stitchJPEG(NSString* destPath, NSString* sourcePath) {
         MadvGLRendererBase_iOS::renderJPEGToJPEG(destPath, sourcePath, jpegInfo.image_width, jpegInfo.image_height, NO, &madvExtension, 0, NULL, 0);
     }
     /*/
-    
-    GLint sourceTexture = createTextureWithJPEG(sourcePath.UTF8String);
-    //MadvGLRenderer::testMADVPanoCrash(jpegInfo.image_width, jpegInfo.image_height);
-    MadvGLRenderer::renderTextureToJPEG(destPath.UTF8String, jpegInfo.image_width, jpegInfo.image_height, sourceTexture, NULL, 0, NULL, NULL, 0, 180, 90);
-    glDeleteTextures(1, (const GLuint*)&sourceTexture);
-    //MadvGLRenderer::renderMadvJPEGToJPEG(destPath.UTF8String, sourcePath.UTF8String, jpegInfo.image_width, jpegInfo.image_height, NULL, 0, NULL, NULL, 0, 180, 90);
-    glFinish();
+    //GLint sourceTexture = createTextureWithJPEG(sourcePath.UTF8String);
+    //MadvGLRenderer::renderTextureToJPEG(destPath.UTF8String, jpegInfo.image_width, jpegInfo.image_height, sourceTexture, NULL, 0, NULL, NULL, 0, 180, 90);
+    //glDeleteTextures(1, (const GLuint*)&sourceTexture);
+    //glFinish();
+    MadvGLRenderer::renderMadvJPEGToJPEG(destPath.UTF8String, sourcePath.UTF8String, jpegInfo.image_width, jpegInfo.image_height, NULL, 0, NULL, NULL, 0, 180, 90);
     //*/
 }
 
@@ -51,11 +49,11 @@ int main(int argc, char * argv[]) {
                 [files addObject:file];
             }
         }
-        
+        //*
         EAGLContext* prevEAGLContext = [EAGLContext currentContext];
         EAGLContext* eaglContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
         [EAGLContext setCurrentContext:eaglContext];
-        
+        //*/
         for (NSString* file in files)
         {
             NSString* sourcePath = [ documentPath stringByAppendingPathComponent:file];
@@ -67,9 +65,9 @@ int main(int argc, char * argv[]) {
                 
             }
         }
-        
+        //*
         [EAGLContext setCurrentContext:prevEAGLContext];
-        
+        //*/
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }
 }
