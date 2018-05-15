@@ -51,10 +51,11 @@ int main(int argc, char * argv[]) {
                 NSString* destPath = [documentPath stringByAppendingPathComponent:[[file stringByDeletingPathExtension] stringByAppendingPathExtension:@"stitched.jpg"]];
                 for (int i=0; i<11; ++i)
                 {
+                    EAGLContext* prevEAGLContext = [EAGLContext currentContext];
                     EAGLContext* eaglContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
                     [EAGLContext setCurrentContext:eaglContext];
                     stitchJPEG(destPath, sourcePath);
-                    [EAGLContext setCurrentContext:nil];
+                    [EAGLContext setCurrentContext:prevEAGLContext];
                 }
             }
         }
