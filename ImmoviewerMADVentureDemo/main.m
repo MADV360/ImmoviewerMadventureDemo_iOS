@@ -12,7 +12,7 @@
 #import <MadvGLRenderer.h>
 #import <MadvGLRenderer_iOS.h>
 #import <MADVPano/JPEGUtils.h>
-#import <MADVPano/MadvGLRendererBase_iOS.h>
+//#import <MADVPano/MadvGLRendererBase_iOS.h>
 
 void stitchJPEG(NSString* destPath, NSString* sourcePath) {
     jpeg_decompress_struct jpegInfo = readImageInfoFromJPEG(sourcePath.UTF8String);
