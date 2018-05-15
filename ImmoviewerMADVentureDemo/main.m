@@ -43,22 +43,32 @@ int main(int argc, char * argv[]) {
         NSFileManager* fm = [NSFileManager defaultManager];
         NSDirectoryEnumerator* enumerator = [fm enumeratorAtPath:documentPath];
         
+        NSMutableArray* files = [[NSMutableArray alloc] init];
         for (NSString* file in enumerator)
         {
             if ([file.pathExtension.lowercaseString isEqualToString:@"jpg"] && ![file hasSuffix:@"stitched.jpg"])
             {
-                NSString* sourcePath = [ documentPath stringByAppendingPathComponent:file];
-                NSString* destPath = [documentPath stringByAppendingPathComponent:[[file stringByDeletingPathExtension] stringByAppendingPathExtension:@"stitched.jpg"]];
-                for (int i=0; i<11; ++i)
-                {
-                    EAGLContext* prevEAGLContext = [EAGLContext currentContext];
-                    EAGLContext* eaglContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
-                    [EAGLContext setCurrentContext:eaglContext];
-                    stitchJPEG(destPath, sourcePath);
-                    [EAGLContext setCurrentContext:prevEAGLContext];
-                }
+                [files addObject:file];
             }
         }
+        
+        EAGLContext* prevEAGLContext = [EAGLContext currentContext];
+        EAGLContext* eaglContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
+        [EAGLContext setCurrentContext:eaglContext];
+        
+        for (NSString* file in files)
+        {
+            NSString* sourcePath = [ documentPath stringByAppendingPathComponent:file];
+            NSString* destPath = [documentPath stringByAppendingPathComponent:[[file stringByDeletingPathExtension] stringByAppendingPathExtension:@"stitched.jpg"]];
+            for (int i=0; i<11; ++i)
+            {
+                
+                stitchJPEG(destPath, sourcePath);
+                
+            }
+        }
+        
+        [EAGLContext setCurrentContext:prevEAGLContext];
         
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }

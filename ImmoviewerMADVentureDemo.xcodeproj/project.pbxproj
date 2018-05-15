@@ -256,6 +256,8 @@
 		BB14E79820410AB100910330 /* PNGUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB14E6F220410AB000910330 /* PNGUtils.cpp */; };
 		BB14E79920410AB100910330 /* Thread_Apple.c in Sources */ = {isa = PBXBuildFile; fileRef = BB14E6F620410AB000910330 /* Thread_Apple.c */; };
 		BB2D77F7209BF235001344C5 /* MadvGLRendererBase_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2D77F5209BF235001344C5 /* MadvGLRendererBase_iOS.mm */; };
+		BB60966620AAC9C9000230C8 /* libturbojpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB7EAA57209FF86800D6B053 /* libturbojpeg.a */; };
+		BB60966720AAC9C9000230C8 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB7EAA56209FF86700D6B053 /* libjpeg.a */; };
 		BBAD07CB20187960005BAD6F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD07CA20187960005BAD6F /* AppDelegate.m */; };
 		BBAD07CE20187960005BAD6F /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD07CD20187960005BAD6F /* FirstViewController.m */; };
 		BBAD07D120187960005BAD6F /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD07D020187960005BAD6F /* SecondViewController.m */; };
@@ -878,6 +880,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB60966620AAC9C9000230C8 /* libturbojpeg.a in Frameworks */,
+				BB60966720AAC9C9000230C8 /* libjpeg.a in Frameworks */,
 				BBDB9EE32099C50B0045913A /* AssetsLibrary.framework in Frameworks */,
 				BBAD080720187BC6005BAD6F /* Accelerate.framework in Frameworks */,
 				BBAD080520187B89005BAD6F /* CoreLocation.framework in Frameworks */,
