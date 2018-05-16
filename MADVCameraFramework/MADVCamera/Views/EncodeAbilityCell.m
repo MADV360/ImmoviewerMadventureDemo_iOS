@@ -17,16 +17,17 @@
     // Initialization code
     UILabel * encodeAbilityLabel = [[UILabel alloc] init];
     [self.contentView addSubview:encodeAbilityLabel];
-    encodeAbilityLabel.frame = CGRectMake(15, 10, ScreenWidth - 45 - 45 - 10, 20);
+    encodeAbilityLabel.frame = CGRectMake(15, 10, ScreenWidth - 49 - 15 - 15, 20);
     encodeAbilityLabel.font = [UIFont systemFontOfSize:13];
     encodeAbilityLabel.textColor = [UIColor colorWithHexString:@"#000000" alpha:0.8];
     encodeAbilityLabel.numberOfLines = 0;
+    encodeAbilityLabel.lineBreakMode = NSLineBreakByCharWrapping;
     encodeAbilityLabel.attributedText = [[NSAttributedString alloc] initWithString:FGGetStringWithKeyFromTable(ENCODEABILITY, nil)];
     [encodeAbilityLabel sizeToFit];
     
     UISwitch * encodeSwitch = [[UISwitch alloc] init];
     [self.contentView addSubview:encodeSwitch];
-    encodeSwitch.frame = CGRectMake(ScreenWidth - 45 - 45, 5, 45, 30);
+    encodeSwitch.frame = CGRectMake(ScreenWidth - 49 - 15, 5, 49, 31);
     self.encodeSwitch = encodeSwitch;
     
     
@@ -43,7 +44,7 @@
     encodeStatementLabel.numberOfLines = 0;
     encodeStatementLabel.font = [UIFont systemFontOfSize:11];
     encodeStatementLabel.textColor = [UIColor colorWithHexString:@"#000000" alpha:0.7];
-    
+    encodeStatementLabel.lineBreakMode = NSLineBreakByCharWrapping;
     NSString * str = @"";
     if (![avUtils isVideoEncodeLimitedTo1080]) {
         str = FGGetStringWithKeyFromTable(DEVICE1080ENCODE, nil);

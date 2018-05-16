@@ -9,5 +9,5 @@
 
 @interface LoadProgressView : UIView
 - (void)startLoadData;
-- (void)finishLoadData;
+- (void)finishLoadData:(void (^ __nullable)(BOOL finished))completion;
 @end

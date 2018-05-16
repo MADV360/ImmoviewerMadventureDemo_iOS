@@ -420,20 +420,41 @@ void MadvGLRenderer::prepareTextureWithRenderSource(void* renderSource) {
     impl->prepareTextureWithRenderSource(renderSource);
 }
 
-void MadvGLRenderer::renderTextureToJPEG(const char* destJpegPath, int dstWidth, int dstHeight, GLint sourceTexture, const char* lutPath, int filterID, const char* glFilterResourcePath, float* gyroMatrix, int gyroMatrixRank, GLuint longitudeSegments, GLuint latitudeSegments) {
-    int blockLines = dstHeight / 8;
-    GLRenderTexture renderTexture(dstWidth, blockLines);
+void MadvGLRenderer::testMADVPanoCrash(int width, int height) {
+    GLRenderTexture renderTexture(width, height);
     CHECK_GL_ERROR();
+    renderTexture.blit();
     glEnable(GL_BLEND);
     glBlendFunc(GL_ONE, GL_ZERO);
     glClearColor(0, 0, 0, 0);
-    glViewport(0, 0, dstWidth, dstHeight);
+    glViewport(0, 0, width, height);
+    CHECK_GL_ERROR();
+}
+
+void MadvGLRenderer::renderTextureToJPEG(const char* destJpegPath, int dstWidth, int dstHeight, GLint sourceTexture, const char* lutPath, int filterID, const char* glFilterResourcePath, float* gyroMatrix, int gyroMatrixRank, GLuint longitudeSegments, GLuint latitudeSegments) {
+    int blockLines = dstHeight / 8;
+    const int pixelStripBytes = 4 * dstWidth * blockLines;
+    
+    GLuint PBOs[2];
+    glGenBuffers(2, PBOs);
+    for (int i=0; i<2; ++i)
+    {
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, PBOs[i]);
+        glBufferData(GL_PIXEL_PACK_BUFFER, pixelStripBytes, NULL, GL_DYNAMIC_READ);
+    }
+    
+    GLRenderTexture renderTexture(dstWidth, blockLines);
     CHECK_GL_ERROR();
 #ifdef USE_MSAA
     glBindFramebuffer(GL_FRAMEBUFFER, _msaaFramebuffer);
 #else
     renderTexture.blit();
 #endif
+    CHECK_GL_ERROR();
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ZERO);
+    glClearColor(0, 0, 0, 0);
+    glViewport(0, 0, dstWidth, dstHeight);
     CHECK_GL_ERROR();
     
     AutoRef<GLRenderTexture> filterRenderTexture = NULL;
@@ -479,10 +500,11 @@ void MadvGLRenderer::renderTextureToJPEG(const char* destJpegPath, int dstWidth,
 	GLuint cubemapTexture = renderer->drawToRemappedCubemap(0, 1024);
 #endif
     JPEGCompressOutput* imageOutput = startWritingImageToJPEG(destJpegPath, GL_RGBA, GL_UNSIGNED_BYTE, 100, dstWidth, dstHeight);
-    GLubyte* pixelData = (GLubyte*)malloc(4 * dstWidth * blockLines);
+    GLubyte* pixelData = (GLubyte*)malloc(pixelStripBytes);
     
     bool finishedAppending = false;
-    int blockLines0 = blockLines;
+    const int blockLines0 = blockLines;
+    int pboIndex = -1;
     for (int iLine = 0; iLine < dstHeight; iLine += blockLines)
     {
         if (dstHeight - iLine < blockLines)
@@ -506,17 +528,41 @@ void MadvGLRenderer::renderTextureToJPEG(const char* destJpegPath, int dstWidth,
             CHECK_GL_ERROR();
         }
         
-        glReadPixels(0, 0, dstWidth, blockLines, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
-        glFinish();
-        CHECK_GL_ERROR();
-        if (!appendImageStrideToJPEG(imageOutput, pixelData, blockLines))
+        GLint prevBindingPBO;
+        glGetIntegerv(GL_PIXEL_PACK_BUFFER_BINDING, &prevBindingPBO);
+        if (-1 == pboIndex)
         {
-            finishedAppending = true;
-            break;
+            pboIndex = 0;
         }
+        else
+        {
+            glBindBuffer(GL_PIXEL_PACK_BUFFER, PBOs[pboIndex]);
+            GLubyte* mappedPixels = (GLubyte*)glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, pixelStripBytes, GL_MAP_READ_BIT);
+//            if (!appendImageStrideToJPEG(imageOutput, mappedPixels, blockLines))
+//            {
+//                finishedAppending = true;
+//                glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+//                break;
+//            }
+            memcpy(pixelData, mappedPixels, pixelStripBytes);
+            glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+            appendImageStrideToJPEG(imageOutput, pixelData, blockLines0);
+            pboIndex = 1 - pboIndex;
+        }
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, PBOs[pboIndex]);
+        glReadPixels(0, 0, dstWidth, blockLines0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, prevBindingPBO);
+        CHECK_GL_ERROR();
     }
+    GLint prevBindingPBO;
+    glGetIntegerv(GL_PIXEL_PACK_BUFFER_BINDING, &prevBindingPBO);
+    glBindBuffer(GL_PIXEL_PACK_BUFFER, PBOs[pboIndex]);
+    GLubyte* mappedPixels = (GLubyte*)glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, pixelStripBytes, GL_MAP_READ_BIT);
+    memcpy(pixelData, mappedPixels, pixelStripBytes);
+    glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+    glBindBuffer(GL_PIXEL_PACK_BUFFER, prevBindingPBO);
     
-    if (!finishedAppending)
+    if (appendImageStrideToJPEG(imageOutput, pixelData, blockLines))
     {
         delete imageOutput;
     }
@@ -530,6 +576,8 @@ void MadvGLRenderer::renderTextureToJPEG(const char* destJpegPath, int dstWidth,
         filterCache = NULL;
     }
     renderer = NULL;
+    
+    glDeleteBuffers(2, PBOs);
 }
 
 void MadvGLRenderer::debugRenderTextureToJPEG(const char* destJpegPath, int dstWidth, int dstHeight, GLint sourceTexture, const char* lutPath, int filterID, const char* glFilterResourcePath, float* gyroMatrix, int gyroMatrixRank, GLuint longitudeSegments, GLuint latitudeSegments) {

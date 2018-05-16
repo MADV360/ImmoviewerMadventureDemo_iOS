@@ -1699,6 +1699,114 @@ didCompleteWithError:(nullable NSError *)error
     return self;
 }
 //*
+
+/** Patch of AFSecurityPolicy for SSL
+ - (BOOL)evaluateServerTrust:(SecTrustRef)serverTrust
+ forDomain:(NSString *)domain
+ {
+ NSMutableArray *policies = [NSMutableArray array];
+ if (self.validatesDomainName) {
+ [policies addObject:(__bridge_transfer id)SecPolicyCreateSSL(true, (__bridge CFStringRef)domain)];
+ } else {
+ [policies addObject:(__bridge_transfer id)SecPolicyCreateBasicX509()];
+ }
+ 
+ SecTrustSetPolicies(serverTrust, (__bridge CFArrayRef)policies);
+ 
+ if (self.SSLPinningMode == AFSSLPinningModeNone) {
+ if (self.allowInvalidCertificates || AFServerTrustIsValid(serverTrust)){
+ return YES;
+ } else {
+ return NO;
+ }
+ } else if (!AFServerTrustIsValid(serverTrust) && !self.allowInvalidCertificates) {
+ return NO;
+ }
+ 
+ NSArray *serverCertificates = AFCertificateTrustChainForServerTrust(serverTrust);
+ switch (self.SSLPinningMode) {
+ case AFSSLPinningModeNone:
+ default:
+ return NO;
+ case AFSSLPinningModeCertificate: {
+ NSMutableArray *pinnedCertificates = [NSMutableArray array];
+ for (NSData *certificateData in self.pinnedCertificates) {
+ CFDataRef secCertDataRef = (__bridge_retained CFDataRef)certificateData;
+ SecCertificateRef secCertRef = SecCertificateCreateWithData(NULL, secCertDataRef);
+ id secCert = (__bridge_transfer id)secCertRef;
+ if (secCert)
+ [pinnedCertificates addObject:secCert];
+ }
+ SecTrustSetAnchorCertificates(serverTrust, (__bridge CFArrayRef)pinnedCertificates);
+ 
+ if (!AFServerTrustIsValid(serverTrust)) {
+ return NO;
+ }
+ 
+ if (!self.validatesCertificateChain) {
+ return YES;
+ }
+ 
+ NSUInteger trustedCertificateCount = 0;
+ for (NSData *trustChainCertificate in serverCertificates) {
+ if ([self.pinnedCertificates containsObject:trustChainCertificate]) {
+ trustedCertificateCount++;
+ }
+ }
+ 
+ return trustedCertificateCount == [serverCertificates count];
+ }
+ case AFSSLPinningModePublicKey: {
+ NSUInteger trustedPublicKeyCount = 0;
+ NSArray *publicKeys = AFPublicKeyTrustChainForServerTrust(serverTrust);
+ if (!self.validatesCertificateChain && [publicKeys count] > 0) {
+ publicKeys = @[[publicKeys firstObject]];
+ }
+ 
+ for (id trustChainPublicKey in publicKeys) {
+ for (id pinnedPublicKey in self.pinnedPublicKeys) {
+ if (AFSecKeyIsEqualToKey((__bridge SecKeyRef)trustChainPublicKey, (__bridge SecKeyRef)pinnedPublicKey)) {
+ trustedPublicKeyCount += 1;
+ }
+ }
+ }
+ 
+ return trustedPublicKeyCount > 0 && ((self.validatesCertificateChain && trustedPublicKeyCount == [serverCertificates count]) || (!self.validatesCertificateChain && trustedPublicKeyCount >= 1));
+ }
+ }
+ 
+ return NO;
+ }
+//*/
+//#define DEBUG_HTTPS_DOWNLOADING
+
++ (AFSecurityPolicy*)customSecurityPolicy
+{
+    // /先导入证书
+    NSString* caCertPath = [[NSBundle mainBundle] pathForResource:@"cacert" ofType:@"der"];
+    NSString* serverCertPath = [[NSBundle mainBundle] pathForResource:@"server_cert" ofType:@"cer"];
+    
+    NSData* caCertData = [NSData dataWithContentsOfFile:caCertPath];
+    NSData* serverCertData = [NSData dataWithContentsOfFile:serverCertPath];
+    
+    // AFSSLPinningModeCertificate 使用证书验证模式
+    AFSecurityPolicy *securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
+    
+    // allowInvalidCertificates 是否允许无效证书（也就是自建的证书），默认为NO
+    // 如果是需要验证自建证书，需要设置为YES
+    securityPolicy.allowInvalidCertificates = YES;
+    
+    //validatesDomainName 是否需要验证域名，默认为YES；
+    //假如证书的域名与你请求的域名不一致，需把该项设置为NO；如设成NO的话，即服务器使用其他可信任机构颁发的证书，也可以建立连接，这个非常危险，建议打开。
+    //置为NO，主要用于这种情况：客户端请求的是子域名，而证书上的是另外一个域名。因为SSL证书上的域名是独立的，假如证书上注册的域名是www.google.com，那么mail.google.com是无法验证通过的；当然，有钱可以注册通配符的域名*.google.com，但这个还是比较贵的。
+    //如置为NO
+    securityPolicy.validatesDomainName = NO;
+    
+    securityPolicy.pinnedCertificates = @[caCertData, serverCertData];
+    
+    return securityPolicy;
+}
+
 - (void) start {
     NSLog(@"AFHTTPDownloadTask : start : _offset=%d, _length=%d @ %@", (int)_offset, (int)_length, self);
     _bytesReceived = 0;
@@ -1707,9 +1815,13 @@ didCompleteWithError:(nullable NSError *)error
     
     //_offset = cutFile(_localFilePath, _offset);
     NSString* downloadingTempFilePath = [MVCameraDownloadManager downloadingTempFilePath:_localFilePath];
+#ifdef DEBUG_HTTPS_DOWNLOADING
+    _offset = 0;
+    _remoteFilePath = @"https://tzn8.com/test.jpg";
+#else
     _offset = fileSizeAtPath(downloadingTempFilePath);
+#endif
     NSLog(@"AFHTTPDownloadTask : start #1 : _offset=%d, _length=%d @ %@", (int)_offset, (int)_length, self);
-    
     NSURLRequest* downloadRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:_remoteFilePath]];
     NSMutableURLRequest* mutableURLRequest = [downloadRequest mutableCopy];
     //NSString* requestRange = _length > 0 ? [NSString stringWithFormat:@"bytes=%ld-%ld", _offset, _offset + _length - 1] : [NSString stringWithFormat:@"bytes=%ld-", _offset];
@@ -1723,6 +1835,11 @@ didCompleteWithError:(nullable NSError *)error
     [[NSURLCache sharedURLCache] removeCachedResponseForRequest:downloadRequest];
     
     AFHTTPRequestOperation* downloadOp = [[AFHTTPRequestOperation alloc] initWithRequest:downloadRequest];
+    if ([_remoteFilePath hasPrefix:HTTPS_DOWNLOAD_URL_PREFIX])
+    {
+        downloadOp.securityPolicy = [self.class customSecurityPolicy]; //#GDPR#
+    }
+    
     self.downloadOperation = downloadOp;
     downloadOp.outputStream = [NSOutputStream outputStreamToFileAtPath:downloadingTempFilePath append:YES];
     __weak typeof(self) wSelf = self;

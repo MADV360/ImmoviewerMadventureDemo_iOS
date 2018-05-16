@@ -178,7 +178,7 @@ void writeImageToJPEG(const char* filename,
          * more than one scanline at a time if that's more convenient.
          */
         row_pointer[0] = & imageData[cinfo.next_scanline * row_stride];
-        (void) jpeg_write_scanlines(&cinfo, row_pointer, 1);
+        jpeg_write_scanlines(&cinfo, row_pointer, 1);
     }
     
     /* Step 6: Finish compression */
@@ -331,7 +331,7 @@ bool appendImageStrideToJPEG(const JPEGCompressOutput* output, unsigned char* im
              * more than one scanline at a time if that's more convenient.
              */
             row_pointer[0] = & imageData[iLine * row_stride];
-            (void) jpeg_write_scanlines(&cinfo, row_pointer, 1);
+            jpeg_write_scanlines(&cinfo, row_pointer, 1);
             //        ALOGE("renderJPEGToJPEG# appendImageStrideToJPEG#1 lines=%d, iLine=%d, cinfo.next_scanline=%d, cinfo.image_height=%d", lines, iLine, cinfo.next_scanline, cinfo.image_height);
         }
     }
@@ -344,7 +344,7 @@ bool appendImageStrideToJPEG(const JPEGCompressOutput* output, unsigned char* im
              * more than one scanline at a time if that's more convenient.
              */
             row_pointer[0] = & imageData[iLine * row_stride];
-            (void) jpeg_write_scanlines(&cinfo, row_pointer, 1);
+            jpeg_write_scanlines(&cinfo, row_pointer, 1);
             //        ALOGE("renderJPEGToJPEG# appendImageStrideToJPEG#1 lines=%d, iLine=%d, cinfo.next_scanline=%d, cinfo.image_height=%d", lines, iLine, cinfo.next_scanline, cinfo.image_height);
         }
     }
@@ -409,7 +409,7 @@ void writeImageToJPEGData(unsigned char** dstBuffer, unsigned long* dstBufferSiz
     row_stride = imageWidth * cinfo.input_components; /* JSAMPLEs per row in image_buffer */
     while (cinfo.next_scanline < cinfo.image_height) {
         row_pointer[0] = & imageData[cinfo.next_scanline * row_stride];
-        (void) jpeg_write_scanlines(&cinfo, row_pointer, 1);
+        jpeg_write_scanlines(&cinfo, row_pointer, 1);
     }
     
     jpeg_finish_compress(&cinfo);
@@ -723,7 +723,7 @@ jpeg_decompress_struct readImageFromJPEGWithCallback(JPEGDecodeLineCallback call
 
     if ((infile = fopen(filename, "rb+")) == NULL) {
         fprintf(stderr, "can't open %s\n", filename);
-        ALOGE("createTextureWithJPEG : Can't open file '%s'", filename);
+//        ALOGE("createTextureWithJPEG : Can't open file '%s'", filename);
         if (NULL != callback)
         {
             callback(&cinfo, NULL, -1, userParams, true);
@@ -743,7 +743,7 @@ jpeg_decompress_struct readImageFromJPEGWithCallback(JPEGDecodeLineCallback call
          */
         jpeg_destroy_decompress(&cinfo);
         fclose(infile);
-        ALOGE("createTextureWithJPEG : Error #1 in file '%s'", filename);
+//        ALOGE("createTextureWithJPEG : Error #1 in file '%s'", filename);
         remove(filename);
         if (NULL != callback)
         {
@@ -807,7 +807,7 @@ jpeg_decompress_struct readImageFromJPEGWithCallback(JPEGDecodeLineCallback call
     /* Here we use the library's state variable cinfo.output_scanline as the
      * loop counter, so that we don't have to keep track ourselves.
      */
-    ALOGE("createTextureWithJPEG : Begin decoding '%s'", filename);
+//    ALOGE("createTextureWithJPEG : Begin decoding '%s'", filename);
     while (cinfo.output_scanline < cinfo.output_height) {
         /* jpeg_read_scanlines expects an array of pointers to scanlines.
          * Here the array is only one element long, but you could ask for
@@ -1141,7 +1141,7 @@ void onDecodeOneJPEGLineByCreateTextureWithJPEG(struct jpeg_decompress_struct* c
             pVars->width = cinfo->output_width;
             pVars->height = cinfo->output_height;
             pVars->quaterHeight = pVars->height / 4;
-            ALOGE("createTextureWithJPEG : width=%d, height=%d, rowStride=%d, quaterHeight=%d", pVars->width, pVars->height, pVars->rowStride, pVars->quaterHeight);
+//            ALOGE("createTextureWithJPEG : width=%d, height=%d, rowStride=%d, quaterHeight=%d", pVars->width, pVars->height, pVars->rowStride, pVars->quaterHeight);
         }
 
         if (0 == pVars->texture)
@@ -1170,7 +1170,7 @@ void onDecodeOneJPEGLineByCreateTextureWithJPEG(struct jpeg_decompress_struct* c
 
         if (pVars->quaterHeight == ++(pVars->filledQuaterDataLine))
         {
-            ALOGE("createTextureWithJPEG : Flush one quater : cinfo->output_scanline = %d, pVars->filledQuaterDataLine = %d", cinfo->output_scanline, pVars->filledQuaterDataLine);
+//            ALOGE("createTextureWithJPEG : Flush one quater : cinfo->output_scanline = %d, pVars->filledQuaterDataLine = %d", cinfo->output_scanline, pVars->filledQuaterDataLine);
             glTexSubImage2D(GL_TEXTURE_2D, 0, 0, cinfo->output_scanline - pVars->filledQuaterDataLine, pVars->width, pVars->filledQuaterDataLine, GL_RGBA, GL_UNSIGNED_BYTE, pVars->quaterData);
             pVars->filledQuaterDataLine = 0;
         }
@@ -1553,7 +1553,7 @@ GLint createTextureWithJPEG(const char* filePath, Vec2f* outTextureSize) {
     {
         glBindTexture(GL_TEXTURE_2D, prevTextureBinding);
         if (variables.quaterData) free(variables.quaterData);
-        ALOGE("createTextureWithJPEG : return texture = %d", variables.texture);
+//        ALOGE("createTextureWithJPEG : return texture = %d", variables.texture);
         return variables.texture;
     }
 //    else

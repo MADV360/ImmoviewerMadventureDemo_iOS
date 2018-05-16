@@ -2184,8 +2184,14 @@ NSString* uniqueLocalPath(NSString* cameraUUID, NSString* remotePath) {
 }
 //*/
 + (NSString*) httpURLFromRemotePath:(NSString*)remotePath {
-    return [remotePath stringByReplacingOccurrencesOfString:HTTP_DOWNLOAD_REMOTE_ROOT withString:HTTP_DOWNLOAD_URL_PREFIX];
+    NSString* cameraFWVersion = [MVCameraClient sharedInstance].connectingCamera.fwVer;
+    NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWidthInsensitiveSearch | NSForcedOrderingSearch;
+    if ([cameraFWVersion compare:HTTP_DEPRECATED_ABOVE_VERSION options:comparisonOptions] == NSOrderedDescending)
+        return [remotePath stringByReplacingOccurrencesOfString:HTTP_DOWNLOAD_REMOTE_ROOT withString:HTTPS_DOWNLOAD_URL_PREFIX];
+    else
+        return [remotePath stringByReplacingOccurrencesOfString:HTTP_DOWNLOAD_REMOTE_ROOT withString:HTTP_DOWNLOAD_URL_PREFIX];
 }
+
 + (NSString*) remotePathFromHttpURL:(NSString*)httpURL {
     return [httpURL stringByReplacingOccurrencesOfString:HTTP_DOWNLOAD_URL_PREFIX withString:HTTP_DOWNLOAD_REMOTE_ROOT];
 }

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LinkModel.h"
 @class ProgressRateView;
 typedef enum : NSInteger {
     Error_Upload = 0,
@@ -38,6 +39,7 @@ typedef enum : NSInteger {
 @property(nonatomic,assign)BOOL isEdit;
 @property(nonatomic,assign)BOOL isScreencap;
 @property(nonatomic,assign)ErrorType errorType;
+@property(nonatomic,assign)LinkType linkType;
 
 - (void)loadProgressRateView;
 

@@ -246,6 +246,9 @@
     {
         return [NSString stringWithFormat:@"%@_iPhone SE",iphoneInfo];
     }
+    if ([deviceModel isEqualToString:@"iPhone10,3"]) {
+        return [NSString stringWithFormat:@"%@_iPhone X",iphoneInfo];
+    }
     if ([deviceModel isEqualToString:@"iPad2,1"] || [deviceModel isEqualToString:@"iPad2,2"] ||
         [deviceModel isEqualToString:@"iPad2,3"] || [deviceModel isEqualToString:@"iPad2,4"])
     {

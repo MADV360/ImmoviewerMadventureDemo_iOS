@@ -807,9 +807,9 @@
 		BB7EAA57209FF86800D6B053 /* libturbojpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libturbojpeg.a; path = MADVPano/libjpegturbo/lib/libturbojpeg.a; sourceTree = "<group>"; };
 		BBAD07C62018795F005BAD6F /* ImmoviewerMADVentureDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImmoviewerMADVentureDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBAD07C920187960005BAD6F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		BBAD07CA20187960005BAD6F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		BBAD07CA20187960005BAD6F /* AppDelegate.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = AppDelegate.m; sourceTree = "<group>"; };
 		BBAD07CC20187960005BAD6F /* FirstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
-		BBAD07CD20187960005BAD6F /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
+		BBAD07CD20187960005BAD6F /* FirstViewController.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = FirstViewController.m; sourceTree = "<group>"; };
 		BBAD07CF20187960005BAD6F /* SecondViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
 		BBAD07D020187960005BAD6F /* SecondViewController.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = SecondViewController.m; sourceTree = "<group>"; };
 		BBAD07D320187960005BAD6F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -2276,6 +2276,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = QBAB3CS86A;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2328,6 +2329,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.madv360.ImmoviewerMADVentureDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = "non-global";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "MADVCameraFramework/FFmpeg/**";
 			};
@@ -2392,6 +2395,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.madv360.ImmoviewerMADVentureDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = "non-global";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "MADVCameraFramework/FFmpeg/**";
 			};
@@ -2509,6 +2514,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = QBAB3CS86A;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2516,6 +2522,7 @@
 					"$(PROJECT_DIR)/**",
 					"$(PROJECT_DIR)",
 				);
+				GENERATE_MASTER_OBJECT_FILE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -2533,6 +2540,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.madv360.ImmoviewerMADVentureDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = "non-global";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -2543,7 +2552,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = QBAB3CS86A;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2551,6 +2560,7 @@
 					"$(PROJECT_DIR)/**",
 					"$(PROJECT_DIR)",
 				);
+				GENERATE_MASTER_OBJECT_FILE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -2568,6 +2578,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.madv360.ImmoviewerMADVentureDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_STYLE = "non-global";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

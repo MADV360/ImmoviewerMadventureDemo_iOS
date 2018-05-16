@@ -15,7 +15,7 @@
     UIView * progressLabel=[[UIView alloc] init];
     [self addSubview:progressLabel];
     progressLabel.frame=CGRectMake(0, 0, 0, 2);
-    progressLabel.backgroundColor=[UIColor colorWithHexString:@"#008040"];
+    progressLabel.backgroundColor=[UIColor colorWithHexString:@"#46a4ea"];
     self.progressLabel=progressLabel;
     
     [UIView animateWithDuration:1 animations:^{
@@ -24,12 +24,13 @@
     }];
     
 }
-- (void)finishLoadData
+- (void)finishLoadData:(void (^ __nullable)(BOOL finished))completion
 {
     [UIView animateWithDuration:0.5 animations:^{
         self.progressLabel.frame=CGRectMake(0, 0, ScreenWidth, self.frame.size.height);
     } completion:^(BOOL finished) {
         [self.progressLabel removeFromSuperview];
+        completion(true);
     }];
 }
 

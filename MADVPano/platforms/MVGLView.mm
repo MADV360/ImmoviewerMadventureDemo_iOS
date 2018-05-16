@@ -571,36 +571,28 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
     return {(draggingPoint.x + 0.5f) * (float)screenSize.width, (float)screenSize.height * (0.5f - draggingPoint.y)};
 }
 //*/
+
+-(void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    UITouch* touch = [touches allObjects][0];
+    CGPoint pointInView = [touch locationInView:touch.view];
+    CGSize frameSize = touch.view.frame.size;
+    if (nil != _renderer && NULL != _panoController)
+    {
+        [_panoController startDragging:pointInView viewSize:frameSize];
+    }
+}
+
 - (void) onPanRecognized : (UIPanGestureRecognizer*)panRecognizer {
     CGPoint velocityVector = [panRecognizer velocityInView:panRecognizer.view];
-//    float velocityScalar = sqrtf(velocityVector.x * velocityVector.x + velocityVector.y * velocityVector.y);
-//    NSLog(@"#Fling# velocity = %f", velocityScalar);
     CGPoint pointInView = [panRecognizer locationInView:panRecognizer.view];
     CGSize frameSize = panRecognizer.view.frame.size;
-    //kmVec2 touchVec2f = [self.class draggingPointFromScreenPoint:touchPoint screenSize:frameSize];
-    //kmVec2 normalizedVelocity = {(float)(velocityVector.x / frameSize.width), (float)(velocityVector.y / frameSize.height)};
-    
     @synchronized (self)
     {
         switch (panRecognizer.state) {
-            case UIGestureRecognizerStateBegan:
-                {
-                    if (nil != _renderer && NULL != _panoController)
-                    {
-                        //_panoController->startTouchControl(touchVec2f);
-                        [_panoController startDragging:pointInView viewSize:frameSize];
-                    }
-//                    _isScrolling = YES;
-//                    _isFlinging = NO;
-//                    _isUsingGyro = NO;
-//                    _flingVelocityX = _flingVelocityY = 0;
-                }
-                break;
             case UIGestureRecognizerStateChanged:
                 {
                     if (nil != _renderer && NULL != _panoController)
                     {
-                        //_panoController->setDragPoint(touchVec2f);
                         [_panoController dragTo:pointInView viewSize:frameSize];
                     }
                 }
@@ -609,7 +601,6 @@ NSString* kNotificationGLRenderLoopDidBecomeActive = @"kNotificationGLRenderLoop
             case UIGestureRecognizerStateEnded:
                 if (nil != _renderer && NULL != _panoController)
                 {
-                    //_panoController->stopTouchControl(normalizedVelocity);
                     [_panoController stopDraggingAndFling:velocityVector viewSize:frameSize];
                 }
                 break;
@@ -2548,6 +2539,10 @@ void runAsynchronouslyOnGLQueue(void(^block)()) {
 - (void)layoutSubviews {
     CHECK_GL_ERROR();
     [self.glRenderLoop invalidateRenderbuffer];
+}
+
+-(void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.glRenderLoop touchesBegan:touches withEvent:event];
 }
 
 - (void) onPanRecognized : (UIPanGestureRecognizer*)panRecognizer {

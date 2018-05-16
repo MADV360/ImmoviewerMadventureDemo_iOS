@@ -64,7 +64,7 @@
         }];
         emailLabel.textColor = [UIColor colorWithHexString:@"#000000" alpha:0.7];
         emailLabel.font = [UIFont systemFontOfSize:14];
-        emailLabel.text = FGGetStringWithKeyFromTable(EMAIL, nil);
+        emailLabel.text = FGGetStringWithKeyFromTable(CONTACTINFORMATION, nil);
         
 //        UIView * lineView=[[UIView alloc] init];
 //        [self.contentView addSubview:lineView];
@@ -115,7 +115,7 @@
         {
             mailTextField.font = [UIFont systemFontOfSize:15];
         }
-        mailTextField.placeholder = FGGetStringWithKeyFromTable(PLEASEEMAILWECANREPLY, nil);
+        mailTextField.placeholder = FGGetStringWithKeyFromTable(PLEASEWRITECONTACTINFORMATION, nil);
         self.mailTextField=mailTextField;
         
     }

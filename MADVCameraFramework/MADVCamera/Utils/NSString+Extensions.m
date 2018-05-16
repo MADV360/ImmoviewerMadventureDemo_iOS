@@ -93,12 +93,21 @@
         }else if ([language hasPrefix:@"es"])//西班牙语
         {
             language = @"es";
-        }else if ([language hasPrefix:@"ru"])
+        }else if ([language hasPrefix:@"ru"])//俄语
         {
             language = @"ru";
-        }else if ([language hasPrefix:@"ar"])
+        }else if ([language hasPrefix:@"ar"])//阿拉伯语
         {
             language = @"ar";
+        }else if ([language hasPrefix:@"it"])//意大利语
+        {
+            language = @"it";
+        }else if ([language hasPrefix:@"fr"])//法语
+        {
+            language = @"fr";
+        }else if ([language hasPrefix:@"de"])//德语
+        {
+            language = @"de";
         }else
         {
             language = @"en";

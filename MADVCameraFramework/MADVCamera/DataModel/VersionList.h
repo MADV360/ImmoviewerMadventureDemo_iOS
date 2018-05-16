@@ -13,4 +13,5 @@
 @property(nonatomic,strong)VersionDetail * hard;
 @property(nonatomic,strong)VersionDetail * remoter;
 @property(nonatomic,copy)NSString * location;
+@property(nonatomic,copy)NSString * country;
 @end

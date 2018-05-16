@@ -37,7 +37,7 @@
 #define TEMP_PIC_LUT_DIR "C:\\Madv360\\tmplut_pic\\"
 #define GLFILTER_RESOURCE_DIR "/filters/"
 //*/
-///!!!#define USE_IMAGE_BLENDER
+#define USE_IMAGE_BLENDER
 
 #ifdef USE_IMAGE_BLENDER
 #include "ImageBlender.h"

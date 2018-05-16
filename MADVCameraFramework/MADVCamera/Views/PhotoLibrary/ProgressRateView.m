@@ -10,7 +10,7 @@
 #import "Masonry.h"
 #import "NSString+Extensions.h"
 
-@interface ProgressRateView()
+@interface ProgressRateView()<UITextViewDelegate>
 @property(nonatomic,weak)UIView * rateView;
 @property(nonatomic,weak)UILabel * rateLabel;
 @property(nonatomic,weak)UILabel * finishLabel;
@@ -129,79 +129,52 @@
     
     
     
-    UILabel * agreementLabel=[[UILabel alloc] init];
-    [uploadView addSubview:agreementLabel];
+    UITextView * agreemenTextView=[[UITextView alloc] init];
+    [uploadView addSubview:agreemenTextView];
+    agreemenTextView.backgroundColor = [UIColor clearColor];
 //    [agreementLabel mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.top.equalTo(rateView.mas_bottom).offset(10);
 //        make.centerX.equalTo(self.mas_centerX);
 //        make.height.equalTo(@15);
 //        make.width.equalTo(@300);
 //    }];
-    agreementLabel.frame = CGRectMake(20, 68, ScreenWidth - 60, 15);
-    agreementLabel.numberOfLines = 0;
-    agreementLabel.textColor=[UIColor colorWithHexString:@"#666666"];
-    agreementLabel.textAlignment=NSTextAlignmentCenter;
-    agreementLabel.font=[UIFont systemFontOfSize:13];
+    agreemenTextView.frame = CGRectMake(20, 68, ScreenWidth - 60, 15);
+    //agreemenTextView.textColor=[UIColor colorWithHexString:@"#666666"];
+    agreemenTextView.textAlignment=NSTextAlignmentLeft;
     
-    NSString * language = [NSString getAppLanguage];
-    NSMutableAttributedString * agreement;
-    if ([language isEqualToString:@"en"]) {
-        agreement=[[NSMutableAttributedString alloc] initWithString:FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRIVACYPOLICY, nil)];
-        [agreement addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRIVACYPOLICY, nil).length - 31, 31)];
-        [agreement addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRIVACYPOLICY, nil).length - 31, 31)];
-    }else if ([language isEqualToString:@"zh-Hans"])
-    {
-        agreement=[[NSMutableAttributedString alloc] initWithString: FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRO, nil)];
-        
-        [agreement addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRO, nil).length - FGGetStringWithKeyFromTable(USERPROTOCOL, nil).length-6, FGGetStringWithKeyFromTable(USERPROTOCOL, nil).length+6)];
-        [agreement addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRO, nil).length - FGGetStringWithKeyFromTable(USERPROTOCOL, nil).length-6, FGGetStringWithKeyFromTable(USERPROTOCOL, nil).length+6)];
-    }else if ([language hasPrefix:@"id"])
-    {
-        agreement=[[NSMutableAttributedString alloc] initWithString: @"Jika Anda memublikasikan konten, Anda akan dipertimbangkan telah menyetujui semua persyaratan Kebijakan Privasi Mi Sphere Camera"];
-        
-        [agreement addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(@"Jika Anda memublikasikan konten, Anda akan dipertimbangkan telah menyetujui semua persyaratan Kebijakan Privasi Mi Sphere Camera".length - 34, 34)];
-        [agreement addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(@"Jika Anda memublikasikan konten, Anda akan dipertimbangkan telah menyetujui semua persyaratan Kebijakan Privasi Mi Sphere Camera".length - 34, 34)];
-    }else if ([language isEqualToString:@"es"])
-    {
-        agreement=[[NSMutableAttributedString alloc] initWithString:FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRO, nil)];
-        [agreement addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRO, nil).length - 39, 39)];
-        [agreement addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRO, nil).length - 39, 39)];
-    }else if ([language isEqualToString:@"ru"])
-    {
-        agreement=[[NSMutableAttributedString alloc] initWithString:FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRO, nil)];
-        [agreement addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRO, nil).length - 46, 46)];
-        [agreement addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRO, nil).length - 46, 46)];
-    }else if ([language isEqualToString:@"ar"])
-    {
-        agreement=[[NSMutableAttributedString alloc] initWithString:FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRIVACYPOLICY, nil)];
-        [agreement addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRIVACYPOLICY, nil).length - 31, 31)];
-        [agreement addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRIVACYPOLICY, nil).length - 31, 31)];
-    }
-    else
-    {
-        agreement=[[NSMutableAttributedString alloc] initWithString:FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRIVACYPOLICY, nil)];
-        
-        [agreement addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRO, nil).length - FGGetStringWithKeyFromTable(PRIVACYPOLICY, nil).length-6, FGGetStringWithKeyFromTable(PRIVACYPOLICY, nil).length+6)];
-        [agreement addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(FGGetStringWithKeyFromTable(UPLOADAGREEMJXJPRO, nil).length - FGGetStringWithKeyFromTable(PRIVACYPOLICY, nil).length-6, FGGetStringWithKeyFromTable(PRIVACYPOLICY, nil).length+6)];
-    }
+    NSMutableAttributedString * agreement = [[NSMutableAttributedString alloc] initWithString:FGGetStringWithKeyFromTable(READAGREEMENT, nil)];
+    [agreement addAttribute:NSLinkAttributeName
+                      value:@"agreement://"
+                      range:[[agreement string] rangeOfString:FGGetStringWithKeyFromTable(USERPROTOCOLBOOKNAME, nil)]];
+    [agreement addAttribute:NSLinkAttributeName
+                             value:@"privacypolicy://"
+                             range:[[agreement string] rangeOfString:FGGetStringWithKeyFromTable(PRIVACYPOLICYBOOKNAME, nil)]];
+    [agreement addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13] range:NSMakeRange(0, agreement.length)];//
+    [agreement addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#666666"] range:NSMakeRange(0, agreement.length)];
     
-    agreementLabel.attributedText=agreement;
-    agreementLabel.userInteractionEnabled=YES;
-    [agreementLabel sizeToFit];
+    agreemenTextView.attributedText=agreement;
+    [agreemenTextView sizeToFit];
+    agreemenTextView.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor colorWithHexString:@"#46A4EA"],
+                                     NSUnderlineColorAttributeName: [UIColor lightGrayColor],
+                                     NSUnderlineStyleAttributeName: @(NSUnderlinePatternSolid)};
+    
+    agreemenTextView.delegate = self;
+    agreemenTextView.editable = NO;        //必须禁止输入，否则点击将弹出输入键盘
+    agreemenTextView.scrollEnabled = NO;
     if (!self.isUsedAsEncoder) {
         [uploadView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(@10);
             make.right.equalTo(@-10);
             make.bottom.equalTo(@(-10 - bottomSafeArea));
-            make.height.equalTo(@(150 - 15 + agreementLabel.height));
+            make.height.equalTo(@(150 - 15 + agreemenTextView.height));
         }];
     }
     
     
-    NSLog(@"+++++++++++++++++%f",agreementLabel.height);
-    UITapGestureRecognizer * agreementTapGes=[[UITapGestureRecognizer alloc] init];
-    [agreementTapGes addTarget:self action:@selector(agreementTapGes:)];
-    [agreementLabel addGestureRecognizer:agreementTapGes];
+//    NSLog(@"+++++++++++++++++%f",agreementLabel.height);
+//    UITapGestureRecognizer * agreementTapGes=[[UITapGestureRecognizer alloc] init];
+//    [agreementTapGes addTarget:self action:@selector(agreementTapGes:)];
+//    [agreementLabel addGestureRecognizer:agreementTapGes];
     
     
     
@@ -362,6 +335,22 @@
     if ([self.delegate respondsToSelector:@selector(progressRateViewaClose:)]) {
         [self.delegate progressRateViewaClose:self];
     }
+}
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
+    if ([[URL scheme] isEqualToString:@"agreement"]) {//用户协议
+        self.linkType = User_Protocol;
+        if ([self.delegate respondsToSelector:@selector(progressRateViewaGreementDidClick:)]) {
+            [self.delegate progressRateViewaGreementDidClick:self];
+        }
+        return NO;
+    } else if ([[URL scheme] isEqualToString:@"privacypolicy"]) {//隐私政策
+        self.linkType = Privacy_Policy;
+        if ([self.delegate respondsToSelector:@selector(progressRateViewaGreementDidClick:)]) {
+            [self.delegate progressRateViewaGreementDidClick:self];
+        }
+        return NO;
+    }
+    return YES;
 }
 
 #pragma mark --用户协议--

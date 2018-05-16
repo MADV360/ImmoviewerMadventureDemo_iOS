@@ -246,6 +246,8 @@ public:
 
     static kmMat4 transformTextureMatrixByVideoCaptureResolution(const kmMat4* textureMatrix, int videoCaptureResolution);
     
+    static void testMADVPanoCrash(int width, int height);
+    
 protected:
     
     /** 通过无类型对象设置源纹理，需要平台相关的子类具体实现
