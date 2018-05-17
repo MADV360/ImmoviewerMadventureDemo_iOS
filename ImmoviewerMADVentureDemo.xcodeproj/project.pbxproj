@@ -252,6 +252,8 @@
 		BB1A1BAD20AD6662002FEB25 /* libturbojpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB7EAA57209FF86800D6B053 /* libturbojpeg.a */; };
 		BB1A1BB020AD74C8002FEB25 /* SDKTestBench.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB1A1BAF20AD74C8002FEB25 /* SDKTestBench.mm */; };
 		BB1A1BB120AD74C8002FEB25 /* SDKTestBench.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB1A1BAF20AD74C8002FEB25 /* SDKTestBench.mm */; };
+		BB1A1BB320AD81C0002FEB25 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBDB9EDD2099BADA0045913A /* opencv2.framework */; };
+		BB1A1BB420AD8242002FEB25 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBDB9EE22099C50A0045913A /* AssetsLibrary.framework */; };
 		BB2D77F7209BF235001344C5 /* MadvGLRendererBase_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2D77F5209BF235001344C5 /* MadvGLRendererBase_iOS.mm */; };
 		BBAD07CB20187960005BAD6F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD07CA20187960005BAD6F /* AppDelegate.m */; };
 		BBAD07CE20187960005BAD6F /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD07CD20187960005BAD6F /* FirstViewController.m */; };
@@ -842,6 +844,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB1A1BB420AD8242002FEB25 /* AssetsLibrary.framework in Frameworks */,
+				BB1A1BB320AD81C0002FEB25 /* opencv2.framework in Frameworks */,
 				BB1A1BAD20AD6662002FEB25 /* libturbojpeg.a in Frameworks */,
 				BB14E185204108F900910330 /* Accelerate.framework in Frameworks */,
 				BB14E186204108F900910330 /* CoreLocation.framework in Frameworks */,
@@ -2284,6 +2288,7 @@
 					"$(PROJECT_DIR)/MADVCameraFramework/MADVCamera/ThirdParty/UMSocialAnalyics",
 					"$(PROJECT_DIR)/MADVCameraFramework/MADVCamera/ThirdParty/XiaomiLogin",
 					/usr/lib/libxml2.2.dylib,
+					"$(PROJECT_DIR)",
 				);
 				GCC_PREFIX_HEADER = MADVCameraFramework/MADVCamera/PrefixHeader.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -2293,6 +2298,7 @@
 					"TARGET_DARWIN=1",
 					"TARGET_DARWIN_IOS=1",
 					"MADVPANO_BY_SOURCE=1",
+					USE_IMAGE_BLENDER,
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
@@ -2351,6 +2357,7 @@
 					"$(PROJECT_DIR)/MADVCameraFramework/MADVCamera/ThirdParty/UMSocialAnalyics",
 					"$(PROJECT_DIR)/MADVCameraFramework/MADVCamera/ThirdParty/XiaomiLogin",
 					/usr/lib/libxml2.2.dylib,
+					"$(PROJECT_DIR)",
 				);
 				GCC_PREFIX_HEADER = MADVCameraFramework/MADVCamera/PrefixHeader.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -2360,6 +2367,7 @@
 					"TARGET_DARWIN=1",
 					"TARGET_DARWIN_IOS=1",
 					"MADVPANO_BY_SOURCE=1",
+					USE_IMAGE_BLENDER,
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",

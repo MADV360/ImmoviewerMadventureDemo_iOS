@@ -611,14 +611,16 @@ void MadvGLRendererBase_iOS::renderJPEGToJPEG(NSString* destJpegPath, NSString* 
 #ifdef USE_IMAGE_BLENDER
         NSString* tmpJPEGPath = (0 != gyroMatrixRank) ? [destJpegPath stringByAppendingPathExtension:@"tmp.jpg"] : destJpegPath;
         // 1. Stitch with no rotation:
-        MadvGLRenderer::renderMadvJPEGToJPEG(tmpJPEGPath.UTF8String, sourcePath.UTF8String, dstWidth, dstHeight, lutPath.UTF8String, filterID, resourcePath.UTF8String, NULL, 0, LONGITUDE_SEGMENTS, LATITUDE_SEGMENTS);
+        NSString* tmp0JPEGPath = [destJpegPath stringByAppendingPathExtension:@"0.tmp.jpg"];
+        MadvGLRenderer::renderMadvJPEGToJPEG(tmp0JPEGPath.UTF8String, sourcePath.UTF8String, dstWidth, dstHeight, lutPath.UTF8String, filterID, resourcePath.UTF8String, NULL, 0, LONGITUDE_SEGMENTS, LATITUDE_SEGMENTS);
         // 2. Save EXIF metadata:
-        long sourceExivImageHandler = createExivImage(tmpJPEGPath.UTF8String);
+        long sourceExivImageHandler = createExivImage(tmp0JPEGPath.UTF8String);
         // 3. Blend with MBB by OpenCV:
-        blendImage(tmpJPEGPath.UTF8String, tmpJPEGPath.UTF8String);
+        blendImage(tmpJPEGPath.UTF8String, tmp0JPEGPath.UTF8String);
         // 4. Restore EXIF metadata:
         copyEXIFDataFromExivImage(tmpJPEGPath.UTF8String, sourceExivImageHandler);
         releaseExivImage(sourceExivImageHandler);
+        [[NSFileManager defaultManager] removeItemAtPath:tmp0JPEGPath error:nil];
         // 5. Rotate with gyro calibration matrix (if any):
         if (0 != gyroMatrixRank)
         {
@@ -641,14 +643,16 @@ void MadvGLRendererBase_iOS::renderJPEGToJPEG(NSString* destJpegPath, NSString* 
 #ifdef USE_IMAGE_BLENDER
         NSString* tmpJPEGPath = (0 != gyroMatrixRank) ? [destJpegPath stringByAppendingPathExtension:@"tmp.jpg"] : destJpegPath;
         // 1. Stitch with no rotation:
-        MadvGLRenderer::renderMadvJPEGToJPEG(tmpJPEGPath.UTF8String, sourcePath.UTF8String, dstWidth, dstHeight, lutPath.UTF8String, filterID, resourcePath.UTF8String, NULL, 0, LONGITUDE_SEGMENTS, LATITUDE_SEGMENTS);
+        NSString* tmp0JPEGPath = [destJpegPath stringByAppendingPathExtension:@"0.tmp.jpg"];
+        MadvGLRenderer::renderMadvJPEGToJPEG(tmp0JPEGPath.UTF8String, sourcePath.UTF8String, dstWidth, dstHeight, lutPath.UTF8String, filterID, resourcePath.UTF8String, NULL, 0, LONGITUDE_SEGMENTS, LATITUDE_SEGMENTS);
         // 2. Save EXIF metadata:
-        long sourceExivImageHandler = createExivImage(tmpJPEGPath.UTF8String);
+        long sourceExivImageHandler = createExivImage(tmp0JPEGPath.UTF8String);
         // 3. Blend with MBB by OpenCV:
-        blendImage(tmpJPEGPath.UTF8String, tmpJPEGPath.UTF8String);
+        blendImage(tmpJPEGPath.UTF8String, tmp0JPEGPath.UTF8String);
         // 4. Restore EXIF metadata:
         copyEXIFDataFromExivImage(tmpJPEGPath.UTF8String, sourceExivImageHandler);
         releaseExivImage(sourceExivImageHandler);
+        [[NSFileManager defaultManager] removeItemAtPath:tmp0JPEGPath error:nil];
         // 5. Rotate with gyro calibration matrix (if any):
         if (0 != gyroMatrixRank)
         {

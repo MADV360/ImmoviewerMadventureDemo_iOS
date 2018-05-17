@@ -34,7 +34,7 @@ void testMADVPanoStitching() {
     NSMutableArray* files = [[NSMutableArray alloc] init];
     for (NSString* file in enumerator)
     {
-        if ([file.pathExtension.lowercaseString isEqualToString:@"jpg"] && ![file hasSuffix:@"stitched.jpg"] && ![file hasSuffix:@"tmp.jpg"])
+        if ([file.pathExtension.lowercaseString isEqualToString:@"jpg"] && ![file hasSuffix:@"stitched.jpg"] && ![file hasSuffix:@"tmp.jpg"] && ![file hasSuffix:@"prestitch.jpg"])
         {
             [files addObject:file];
         }
