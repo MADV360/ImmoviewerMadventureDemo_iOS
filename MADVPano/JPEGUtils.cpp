@@ -760,7 +760,7 @@ jpeg_decompress_struct readImageFromJPEGWithCallback(JPEGDecodeLineCallback call
 
     /* Step 3: read file parameters with jpeg_read_header() */
 
-    (void) jpeg_read_header(&cinfo, TRUE);
+    jpeg_read_header(&cinfo, TRUE);
     /* We can ignore the return value from jpeg_read_header since
      *   (a) suspension is not possible with the stdio data source, and
      *   (b) we passed TRUE to reject a tables-only JPEG file as an error.
@@ -784,7 +784,7 @@ jpeg_decompress_struct readImageFromJPEGWithCallback(JPEGDecodeLineCallback call
     
     /* Step 5: Start decompressor */
 
-    (void) jpeg_start_decompress(&cinfo);
+    jpeg_start_decompress(&cinfo);
     /* We can ignore the return value since suspension is not possible
      * with the stdio data source.
      */
@@ -813,7 +813,7 @@ jpeg_decompress_struct readImageFromJPEGWithCallback(JPEGDecodeLineCallback call
          * Here the array is only one element long, but you could ask for
          * more than one scanline at a time if that's more convenient.
          */
-        (void) jpeg_read_scanlines(&cinfo, buffer, 1);
+        jpeg_read_scanlines(&cinfo, buffer, 1);
         /* Assume put_scanline_someplace wants a pointer and sample count. */
         ///!!!    put_scanline_someplace(buffer[0], row_stride);
 //        memcpy(outPixelData + (cinfo.output_scanline - 1) * sizeof(JSAMPLE) * row_stride, buffer[0], sizeof(JSAMPLE) * row_stride);
@@ -829,7 +829,7 @@ jpeg_decompress_struct readImageFromJPEGWithCallback(JPEGDecodeLineCallback call
 
     /* Step 7: Finish decompression */
 
-    (void) jpeg_finish_decompress(&cinfo);
+    jpeg_finish_decompress(&cinfo);
     /* We can ignore the return value since suspension is not possible
      * with the stdio data source.
      */

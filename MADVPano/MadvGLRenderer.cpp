@@ -502,7 +502,6 @@ void MadvGLRenderer::renderTextureToJPEG(const char* destJpegPath, int dstWidth,
     JPEGCompressOutput* imageOutput = startWritingImageToJPEG(destJpegPath, GL_RGBA, GL_UNSIGNED_BYTE, 100, dstWidth, dstHeight);
     GLubyte* pixelData = (GLubyte*)malloc(pixelStripBytes);
     
-    bool finishedAppending = false;
     const int blockLines0 = blockLines;
     int pboIndex = -1;
     for (int iLine = 0; iLine < dstHeight; iLine += blockLines)
