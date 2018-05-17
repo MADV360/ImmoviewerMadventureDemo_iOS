@@ -206,18 +206,13 @@
 		BB14E75C20410AB000910330 /* jconfig.h.windows.backup in Resources */ = {isa = PBXBuildFile; fileRef = BB14E67A20410AAF00910330 /* jconfig.h.windows.backup */; };
 		BB14E75D20410AB000910330 /* jconfigint.h.windows.backup in Resources */ = {isa = PBXBuildFile; fileRef = BB14E67B20410AAF00910330 /* jconfigint.h.windows.backup */; };
 		BB14E75E20410AB000910330 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB14E69020410AAF00910330 /* libjpeg.a */; };
-		BB14E75F20410AB000910330 /* libturbojpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB14E69120410AAF00910330 /* libturbojpeg.a */; };
-		BB14E76020410AB000910330 /* jpeg-static.lib in Frameworks */ = {isa = PBXBuildFile; fileRef = BB14E69320410AAF00910330 /* jpeg-static.lib */; };
 		BB14E76120410AB000910330 /* jpeg.exp in Sources */ = {isa = PBXBuildFile; fileRef = BB14E69420410AAF00910330 /* jpeg.exp */; };
-		BB14E76220410AB000910330 /* jpeg.lib in Frameworks */ = {isa = PBXBuildFile; fileRef = BB14E69520410AAF00910330 /* jpeg.lib */; };
 		BB14E76320410AB000910330 /* jpeg.pdb in Resources */ = {isa = PBXBuildFile; fileRef = BB14E69620410AAF00910330 /* jpeg.pdb */; };
 		BB14E76420410AB000910330 /* jpeg62.dll in Resources */ = {isa = PBXBuildFile; fileRef = BB14E69720410AAF00910330 /* jpeg62.dll */; };
 		BB14E76520410AB000910330 /* jpeg62.ilk in Resources */ = {isa = PBXBuildFile; fileRef = BB14E69820410AAF00910330 /* jpeg62.ilk */; };
-		BB14E76620410AB000910330 /* turbojpeg-static.lib in Frameworks */ = {isa = PBXBuildFile; fileRef = BB14E69920410AAF00910330 /* turbojpeg-static.lib */; };
 		BB14E76720410AB000910330 /* turbojpeg.dll in Resources */ = {isa = PBXBuildFile; fileRef = BB14E69A20410AAF00910330 /* turbojpeg.dll */; };
 		BB14E76820410AB000910330 /* turbojpeg.exp in Sources */ = {isa = PBXBuildFile; fileRef = BB14E69B20410AAF00910330 /* turbojpeg.exp */; };
 		BB14E76920410AB000910330 /* turbojpeg.ilk in Resources */ = {isa = PBXBuildFile; fileRef = BB14E69C20410AAF00910330 /* turbojpeg.ilk */; };
-		BB14E76A20410AB000910330 /* turbojpeg.lib in Frameworks */ = {isa = PBXBuildFile; fileRef = BB14E69D20410AAF00910330 /* turbojpeg.lib */; };
 		BB14E76B20410AB000910330 /* turbojpeg.pdb in Resources */ = {isa = PBXBuildFile; fileRef = BB14E69E20410AAF00910330 /* turbojpeg.pdb */; };
 		BB14E76C20410AB000910330 /* arm_init.c in Sources */ = {isa = PBXBuildFile; fileRef = BB14E6A420410AAF00910330 /* arm_init.c */; };
 		BB14E76D20410AB000910330 /* filter_neon.S in Sources */ = {isa = PBXBuildFile; fileRef = BB14E6A520410AAF00910330 /* filter_neon.S */; };
@@ -851,17 +846,12 @@
 				BB14E187204108F900910330 /* MediaPlayer.framework in Frameworks */,
 				BB14E49F20410AA100910330 /* libavformat.a in Frameworks */,
 				BB14E188204108F900910330 /* Photos.framework in Frameworks */,
-				BB14E76620410AB000910330 /* turbojpeg-static.lib in Frameworks */,
 				BB14E18B204108F900910330 /* libiconv.tbd in Frameworks */,
-				BB14E76220410AB000910330 /* jpeg.lib in Frameworks */,
 				BB14E18C204108F900910330 /* libz.tbd in Frameworks */,
 				BB14E18D204108F900910330 /* libxml2.2.tbd in Frameworks */,
-				BB14E75F20410AB000910330 /* libturbojpeg.a in Frameworks */,
 				BB14E18E204108F900910330 /* AudioToolbox.framework in Frameworks */,
-				BB14E76020410AB000910330 /* jpeg-static.lib in Frameworks */,
 				BB14E18F204108F900910330 /* AVFoundation.framework in Frameworks */,
 				BB14E4A020410AA100910330 /* libavutil.a in Frameworks */,
-				BB14E76A20410AB000910330 /* turbojpeg.lib in Frameworks */,
 				BB14E190204108F900910330 /* VideoToolbox.framework in Frameworks */,
 				BB14E191204108F900910330 /* CoreAudio.framework in Frameworks */,
 				BB14E192204108F900910330 /* CoreTelephony.framework in Frameworks */,
