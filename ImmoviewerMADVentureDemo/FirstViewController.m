@@ -51,6 +51,7 @@
 
 -(IBAction)shootButtonClicked:(id)sender {
     // Take photo(or video, depends on which mode the camera is in):
+    [[MVCameraClient sharedInstance] setSettingOption:14 paramUID:0];
     [[MVCameraClient sharedInstance] startShooting];
 }
 
@@ -110,6 +111,10 @@
     {// Change to Photo mode:
         [[MVCameraClient sharedInstance] setCameraMode:CameraModePhoto subMode:CameraSubmodePhotoNormal param:0];
     }
+}
+
+-(void) didEndShooting:(NSString *)remoteFilePath videoDurationMills:(NSInteger)videoDurationMills error:(int)error errMsg:(NSString *)errMsg {
+    [[MVCameraClient sharedInstance] synchronizeCameraSettings];
 }
 
 @end

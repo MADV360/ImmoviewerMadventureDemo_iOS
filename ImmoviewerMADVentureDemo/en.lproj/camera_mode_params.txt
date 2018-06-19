@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <group msgID="4611">
+        <mode uid="0" msgID="0" name="Record a video">
+            <subMode uid="1" msgID="4621" name="Time lapse">
+                <param msgID="255" value="1" name="0.5s" />
+                <param msgID="1" value="2" name="1s" />
+                <param msgID="2" value="3" name="2s" />
+                <param msgID="5" value="4" name="5s" />
+                <param msgID="10" value="5" name="10s" />
+                <param msgID="30" value="6" name="30s" />
+                <param msgID="60" value="7" name="60s" />
+            </subMode>
+
+            <subMode uid="3" msgID="4618" name="Short video">
+                <param msgID="10" value="1" name="10s" />
+                <param msgID="20" value="2" name="20s" />
+                <param msgID="30" value="3" name="30s" />
+            </subMode>
+            <subMode uid="5" msgID="4916" name="Slow-motion">
+                <param msgID="2" value="1" name="2x" />
+                <param msgID="4" value="2" name="4x" />
+                <param msgID="8" value="3" name="8x" />
+            </subMode>
+
+        </mode>
+
+        <mode uid="1" msgID="1" name="Take a photo">
+            <subMode uid="2" msgID="4866" name="Timer">
+                 <param msgID="3" value="1" name="3s" />
+                 <param msgID="4" value="2" name="4s" />
+                 <param msgID="5" value="3" name="5s" />
+                 <param msgID="6" value="4" name="6s" />
+                 <param msgID="7" value="5" name="7s" />
+                 <param msgID="8" value="6" name="8s" />
+                 <param msgID="9" value="7" name="9s" />
+                 <param msgID="10" value="8" name="10s" />
+            </subMode>
+            <subMode uid="4" msgID="4929" name="Intervalometer">
+                 <param msgID="2" value="1" name="2s" />
+                 <param msgID="5" value="2" name="5s" />
+                 <param msgID="10" value="3" name="10s" />
+                 <param msgID="30" value="4" name="30s" />
+                 <param msgID="60" value="5" name="60s" />
+                 <param msgID="120" value="6" name="2min" />
+                 <param msgID="300" value="7" name="5min" />
+           </subMode>
+<subMode uid="4" msgID="4915" name="Burst mode">
+<param msgID="3" value="1" name="3p" />
+<param msgID="6" value="2" name="6p" />
+<param msgID="10" value="3" name="10p" />
+</subMode>
+
+<subMode uid="5" msgID="4918" name="Bracketing">
+<param msgID="1" value="1" name="±0.5" />
+<param msgID="2" value="2" name="±1" />
+<param msgID="3" value="3" name="±1.5" />
+<param msgID="4" value="4" name="±2" />
+<param msgID="5" value="5" name="±2.5" />
+<param msgID="6" value="6" name="±3" />
+</subMode>
+        </mode>
+    </group>
+</resources>

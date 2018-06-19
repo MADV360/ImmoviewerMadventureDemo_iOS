@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import <MVMediaManager.h>
+#import <EXIFParser.h>
 
 NSString* kNotificationDownloadedListUpdated = @"NSString* kNotificationDownloadedListUpdated";
 
@@ -96,6 +97,11 @@ NSMutableArray<NSString* >* g_downloadedFileNames = nil;
         //To download files into sandbox from camera, "Application supports iTunes file sharing" and "App Transport Security Settings"->"Allow Arbitrary Loads" in Info.plist should all be set to YES
         NSLog(@"Media downloaded, localPath = %@", media.localPath);
         [g_downloadedFileNames addObject:media.localPath];
+        if ([media.localPath.pathExtension.lowercaseString isEqualToString:@"jpg"])
+        {
+            NSString* filePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:media.localPath];
+            exifPrint(filePath.UTF8String, std::cout);
+        }
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationDownloadedListUpdated object:g_downloadedFileNames];
     }
 }

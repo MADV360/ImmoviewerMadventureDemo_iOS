@@ -255,6 +255,20 @@
 		BB1A1BB320AD81C0002FEB25 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBDB9EDD2099BADA0045913A /* opencv2.framework */; };
 		BB1A1BB420AD8242002FEB25 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBDB9EE22099C50A0045913A /* AssetsLibrary.framework */; };
 		BB2D77F7209BF235001344C5 /* MadvGLRendererBase_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2D77F5209BF235001344C5 /* MadvGLRendererBase_iOS.mm */; };
+		BB35597120BBB04C00FFF246 /* camera_mode_params.txt in Resources */ = {isa = PBXBuildFile; fileRef = BB35596320BBB04C00FFF246 /* camera_mode_params.txt */; };
+		BB35597220BBB04C00FFF246 /* camera_mode_params.txt in Resources */ = {isa = PBXBuildFile; fileRef = BB35596320BBB04C00FFF246 /* camera_mode_params.txt */; };
+		BB35597320BBB04C00FFF246 /* device_settings.txt in Resources */ = {isa = PBXBuildFile; fileRef = BB35596520BBB04C00FFF246 /* device_settings.txt */; };
+		BB35597420BBB04C00FFF246 /* device_settings.txt in Resources */ = {isa = PBXBuildFile; fileRef = BB35596520BBB04C00FFF246 /* device_settings.txt */; };
+		BB35597520BBB04C00FFF246 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB35596720BBB04C00FFF246 /* InfoPlist.strings */; };
+		BB35597620BBB04C00FFF246 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB35596720BBB04C00FFF246 /* InfoPlist.strings */; };
+		BB35597720BBB04C00FFF246 /* keystrings.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB35596920BBB04C00FFF246 /* keystrings.strings */; };
+		BB35597820BBB04C00FFF246 /* keystrings.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB35596920BBB04C00FFF246 /* keystrings.strings */; };
+		BB35597920BBB04C00FFF246 /* LaunchScreen.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB35596B20BBB04C00FFF246 /* LaunchScreen.strings */; };
+		BB35597A20BBB04C00FFF246 /* LaunchScreen.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB35596B20BBB04C00FFF246 /* LaunchScreen.strings */; };
+		BB35597B20BBB04C00FFF246 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB35596D20BBB04C00FFF246 /* Localizable.strings */; };
+		BB35597C20BBB04C00FFF246 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB35596D20BBB04C00FFF246 /* Localizable.strings */; };
+		BB35597D20BBB04C00FFF246 /* Main.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB35596F20BBB04C00FFF246 /* Main.strings */; };
+		BB35597E20BBB04C00FFF246 /* Main.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB35596F20BBB04C00FFF246 /* Main.strings */; };
 		BBAD07CB20187960005BAD6F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD07CA20187960005BAD6F /* AppDelegate.m */; };
 		BBAD07CE20187960005BAD6F /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD07CD20187960005BAD6F /* FirstViewController.m */; };
 		BBAD07D120187960005BAD6F /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD07D020187960005BAD6F /* SecondViewController.m */; };
@@ -280,6 +294,10 @@
 		BBAD080320187B81005BAD6F /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD080220187B81005BAD6F /* MediaPlayer.framework */; };
 		BBAD080520187B89005BAD6F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD080420187B89005BAD6F /* CoreLocation.framework */; };
 		BBAD080720187BC6005BAD6F /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD080620187BC6005BAD6F /* Accelerate.framework */; };
+		BBCCE75C20D89A770044113A /* cacert.der in Resources */ = {isa = PBXBuildFile; fileRef = BBCCE75A20D89A760044113A /* cacert.der */; };
+		BBCCE75D20D89A770044113A /* cacert.der in Resources */ = {isa = PBXBuildFile; fileRef = BBCCE75A20D89A760044113A /* cacert.der */; };
+		BBCCE75E20D89A770044113A /* server_cert.cer in Resources */ = {isa = PBXBuildFile; fileRef = BBCCE75B20D89A770044113A /* server_cert.cer */; };
+		BBCCE75F20D89A770044113A /* server_cert.cer in Resources */ = {isa = PBXBuildFile; fileRef = BBCCE75B20D89A770044113A /* server_cert.cer */; };
 		BBDB9EDE2099BADB0045913A /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBDB9EDD2099BADA0045913A /* opencv2.framework */; };
 		BBDB9EE32099C50B0045913A /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBDB9EE22099C50A0045913A /* AssetsLibrary.framework */; };
 		F3AF0153BD8636897B2271C9 /* libPods-ImmoviewerMADVentureDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25132D9EC38BDD4A8C419F43 /* libPods-ImmoviewerMADVentureDemo.a */; };
@@ -802,6 +820,13 @@
 		BB1A1BAF20AD74C8002FEB25 /* SDKTestBench.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SDKTestBench.mm; sourceTree = "<group>"; };
 		BB2D77F5209BF235001344C5 /* MadvGLRendererBase_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MadvGLRendererBase_iOS.mm; sourceTree = "<group>"; };
 		BB2D77F6209BF235001344C5 /* MadvGLRendererBase_iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MadvGLRendererBase_iOS.h; sourceTree = "<group>"; };
+		BB35596420BBB04C00FFF246 /* en */ = {isa = PBXFileReference; lastKnownFileType = text; name = en; path = camera_mode_params.txt; sourceTree = "<group>"; };
+		BB35596620BBB04C00FFF246 /* en */ = {isa = PBXFileReference; lastKnownFileType = text; name = en; path = device_settings.txt; sourceTree = "<group>"; };
+		BB35596820BBB04C00FFF246 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
+		BB35596A20BBB04C00FFF246 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = keystrings.strings; sourceTree = "<group>"; };
+		BB35596C20BBB04C00FFF246 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = LaunchScreen.strings; sourceTree = "<group>"; };
+		BB35596E20BBB04C00FFF246 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
+		BB35597020BBB04C00FFF246 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Main.strings; sourceTree = "<group>"; };
 		BB7EAA56209FF86700D6B053 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = MADVPano/libjpegturbo/lib/libjpeg.a; sourceTree = "<group>"; };
 		BB7EAA57209FF86800D6B053 /* libturbojpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libturbojpeg.a; path = MADVPano/libjpegturbo/lib/libturbojpeg.a; sourceTree = "<group>"; };
 		BBAD07C62018795F005BAD6F /* ImmoviewerMADVentureDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImmoviewerMADVentureDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -835,6 +860,8 @@
 		BBAD080220187B81005BAD6F /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		BBAD080420187B89005BAD6F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		BBAD080620187BC6005BAD6F /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		BBCCE75A20D89A760044113A /* cacert.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = cacert.der; sourceTree = "<group>"; };
+		BBCCE75B20D89A770044113A /* server_cert.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = server_cert.cer; sourceTree = "<group>"; };
 		BBDB9EDD2099BADA0045913A /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		BBDB9EE22099C50A0045913A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -1763,9 +1790,25 @@
 			path = platformspec;
 			sourceTree = "<group>";
 		};
+		BB35596220BBB04C00FFF246 /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				BB35596320BBB04C00FFF246 /* camera_mode_params.txt */,
+				BB35596520BBB04C00FFF246 /* device_settings.txt */,
+				BB35596720BBB04C00FFF246 /* InfoPlist.strings */,
+				BB35596920BBB04C00FFF246 /* keystrings.strings */,
+				BB35596B20BBB04C00FFF246 /* LaunchScreen.strings */,
+				BB35596D20BBB04C00FFF246 /* Localizable.strings */,
+				BB35596F20BBB04C00FFF246 /* Main.strings */,
+			);
+			path = en.lproj;
+			sourceTree = "<group>";
+		};
 		BBAD07BD2018795E005BAD6F = {
 			isa = PBXGroup;
 			children = (
+				BBCCE75A20D89A760044113A /* cacert.der */,
+				BBCCE75B20D89A770044113A /* server_cert.cer */,
 				BB14E56F20410AAF00910330 /* MADVPano */,
 				BB14E1A320410AA000910330 /* MADVCamera */,
 				BBAD07C820187960005BAD6F /* ImmoviewerMADVentureDemo */,
@@ -1788,6 +1831,7 @@
 		BBAD07C820187960005BAD6F /* ImmoviewerMADVentureDemo */ = {
 			isa = PBXGroup;
 			children = (
+				BB35596220BBB04C00FFF246 /* en.lproj */,
 				BB1A1BAE20AD74C8002FEB25 /* SDKTestBench.h */,
 				BB1A1BAF20AD74C8002FEB25 /* SDKTestBench.mm */,
 				BBAD07C920187960005BAD6F /* AppDelegate.h */,
@@ -1895,23 +1939,32 @@
 				BB14E76420410AB000910330 /* jpeg62.dll in Resources */,
 				BB14E6FF20410AB000910330 /* iconv.h.inst in Resources */,
 				BB14E49620410AA100910330 /* kxmovie.bundle in Resources */,
+				BBCCE75D20D89A770044113A /* cacert.der in Resources */,
 				BB14E6FE20410AB000910330 /* iconv.h.in in Resources */,
 				BB14E76720410AB000910330 /* turbojpeg.dll in Resources */,
 				BB14E75C20410AB000910330 /* jconfig.h.windows.backup in Resources */,
 				BB14E199204108F900910330 /* LaunchScreen.storyboard in Resources */,
+				BB35597E20BBB04C00FFF246 /* Main.strings in Resources */,
 				BB14E76B20410AB000910330 /* turbojpeg.pdb in Resources */,
 				BB14E75B20410AB000910330 /* build_libjpegturbo_android.sh in Resources */,
+				BB35597420BBB04C00FFF246 /* device_settings.txt in Resources */,
 				BB14E78120410AB000910330 /* lookup_miss_etikate.png in Resources */,
+				BB35597820BBB04C00FFF246 /* keystrings.strings in Resources */,
 				BB14E77F20410AB000910330 /* lookup.png in Resources */,
 				BB14E70C20410AB000910330 /* exiv2.1 in Resources */,
 				BB14E78220410AB000910330 /* lookup_soft_elegance_1.png in Resources */,
+				BB35597620BBB04C00FFF246 /* InfoPlist.strings in Resources */,
+				BB35597A20BBB04C00FFF246 /* LaunchScreen.strings in Resources */,
 				BB14E76920410AB000910330 /* turbojpeg.ilk in Resources */,
 				BB14E78020410AB000910330 /* lookup_amatorka.png in Resources */,
 				BB14E78320410AB000910330 /* lookup_soft_elegance_2.png in Resources */,
 				BB14E19A204108F900910330 /* Assets.xcassets in Resources */,
 				BB14E6FD20410AB000910330 /* iconv.h.build.in in Resources */,
 				BB14E76320410AB000910330 /* jpeg.pdb in Resources */,
+				BB35597C20BBB04C00FFF246 /* Localizable.strings in Resources */,
+				BBCCE75F20D89A770044113A /* server_cert.cer in Resources */,
 				BB14E75D20410AB000910330 /* jconfigint.h.windows.backup in Resources */,
+				BB35597220BBB04C00FFF246 /* camera_mode_params.txt in Resources */,
 				BB14E76520410AB000910330 /* jpeg62.ilk in Resources */,
 				BB14E19B204108F900910330 /* Main.storyboard in Resources */,
 			);
@@ -1921,9 +1974,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB35597120BBB04C00FFF246 /* camera_mode_params.txt in Resources */,
+				BB35597520BBB04C00FFF246 /* InfoPlist.strings in Resources */,
 				BBAD07D920187961005BAD6F /* LaunchScreen.storyboard in Resources */,
+				BBCCE75C20D89A770044113A /* cacert.der in Resources */,
 				BBAD07D620187960005BAD6F /* Assets.xcassets in Resources */,
+				BB35597B20BBB04C00FFF246 /* Localizable.strings in Resources */,
+				BB35597320BBB04C00FFF246 /* device_settings.txt in Resources */,
+				BBCCE75E20D89A770044113A /* server_cert.cer in Resources */,
 				BBAD07D420187960005BAD6F /* Main.storyboard in Resources */,
+				BB35597720BBB04C00FFF246 /* keystrings.strings in Resources */,
+				BB35597920BBB04C00FFF246 /* LaunchScreen.strings in Resources */,
+				BB35597D20BBB04C00FFF246 /* Main.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2249,6 +2311,62 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		BB35596320BBB04C00FFF246 /* camera_mode_params.txt */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BB35596420BBB04C00FFF246 /* en */,
+			);
+			name = camera_mode_params.txt;
+			sourceTree = "<group>";
+		};
+		BB35596520BBB04C00FFF246 /* device_settings.txt */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BB35596620BBB04C00FFF246 /* en */,
+			);
+			name = device_settings.txt;
+			sourceTree = "<group>";
+		};
+		BB35596720BBB04C00FFF246 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BB35596820BBB04C00FFF246 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		BB35596920BBB04C00FFF246 /* keystrings.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BB35596A20BBB04C00FFF246 /* en */,
+			);
+			name = keystrings.strings;
+			sourceTree = "<group>";
+		};
+		BB35596B20BBB04C00FFF246 /* LaunchScreen.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BB35596C20BBB04C00FFF246 /* en */,
+			);
+			name = LaunchScreen.strings;
+			sourceTree = "<group>";
+		};
+		BB35596D20BBB04C00FFF246 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BB35596E20BBB04C00FFF246 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		BB35596F20BBB04C00FFF246 /* Main.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BB35597020BBB04C00FFF246 /* en */,
+			);
+			name = Main.strings;
+			sourceTree = "<group>";
+		};
 		BBAD07D220187960005BAD6F /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  Madv360_v1
+  Created by 张巧隔 on 17/3/16.
+  Copyright © 2017年 Cyllenge. All rights reserved.
+*/
+"UILaunchStoryboardName" = "LaunchScreen_en";
+"NSCameraUsageDescription" = "Allow";
+"NSPhotoLibraryUsageDescription" = "存储，查看并分享从Madventure 360传输的球面全景图像";
+"NSMicrophoneUsageDescription" = "Allow the app to access your microphone";

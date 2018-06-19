@@ -1,0 +1,98 @@
+/* Class = "UIButton"; normalTitle = "Load"; ObjectID = "1Lc-Ao-YiO"; */
+"1Lc-Ao-YiO.normalTitle" = "Load";
+/* Class = "UILabel"; text = "IP"; ObjectID = "330-Jy-iYO"; */
+"330-Jy-iYO.text" = "IP";
+/* Class = "UIButton"; normalTitle = "OK"; ObjectID = "482-Sy-Hlr"; */
+"482-Sy-Hlr.normalTitle" = "OK";
+/* Class = "UILabel"; text = "Key"; ObjectID = "5pg-0y-i9C"; */
+"5pg-0y-i9C.text" = "Key";
+/* Class = "UIButton"; normalTitle = "SetTime"; ObjectID = "6cJ-qF-5De"; */
+"6cJ-qF-5De.normalTitle" = "Set time";
+/* Class = "UIButton"; normalTitle = "STOP"; ObjectID = "96r-95-Nzk"; */
+"96r-95-Nzk.normalTitle" = "STOP";
+/* Class = "UILabel"; text = "摄像"; ObjectID = "9lN-iV-fQs"; */
+"9lN-iV-fQs.text" = "Record a video";
+/* Class = "UIButton"; normalTitle = "RESET(deprecated)"; ObjectID = "Ekj-wt-5Bx"; */
+"Ekj-wt-5Bx.normalTitle" = "RESET(deprecated)";
+/* Class = "UITextField"; text = "192.168.42.1"; ObjectID = "FsX-ex-uWQ"; */
+"FsX-ex-uWQ.text" = "192.168.42.1";
+/* Class = "UIButton"; normalTitle = "OK"; ObjectID = "G1L-rE-IzM"; */
+"G1L-rE-IzM.normalTitle" = "OK";
+/* Class = "UITabBarItem"; title = "Devices"; ObjectID = "GcL-2j-9lU"; */
+"GcL-2j-9lU.title" = "Devices";
+/* Class = "UITextField"; text = "8787"; ObjectID = "IOW-Tc-J31"; */
+"IOW-Tc-J31.text" = "8787";
+/* Class = "UITextField"; text = "7878"; ObjectID = "Kzi-E0-ZzJ"; */
+"Kzi-E0-ZzJ.text" = "7878";
+/* Class = "UILabel"; text = "Label"; ObjectID = "M5O-eO-P1d"; */
+"M5O-eO-P1d.text" = "Label";
+/* Class = "UILabel"; text = "请在%d秒内按下相机按键完成授权"; ObjectID = "MAo-OK-Cpz"; */
+"MAo-OK-Cpz.text" = "Press camera button in %d seconds to authorize";
+/* Class = "UIButton"; normalTitle = "Send"; ObjectID = "O2M-pc-mmK"; */
+"O2M-pc-mmK.normalTitle" = "Send";
+/* Class = "UITabBarItem"; title = "Comm"; ObjectID = "PVf-rt-529"; */
+"PVf-rt-529.title" = "Comm";
+/* Class = "UILabel"; text = "Value"; ObjectID = "ROz-2y-UqZ"; */
+"ROz-2y-UqZ.text" = "Value";
+/* Class = "UIButton"; normalTitle = "Connect"; ObjectID = "TQk-UT-mho"; */
+"TQk-UT-mho.normalTitle" = "Connect";
+/* Class = "UILabel"; text = "00:00:00"; ObjectID = "TZj-wD-GEP"; */
+"TZj-wD-GEP.text" = "00:00:00";
+/* Class = "UIButton"; normalTitle = "Edit"; ObjectID = "UeB-Rg-Dus"; */
+"UeB-Rg-Dus.normalTitle" = "Edit";
+/* Class = "UILabel"; text = "DATA PORT"; ObjectID = "ZSU-II-DNN"; */
+"ZSU-II-DNN.text" = "DATA PORT";
+/* Class = "UITabBarItem"; title = "Connection"; ObjectID = "acW-dT-cKf"; */
+"acW-dT-cKf.title" = "Connection";
+/* Class = "UITabBarItem"; title = "Second"; ObjectID = "cPa-gy-q4n"; */
+"cPa-gy-q4n.title" = "Second";
+/* Class = "UIBarButtonItem"; title = "DONE"; ObjectID = "cbQ-dK-FCu"; */
+"cbQ-dK-FCu.title" = "DONE";
+/* Class = "UILabel"; text = "拍照"; ObjectID = "d63-Yt-lkf"; */
+"d63-Yt-lkf.text" = "Take a photo";
+/* Class = "UITabBarItem"; title = "相机"; ObjectID = "dio-bg-wpW"; */
+"dio-bg-wpW.title" = "Camera";
+/* Class = "UITabBarItem"; title = "媒体"; ObjectID = "f6o-AO-8vd"; */
+"f6o-AO-8vd.title" = "Media";
+/* Class = "UILabel"; text = "--:--:--"; ObjectID = "fSf-5t-yee"; */
+"fSf-5t-yee.text" = "--:--:--";
+/* Class = "UIButton"; normalTitle = "OK"; ObjectID = "fm7-OQ-0Zb"; */
+"fm7-OQ-0Zb.normalTitle" = "OK";
+/* Class = "UIButton"; normalTitle = "Select media file from library..."; ObjectID = "gWZ-Et-P2I"; */
+"gWZ-Et-P2I.normalTitle" = "Select media file from library…";
+/* Class = "UIButton"; normalTitle = "StopRecord"; ObjectID = "gkF-n8-VW3"; */
+"gkF-n8-VW3.normalTitle" = "Stop record";
+/* Class = "UIButton"; normalTitle = "Go to Settings"; ObjectID = "goQ-Fb-Wbk"; */
+"goQ-Fb-Wbk.normalTitle" = "Go to Settings";
+/* Class = "UIBarButtonItem"; title = "  "; ObjectID = "hTe-94-q8J"; */
+"hTe-94-q8J.title" = "  ";
+/* Class = "UILabel"; text = "Password"; ObjectID = "j8B-NT-QhC"; */
+"j8B-NT-QhC.text" = "Password";
+/* Class = "UILabel"; text = "--:--:--"; ObjectID = "nyJ-7r-vUj"; */
+"nyJ-7r-vUj.text" = "--:--:--";
+/* Class = "UILabel"; text = "CMD PORT"; ObjectID = "ozo-sz-1w2"; */
+"ozo-sz-1w2.text" = "CMD PORT";
+/* Class = "UILabel"; text = "Label"; ObjectID = "pAa-ql-abH"; */
+"pAa-ql-abH.text" = "Label";
+/* Class = "UILabel"; text = "设置SSID和非空的Wifi密码"; ObjectID = "pK9-5m-1qi"; */
+"pK9-5m-1qi.text" = "Set SSID and Wi-Fi password";
+/* Class = "UINavigationItem"; title = "Title"; ObjectID = "ppi-l2-lzM"; */
+"ppi-l2-lzM.title" = "Title";
+/* Class = "UILabel"; text = "SSID"; ObjectID = "t65-BG-0ps"; */
+"t65-BG-0ps.text" = "SSID";
+/* Class = "UIButton"; normalTitle = "Apply"; ObjectID = "t7Q-Xf-bkC"; */
+"t7Q-Xf-bkC.normalTitle" = "Apply";
+/* Class = "UITabBarItem"; title = "发现"; ObjectID = "tL0-zz-C9w"; */
+"tL0-zz-C9w.title" = "Discover";
+/* Class = "UILabel"; text = "Label"; ObjectID = "v6e-Mf-wfe"; */
+"v6e-Mf-wfe.text" = "Label";
+/* Class = "UILabel"; text = "Revision: 20160402"; ObjectID = "vLO-Ip-t41"; */
+"vLO-Ip-t41.text" = "Revision: 20160402";
+/* Class = "UILabel"; text = "延时"; ObjectID = "vft-92-42d"; */
+"vft-92-42d.text" = "Time lapse";
+/* Class = "UILabel"; text = "连拍"; ObjectID = "yg8-6n-hch"; */
+"yg8-6n-hch.text" = "Burst mode";
+/* Class = "UIButton"; normalTitle = "StartRecord"; ObjectID = "ynq-eP-4ek"; */
+"ynq-eP-4ek.normalTitle" = "Start recording";
+/* Class = "UIButton"; normalTitle = "REC"; ObjectID = "zrf-C4-kpH"; */
+"zrf-C4-kpH.normalTitle" = "REC";

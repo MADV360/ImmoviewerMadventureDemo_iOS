@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <group uid="0" name="Videos">
+        <option uid="0" msgID="4612" name="Resolution" jsonParamKey="v_res">
+            <param uid="0" msgID="6" name="3840x1920 | 30fps" />
+            <param uid="1" msgID="1" name="2304x1152 | 30fps" />
+            <param uid="2" msgID="2" name="2304x1152 | 60fps" />
+            <param uid="3" msgID="7" name="2048x512 | 120fps Top" />
+            <param uid="4" msgID="9" name="2048x512 | 120fps Bottom (Bullet Time)" />
+            <param uid="5" msgID="11" name="3840x1920 | 30fps High bitrate" />
+        </option>
+
+        <option uid="1" msgID="5136" name="White balance" jsonParamKey="video_wb">
+            <param uid="0" msgID="0" name="Auto" />
+            <param uid="1" msgID="1" name="Outdoors" />
+            <param uid="2" msgID="2" name="Cloudy" />
+            <Param uid= "3" msgID= "3" name = "Incandescent"/>
+            <param uid="4" msgID="4" name="Fluorescent" />
+        </option>
+
+        <option uid="3" msgID="5137" name="Exposure compensation" type="slider" jsonParamKey="video_ev">
+            <param uid="-6" msgID="-6" name="-3" />
+            <param uid="-5" msgID="-5" name="-2.5" />
+            <param uid="-4" msgID="-4" name="-2" />
+            <param uid="-3" msgID="-3" name="-1.5" />
+            <param uid="-2" msgID="-2" name="-1" />
+            <param uid="-1" msgID="-1" name="-0.5" />
+            <param uid="0" msgID="0" name="0" />
+            <param uid="1" msgID="1" name="0.5" />
+            <param uid="2" msgID="2" name="1" />
+            <param uid="3" msgID="3" name="1.5" />
+            <param uid="4" msgID="4" name="2" />
+            <param uid="5" msgID="5" name="2.5" />
+            <param uid="6" msgID="6" name="3" />
+        </option>
+
+        <option uid="4" msgID="4617" name="Recording cycle" jsonParamKey="loop">
+            <param uid="0" msgID="0" name="Turn off" />
+            <param uid="1" msgID="1" name="Turn on" />
+        </option>
+        <option uid="5" msgID="0" name="SURPLUSVIDEO" type="readonly" >
+            <param uid="0" msgID="0" name="00:00" />
+        </option>
+    </group>
+
+    <group uid="1" name="Photos">
+        <option uid="10" msgID="4872" name="Resolution" jsonParamKey="p_res">
+            <param uid="0" msgID="0" name="6912x3456" />
+            <param uid="1" msgID="1" name="3456x1728 (stitched)" />
+            <param uid="3" msgID="3" name="6912x3456 Raw" />
+        </option>
+
+        <option uid="11" msgID="5168" name="White balance" jsonParamKey="still_wb">
+            <param uid="0" msgID="0" name="Auto" />
+            <param uid="1" msgID="1" name="Outdoors" />
+            <param uid="2" msgID="2" name="Cloudy" />
+            <param uid="3" msgID="3" name="Incandescent" />
+            <param uid="4" msgID="4" name="Fluorescent" />
+        </option>
+
+        <option uid="12" msgID="5172" name="ISO" jsonParamKey="still_iso">
+            <param uid="0" msgID="0" name="Auto" />
+            <param uid="50" msgID="50" name="50" />
+            <param uid="100" msgID="100" name="100" />
+            <param uid="200" msgID="200" name="200" />
+            <param uid="400" msgID="400" name="400" />
+            <param uid="800" msgID="800" name="800" />
+            <param uid="1600" msgID="1600" name="1600" />
+        </option>
+
+        <option uid="13" msgID="5171" name="Exposure time" jsonParamKey="still_shutter">
+            <param uid="0" msgID="0" name="Auto" />
+            <param uid="1" msgID="39168" name="1/6400s" />
+            <param uid="2" msgID="35968" name="1/3200s" />
+            <param uid="3" msgID="34768" name="1/2000s" />
+            <param uid="4" msgID="33768" name="1/1000s" />
+            <param uid="5" msgID="33268" name="1/500s" />
+            <param uid="6" msgID="33008" name="1/240s" />
+            <param uid="7" msgID="32888" name="1/120s" />
+            <param uid="8" msgID="32828" name="1/60s" />
+            <param uid="9" msgID="32798" name="1/30s" />
+            <param uid="10" msgID="32783" name="1/15s" />
+            <param uid="11" msgID="32776" name="1/8s" />
+            <param uid="12" msgID="32772" name="1/4s" />
+            <param uid="13" msgID="1" name="1s" />
+            <param uid="14" msgID="2" name="2s" />
+            <param uid="15" msgID="4" name="4s" />
+            <param uid="16" msgID="8" name="8s" />
+            <param uid="17" msgID="12" name="12s" />
+            <param uid="18" msgID="16" name="16s" />
+            <param uid="19" msgID="20" name="20s" />
+            <param uid="20" msgID="24" name="24s" />
+            <param uid="21" msgID="28" name="28s" />
+            <param uid="22" msgID="32" name="32s" />
+        </option>
+
+        <option uid="14" msgID="5169" name="Exposure compensation" type="slider" jsonParamKey="still_ev">
+            <param uid="-6" msgID="-6" name="-3" />
+            <param uid="-5" msgID="-5" name="-2.5" />
+            <param uid="-4" msgID="-4" name="-2" />
+            <param uid="-3" msgID="-3" name="-1.5" />
+            <param uid="-2" msgID="-2" name="-1" />
+            <param uid="-1" msgID="-1" name="-0.5" />
+            <param uid="0" msgID="0" name="0" />
+            <param uid="1" msgID="1" name="0.5" />
+            <param uid="2" msgID="2" name="1" />
+            <param uid="3" msgID="3" name="1.5" />
+            <param uid="4" msgID="4" name="2" />
+            <param uid="5" msgID="5" name="2.5" />
+            <param uid="6" msgID="6" name="3" />
+        </option>
+        <option uid="15" msgID="0" name="SURPLUSPHOTO" type="readonly" >
+            <param uid="0" msgID="0" name="0" />
+        </option>
+        <option uid="16" msgID="0" name="DOWNLOADAUTOMATICALLY" type="switch" />
+    </group>
+
+    <group uid="2" name="Camera">
+        <option uid="28" msgID="0" name="GPS">
+            <param uid="0" msgID="0" name="Turn off" />
+            <param uid="1" msgID="1" name="1s" />
+            <param uid="2" msgID="3" name="3s" />
+            <param uid="3" msgID="5" name="5s" />
+            <param uid="4" msgID="10" name="10s" />
+        </option>
+        <option uid="20" msgID="10000" name="Wi-Fi settings" type="jump" />
+
+        <option uid="21" msgID="4" name="Format SD card" type="action" >
+            <param uid="0" msgID="0" name="Available: 00G/Total: 16G" />
+        </option>
+
+        <option uid="22" msgID="8888" name="Preview mode">
+            <param uid="0" msgID="3" name="Mirror ball" />
+            <param uid="1" msgID="1" name="Flat" />
+            <param uid="2" msgID="2" name="Little planet" />
+            <param uid="3" msgID="4" name="Pano" />
+            <param uid="4" msgID="5" name="CRYSTALBALL" />
+        </option>
+
+        <option uid="23" msgID="6151" name="Turn off automatically" jsonParamKey="poweroff_time">
+            <param uid="0" msgID="0" name="Turn off" />
+            <param uid="5" msgID="5" name="5min" />
+            <param uid="10" msgID="10" name="10min" />
+        </option>
+
+        <option uid="24" msgID="6145" name="Buzzer" jsonParamKey="buzzer">
+            <param uid="0" msgID="0" name="Turn off" />
+            <param uid="1" msgID="1" name="25%" />
+            <param uid="2" msgID="2" name="50%" />
+            <param uid="3" msgID="3" name="75%" />
+            <param uid="4" msgID="4" name="100%" />
+        </option>
+
+        <option uid="26" msgID="6156" name="LED light" jsonParamKey="led">
+            <param uid="0" msgID="0" name="Turn off" />
+            <param uid="1" msgID="1" name="Turn on" />
+        </option>
+        <option uid="29" msgID="6165" name="CAMERAGYROCORRECTION"/>
+        <option uid="27" msgID="6155" name="Turn off camera" type="action" />
+    </group>
+
+    <group uid="3" name="Device">
+        <option uid="30" msgID="4099" name="Device name" type="readonly" >
+            <param uid="0" msgID="0" name="madv360" />
+        </option>
+
+        <option uid="31" msgID="4097" name="Serial number" type="readonly" >
+            <param uid="0" msgID="0" name="madv121234567" />
+        </option>
+
+        <option uid="32" msgID="4100" name="Firmware version" type="action" >
+             <param uid="0" msgID="0" name="345678987878676756" />
+        </option>
+
+        <option uid="33" msgID="6152" name="Restore factory settings" type="action" />
+    </group>
+</resources>
