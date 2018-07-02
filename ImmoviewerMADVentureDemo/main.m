@@ -12,7 +12,7 @@
 
 int main(int argc, char * argv[]) {
     @autoreleasepool {
-        testMADVPanoStitching();
+        //testMADVPanoStitching();
         
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }
