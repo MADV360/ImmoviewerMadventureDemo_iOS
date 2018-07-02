@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F66A94953B78299E559F85D /* libPods-ImmoviewerMADVentureDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25132D9EC38BDD4A8C419F43 /* libPods-ImmoviewerMADVentureDemo.a */; };
 		BB14E180204108F900910330 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD07D020187960005BAD6F /* SecondViewController.m */; };
 		BB14E181204108F900910330 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD07CA20187960005BAD6F /* AppDelegate.m */; };
 		BB14E182204108F900910330 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD07DB20187961005BAD6F /* main.m */; };
@@ -27,7 +28,6 @@
 		BB14E194204108F900910330 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD07E620187AD1005BAD6F /* CoreGraphics.framework */; };
 		BB14E195204108F900910330 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD07E220187AC9005BAD6F /* CoreMotion.framework */; };
 		BB14E196204108F900910330 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAD07E320187AC9005BAD6F /* CoreMedia.framework */; };
-		BB14E197204108F900910330 /* libPods-ImmoviewerMADVentureDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25132D9EC38BDD4A8C419F43 /* libPods-ImmoviewerMADVentureDemo.a */; };
 		BB14E199204108F900910330 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBAD07D720187961005BAD6F /* LaunchScreen.storyboard */; };
 		BB14E19A204108F900910330 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBAD07D520187960005BAD6F /* Assets.xcassets */; };
 		BB14E19B204108F900910330 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBAD07D220187960005BAD6F /* Main.storyboard */; };
@@ -305,8 +305,8 @@
 
 /* Begin PBXFileReference section */
 		25132D9EC38BDD4A8C419F43 /* libPods-ImmoviewerMADVentureDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ImmoviewerMADVentureDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		40E3166B23F443B369412182 /* Pods-ImmoviewerMADVentureDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImmoviewerMADVentureDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ImmoviewerMADVentureDemo/Pods-ImmoviewerMADVentureDemo.debug.xcconfig"; sourceTree = "<group>"; };
-		4CE02EE7E4F5FA1AAE8ABCC3 /* Pods-ImmoviewerMADVentureDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImmoviewerMADVentureDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ImmoviewerMADVentureDemo/Pods-ImmoviewerMADVentureDemo.release.xcconfig"; sourceTree = "<group>"; };
+		476DB9C28BAE547508C4B478 /* Pods-ImmoviewerMADVentureDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImmoviewerMADVentureDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ImmoviewerMADVentureDemo/Pods-ImmoviewerMADVentureDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		5DE8849F76196BC436060533 /* Pods-ImmoviewerMADVentureDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImmoviewerMADVentureDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ImmoviewerMADVentureDemo/Pods-ImmoviewerMADVentureDemo.release.xcconfig"; sourceTree = "<group>"; };
 		BB14E1A1204108F900910330 /* ImmoviewerMADVentureDemo_with_SDK_source.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImmoviewerMADVentureDemo_with_SDK_source.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB14E1A2204108FA00910330 /* ImmoviewerMADVentureDemo_with_SDK_source-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ImmoviewerMADVentureDemo_with_SDK_source-Info.plist"; path = "/Users/qiudong/Projects/ImmoviewerMADVentureDemo/ImmoviewerMADVentureDemo_with_SDK_source-Info.plist"; sourceTree = "<absolute>"; };
 		BB14E1A420410AA000910330 /* avUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = avUtils.h; sourceTree = "<group>"; };
@@ -893,7 +893,6 @@
 				BB14E194204108F900910330 /* CoreGraphics.framework in Frameworks */,
 				BB14E195204108F900910330 /* CoreMotion.framework in Frameworks */,
 				BB14E196204108F900910330 /* CoreMedia.framework in Frameworks */,
-				BB14E197204108F900910330 /* libPods-ImmoviewerMADVentureDemo.a in Frameworks */,
 				BB14E4A120410AA100910330 /* libswresample.a in Frameworks */,
 				BB14E49E20410AA100910330 /* libavcodec.a in Frameworks */,
 			);
@@ -924,6 +923,7 @@
 				BBAD07E520187AC9005BAD6F /* CoreMedia.framework in Frameworks */,
 				BBDB9EDE2099BADB0045913A /* opencv2.framework in Frameworks */,
 				F3AF0153BD8636897B2271C9 /* libPods-ImmoviewerMADVentureDemo.a in Frameworks */,
+				0F66A94953B78299E559F85D /* libPods-ImmoviewerMADVentureDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -933,8 +933,8 @@
 		1C070C5A73858637F229DBD9 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				40E3166B23F443B369412182 /* Pods-ImmoviewerMADVentureDemo.debug.xcconfig */,
-				4CE02EE7E4F5FA1AAE8ABCC3 /* Pods-ImmoviewerMADVentureDemo.release.xcconfig */,
+				476DB9C28BAE547508C4B478 /* Pods-ImmoviewerMADVentureDemo.debug.xcconfig */,
+				5DE8849F76196BC436060533 /* Pods-ImmoviewerMADVentureDemo.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1856,12 +1856,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BB14E19E204108F900910330 /* Build configuration list for PBXNativeTarget "ImmoviewerMADVentureDemo_with_SDK_source" */;
 			buildPhases = (
-				BB14E17E204108F900910330 /* [CP] Check Pods Manifest.lock */,
 				BB14E17F204108F900910330 /* Sources */,
 				BB14E184204108F900910330 /* Frameworks */,
 				BB14E198204108F900910330 /* Resources */,
-				BB14E19C204108F900910330 /* [CP] Embed Pods Frameworks */,
-				BB14E19D204108F900910330 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1880,8 +1877,8 @@
 				BBAD07C22018795F005BAD6F /* Sources */,
 				BBAD07C32018795F005BAD6F /* Frameworks */,
 				BBAD07C42018795F005BAD6F /* Resources */,
-				BB8326E550D9D7F3347B7DFD /* [CP] Embed Pods Frameworks */,
-				A475CAFF34C95FF0E476DEF1 /* [CP] Copy Pods Resources */,
+				07BEC4CEAE2ED0369A94A5AD /* [CP] Embed Pods Frameworks */,
+				6584F2163DEFC5324BE7EFB8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1992,6 +1989,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		07BEC4CEAE2ED0369A94A5AD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ImmoviewerMADVentureDemo/Pods-ImmoviewerMADVentureDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		34D500C431619FC5F43A2071 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2010,7 +2022,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A475CAFF34C95FF0E476DEF1 /* [CP] Copy Pods Resources */ = {
+		6584F2163DEFC5324BE7EFB8 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2023,69 +2035,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ImmoviewerMADVentureDemo/Pods-ImmoviewerMADVentureDemo-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BB14E17E204108F900910330 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ImmoviewerMADVentureDemo-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BB14E19C204108F900910330 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ImmoviewerMADVentureDemo/Pods-ImmoviewerMADVentureDemo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BB14E19D204108F900910330 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ImmoviewerMADVentureDemo/Pods-ImmoviewerMADVentureDemo-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BB8326E550D9D7F3347B7DFD /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ImmoviewerMADVentureDemo/Pods-ImmoviewerMADVentureDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2388,7 +2337,6 @@
 /* Begin XCBuildConfiguration section */
 		BB14E19F204108F900910330 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40E3166B23F443B369412182 /* Pods-ImmoviewerMADVentureDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -2457,7 +2405,6 @@
 		};
 		BB14E1A0204108F900910330 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4CE02EE7E4F5FA1AAE8ABCC3 /* Pods-ImmoviewerMADVentureDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -2631,7 +2578,7 @@
 		};
 		BBAD07E020187961005BAD6F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40E3166B23F443B369412182 /* Pods-ImmoviewerMADVentureDemo.debug.xcconfig */;
+			baseConfigurationReference = 476DB9C28BAE547508C4B478 /* Pods-ImmoviewerMADVentureDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -2670,7 +2617,7 @@
 		};
 		BBAD07E120187961005BAD6F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4CE02EE7E4F5FA1AAE8ABCC3 /* Pods-ImmoviewerMADVentureDemo.release.xcconfig */;
+			baseConfigurationReference = 5DE8849F76196BC436060533 /* Pods-ImmoviewerMADVentureDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
