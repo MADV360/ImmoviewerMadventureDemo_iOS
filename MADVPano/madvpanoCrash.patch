@@ -1,0 +1,125 @@
+Index: GLFilters/GLFilter.cpp
+===================================================================
+--- GLFilters/GLFilter.cpp	(revision 18176)
++++ GLFilters/GLFilter.cpp	(working copy)
+@@ -27,7 +27,7 @@
+     _vertexShaderSourceCount = vertexShaderSourceCount + 1;
+     _fragmentShaderSourceCount = fragmentShaderSourceCount + 1;
+ #endif
+-    size_t predefinedMacrosSize = (size_t)strlen(VersionDirectiveStatement) + 1;
++    int predefinedMacrosSize = (int)strlen(VersionDirectiveStatement) + 1;
+ 
+ 	_vertexShaderSources = (GLchar**) malloc(sizeof(GLchar*) * _vertexShaderSourceCount);
+ 	_fragmentShaderSources = (GLchar**)malloc(sizeof(GLchar*) * _fragmentShaderSourceCount);
+Index: GLRenderTexture.cpp
+===================================================================
+--- GLRenderTexture.cpp	(revision 18176)
++++ GLRenderTexture.cpp	(working copy)
+@@ -130,7 +130,7 @@
+         glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevFramebuffer);
+ 
+         glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+-
++        CHECK_GL_ERROR();
+         if (_texture && _ownTexture)
+         {
+             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, _textureTarget, 0, 0);
+Index: JPEGUtils.cpp
+===================================================================
+--- JPEGUtils.cpp	(revision 18176)
++++ JPEGUtils.cpp	(working copy)
+@@ -1523,7 +1523,7 @@
+ }
+ 
+ GLint createTextureWithJPEG(const char* filePath, Vec2f* outTextureSize) {
+-    GLint prevTextureBinding = 0;
++    GLint prevTextureBinding;
+     glGetIntegerv(GL_TEXTURE_BINDING_2D, &prevTextureBinding);
+     DecodeOneJPEGLineVariables variables;
+ 	InitDecodeOneJPEGLineVariables(&variables);
+Index: MadvGLRenderer.cpp
+===================================================================
+--- MadvGLRenderer.cpp	(revision 18176)
++++ MadvGLRenderer.cpp	(working copy)
+@@ -420,16 +420,16 @@
+     impl->prepareTextureWithRenderSource(renderSource);
+ }
+ 
+-void MadvGLRenderer::testMADVPanoCrash(int width, int height) {
+-    GLRenderTexture renderTexture(width, height);
+-    CHECK_GL_ERROR();
+-    renderTexture.blit();
+-    glEnable(GL_BLEND);
+-    glBlendFunc(GL_ONE, GL_ZERO);
+-    glClearColor(0, 0, 0, 0);
+-    glViewport(0, 0, width, height);
+-    CHECK_GL_ERROR();
+-}
++//void MadvGLRenderer::testMADVPanoCrash(int width, int height) {
++//    GLRenderTexture renderTexture(width, height);
++//    CHECK_GL_ERROR();
++//    renderTexture.blit();
++//    glEnable(GL_BLEND);
++//    glBlendFunc(GL_ONE, GL_ZERO);
++//    glClearColor(0, 0, 0, 0);
++//    glViewport(0, 0, width, height);
++//    CHECK_GL_ERROR();
++//}
+ 
+ void MadvGLRenderer::renderTextureToJPEG(const char* destJpegPath, int dstWidth, int dstHeight, GLint sourceTexture, const char* lutPath, int filterID, const char* glFilterResourcePath, float* gyroMatrix, int gyroMatrixRank, GLuint longitudeSegments, GLuint latitudeSegments) {
+     int blockLines = dstHeight / 8;
+@@ -664,7 +664,6 @@
+ void MadvGLRenderer::renderMadvJPEGToJPEG(const char* destJpegPath, const char* sourceJpegPath, int dstWidth, int dstHeight, const char* lutPath, int filterID, const char* glFilterResourcePath, float* gyroMatrix, int gyroMatrixRank, GLuint longitudeSegments, GLuint latitudeSegments, MVProgressClosure progressClosure) {
+     long sourceExivImageHandler = createExivImage(sourceJpegPath);
+     GLint sourceTexture = createTextureWithJPEG(sourceJpegPath);
+-    CHECK_GL_ERROR();
+     bool withLUTStitching = (lutPath && 0 < strlen(lutPath));
+     renderTextureToJPEG(destJpegPath, dstWidth, dstHeight, sourceTexture, lutPath, filterID, glFilterResourcePath, gyroMatrix, gyroMatrixRank, longitudeSegments, latitudeSegments);
+     glDeleteTextures(1, (GLuint*)&sourceTexture);
+@@ -1170,3 +1169,16 @@
+ 	}
+ 	return true;
+ }
++
++void MadvGLRenderer::setGyroMatrix(float* matrix, int rank) {
++    
++}
++
++void MadvGLRenderer::setModelPostRotation(kmVec3 fromVector, kmVec3 toVector) {
++    
++}
++
++void MadvGLRenderer::setModelPostRotation(const kmVec3* fromVector, const kmVec3* toVector) {
++    
++}
++
+Index: MadvGLRenderer.h
+===================================================================
+--- MadvGLRenderer.h	(revision 18176)
++++ MadvGLRenderer.h	(working copy)
+@@ -246,8 +246,12 @@
+ 
+     static kmMat4 transformTextureMatrixByVideoCaptureResolution(const kmMat4* textureMatrix, int videoCaptureResolution);
+     
+-    static void testMADVPanoCrash(int width, int height);
++    ///!!!#FrameworkCrash#
++    void setModelPostRotation(const kmVec3* fromVector, const kmVec3* toVector);
+     
++    void setModelPostRotation(kmVec3 fromVector, kmVec3 toVector);
++    void setGyroMatrix(float* matrix, int rank);
++    ///!!!#FrameworkCrash#
+ protected:
+     
+     /** 通过无类型对象设置源纹理，需要平台相关的子类具体实现
+Index: MadvGLRendererImpl.cpp
+===================================================================
+--- MadvGLRendererImpl.cpp	(revision 18176)
++++ MadvGLRendererImpl.cpp	(working copy)
+@@ -777,7 +777,6 @@
+     _lutSphereVAO = NULL;
+     
+     delete[] _glPrograms;
+-	_currentGLProgram = NULL;
+     //    glDeleteFramebuffers(1, &_framebuffer);
+     //        glDeleteRenderbuffers(1, &_depthbuffer);
+ #ifdef USE_MSAA

@@ -1,0 +1,27 @@
+Index: GLRenderTexture.cpp
+===================================================================
+--- GLRenderTexture.cpp	(revision 17193)
++++ GLRenderTexture.cpp	(revision 17192)
+@@ -56,11 +56,11 @@
+ //, _pboIndex(0)
+ , _enableDepthTest(enableDepthTest)
+ {
+-#if !defined(TARGET_OS_OSX)
+     const char* extensions = (const char*) glGetString(GL_EXTENSIONS);
+     ALOGE("GL Extensions : %s", extensions);
+ //    _isPBOSupported = true;///!!!(NULL != strstr(extensions, "pixel_buffer_object"));
+-#endif
++
++
+     if (0 != resizeIfNecessary(width, height))
+     {
+         releaseGLObjects();
+@@ -130,7 +130,7 @@
+         glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevFramebuffer);
+ 
+         glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+-
++        CHECK_GL_ERROR();
+         if (_texture && _ownTexture)
+         {
+             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, _textureTarget, 0, 0);
